@@ -15,6 +15,21 @@
         android:id="@+id/routinesFragment"
         android:name="com.nejj.workoutorganizerapp.ui.fragment.RoutinesFragment"
         android:label="fragment_routines"
-        tools:layout="@layout/fragment_routines" />
+        tools:layout="@layout/fragment_routines" >
+        <action
+            android:id="@+id/action_routinesFragment_to_routineFragment"
+            app:destination="@id/routineFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/statisticsFragment"
+        android:name="com.nejj.workoutorganizerapp.ui.fragment.StatisticsFragment"
+        android:label="StatisticsFragment"
+        tools:layout="@layout/fragment_statistics"/>
+
+    <fragment
+        android:id="@+id/routineFragment"
+        android:name="com.nejj.workoutorganizerapp.ui.fragment.RoutineFragment"
+        android:label="RoutineFragment" />
 
 </navigation>

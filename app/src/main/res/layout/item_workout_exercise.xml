@@ -4,19 +4,17 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-
     <TextView
-        android:id="@+id/tvRoutineName"
+        android:id="@+id/tvExerciseName"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:text="Seated Overhead Press"
         android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/textViewOptions"
         app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_weight="3"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintHorizontal_weight="4"
-        app:layout_constraintVertical_bias="0.5" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/textViewOptions"
@@ -27,11 +25,26 @@
         android:text="⋮"
         android:textAppearance="?android:textAppearanceLarge"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintHorizontal_weight="1"
-        app:layout_constraintStart_toEndOf="@+id/tvRoutineName"
+        app:layout_constraintStart_toEndOf="@+id/tvExerciseName"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvExerciseSets"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/textViewOptions" />
+
+    <Button
+        android:id="@+id/btnAddSet"
+        style="@style/Widget.Material3.Button.TextButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="15sp"
+        android:text="Add set"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/rvExerciseSets" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
