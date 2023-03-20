@@ -30,6 +30,30 @@
     <fragment
         android:id="@+id/routineFragment"
         android:name="com.nejj.workoutorganizerapp.ui.fragment.RoutineFragment"
-        android:label="RoutineFragment" />
+        android:label="RoutineFragment" >
+        <argument
+            android:name="routine"
+            app:argType="com.nejj.workoutorganizerapp.models.WorkoutRoutine" />
+    </fragment>
+    <fragment
+        android:id="@+id/categoriesFragment"
+        android:name="com.nejj.workoutorganizerapp.ui.fragment.CategoriesFragment"
+        android:label="CategoriesFragment" />
+    <fragment
+        android:id="@+id/exercisesFragment"
+        android:name="com.nejj.workoutorganizerapp.ui.fragment.ExercisesFragment"
+        android:label="ExercisesFragment" >
+        <action
+            android:id="@+id/action_exercisesFragment_to_editExerciseFragment"
+            app:destination="@id/editExerciseFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/editExerciseFragment"
+        android:name="com.nejj.workoutorganizerapp.ui.fragment.EditExerciseFragment"
+        android:label="EditExerciseFragment" >
+        <argument
+            android:name="exercise"
+            app:argType="com.nejj.workoutorganizerapp.models.Exercise" />
+    </fragment>
 
 </navigation>

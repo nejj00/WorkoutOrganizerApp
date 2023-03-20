@@ -5,5 +5,5 @@ import java.io.Serializable
 data class ExerciseSet(
     val weight: Int = 0,
     val repetitions: Int = 0,
-    val notes: String?
+    val notes: String? = ""
 ): Serializable

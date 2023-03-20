@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="is_single_side">
+        <item>Yes</item>
+        <item>No</item>
+    </string-array>
+
+    <string-array name="exercise_types">
+        <item>Weight - Reps</item>
+        <item>Weight - Time</item>
+        <item>Bodyweight - Reps</item>
+        <item>Bodyweight - Time</item>
+        <item>Other</item>
+    </string-array>
+</resources>

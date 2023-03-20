@@ -1,6 +1,7 @@
 package com.nejj.workoutorganizerapp.models
 
 import java.io.Serializable
+import java.util.Date
 
 data class WorkoutRoutine(
     val name: String,

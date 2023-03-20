@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.nejj.workoutorganizerapp.R
 import com.nejj.workoutorganizerapp.adapters.RoutineAdapter
 import com.nejj.workoutorganizerapp.databinding.FragmentRoutinesBinding
-import com.nejj.workoutorganizerapp.repositories.RoutineRepository
+import com.nejj.workoutorganizerapp.repositories.TestingRepository
 
 
 class RoutinesFragment : Fragment(R.layout.fragment_routines) {
@@ -42,8 +42,8 @@ class RoutinesFragment : Fragment(R.layout.fragment_routines) {
             )
         }
 
-        val routineRepository = RoutineRepository()
-        routineAdapter.differ.submitList(routineRepository.getWorkoutRoutines().toList())
+        val testingRepository = TestingRepository()
+        routineAdapter.differ.submitList(testingRepository.getWorkoutRoutines().toList())
     }
 
     private fun setupRecyclerView() {

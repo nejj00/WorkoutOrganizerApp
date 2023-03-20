@@ -20,6 +20,6 @@
     </style>
 
     <style name="FabShapeStyle" parent="ShapeAppearance.Material3.SmallComponent">
-        <item name="cornerSize">20%</item>
+        <item name="cornerSize">25%</item>
     </style>
 </resources>
