@@ -8,7 +8,7 @@ class TestingRepository() {
     fun getWorkoutRoutines() : MutableList<WorkoutRoutine> {
         val workoutRoutines: MutableList<WorkoutRoutine> = mutableListOf()
         for(i in 1..10) {
-            workoutRoutines.add(WorkoutRoutine("routine ${i}", "note", getWorkoutExercises()))
+            workoutRoutines.add(WorkoutRoutine(name = "routine ${i}", notes = "note", workoutExercises = getWorkoutExercises()))
         }
 
         return workoutRoutines

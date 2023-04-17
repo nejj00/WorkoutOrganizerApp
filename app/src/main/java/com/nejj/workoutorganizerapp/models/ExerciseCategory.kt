@@ -10,5 +10,18 @@ import java.io.Serializable
 data class ExerciseCategory(
     @PrimaryKey(autoGenerate = true)
     var id: Int? = null,
-    var categoryName: String
-) : Serializable
+    var name: String
+) : Serializable {
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is ExerciseCategory) return false
+        return name == other.name
+    }
+
+    override fun hashCode(): Int {
+        return name.hashCode()
+    }
+
+    override fun toString(): String = name
+}

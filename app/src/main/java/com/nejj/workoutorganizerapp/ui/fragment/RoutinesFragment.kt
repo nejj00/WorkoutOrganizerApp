@@ -10,6 +10,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.nejj.workoutorganizerapp.R
 import com.nejj.workoutorganizerapp.adapters.RoutineAdapter
 import com.nejj.workoutorganizerapp.databinding.FragmentRoutinesBinding
+import com.nejj.workoutorganizerapp.models.Exercise
+import com.nejj.workoutorganizerapp.models.WorkoutRoutine
 import com.nejj.workoutorganizerapp.repositories.TestingRepository
 
 
@@ -32,18 +34,32 @@ class RoutinesFragment : Fragment(R.layout.fragment_routines) {
 
         setupRecyclerView()
 
-        routineAdapter.setOnItemClickListener {
-            val bundle = Bundle().apply {
-                putSerializable("routine", it)
-            }
-            findNavController().navigate(
-                R.id.action_routinesFragment_to_routineFragment,
-                bundle
-            )
-        }
+        routineAdapter.setOnItemClickListener(routineClickedListener)
+
+        viewBinding.fabAddRoutine.setOnClickListener(addRoutineListener)
 
         val testingRepository = TestingRepository()
         routineAdapter.differ.submitList(testingRepository.getWorkoutRoutines().toList())
+    }
+
+    private val routineClickedListener = fun(routine:WorkoutRoutine) {
+        val bundle = Bundle().apply {
+            putSerializable("routine", routine)
+        }
+        findNavController().navigate(
+            R.id.action_routinesFragment_to_routineFragment,
+            bundle
+        )
+    }
+
+    private val addRoutineListener = fun(_: View) {
+        val bundle = Bundle().apply {
+            putSerializable("routine", WorkoutRoutine())
+        }
+        findNavController().navigate(
+            R.id.action_routinesFragment_to_routineFragment,
+            bundle
+        )
     }
 
     private fun setupRecyclerView() {

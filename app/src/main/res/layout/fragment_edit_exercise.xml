@@ -19,38 +19,90 @@
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
+
     </com.google.android.material.textfield.TextInputLayout>
 
-    <Spinner
-        android:id="@+id/spCategory"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tiCategory"
+        style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
         android:layout_width="match_parent"
-        android:layout_height="48dp"
+        android:layout_height="wrap_content"
         android:padding="@dimen/text_input_layout_padding"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tiExerciseName" />
+        app:layout_constraintTop_toBottomOf="@+id/tiExerciseName">
 
-    <Spinner
-        android:id="@+id/spExerciseType"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:padding="@dimen/text_input_layout_padding"
-        android:entries="@array/exercise_types"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spCategory" />
+        <AutoCompleteTextView
+            android:id="@+id/actvCategory"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="none" />
 
-    <Spinner
-        android:id="@+id/spIsSingleSide"
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tiExerciseType"
+        style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
         android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:entries="@array/is_single_side"
+        android:layout_height="wrap_content"
         android:padding="@dimen/text_input_layout_padding"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spExerciseType" />
+        app:layout_constraintTop_toBottomOf="@+id/tiCategory">
+
+        <AutoCompleteTextView
+            android:id="@+id/actvExerciseType"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="none" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <CheckBox
+        android:id="@+id/cbIsSingleSide"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:checked="false"
+        android:text="@string/single_leg_single_arm"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tiExerciseType" />
+
+
+    <!--    <Spinner-->
+    <!--        android:id="@+id/spCategory"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="48dp"-->
+    <!--        android:padding="@dimen/text_input_layout_padding"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        app:layout_constraintHorizontal_bias="0.5"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        app:layout_constraintTop_toBottomOf="@+id/tiExerciseName" />-->
+
+    <!--    <Spinner-->
+    <!--        android:id="@+id/spExerciseType"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="48dp"-->
+    <!--        android:padding="@dimen/text_input_layout_padding"-->
+    <!--        android:entries="@array/exercise_types"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        app:layout_constraintHorizontal_bias="0.5"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        app:layout_constraintTop_toBottomOf="@+id/spCategory" />-->
+
+    <!--    <Spinner-->
+    <!--        android:id="@+id/spIsSingleSide"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="48dp"-->
+    <!--        android:entries="@array/is_single_side"-->
+    <!--        android:padding="@dimen/text_input_layout_padding"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        app:layout_constraintHorizontal_bias="0.5"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        app:layout_constraintTop_toBottomOf="@+id/spExerciseType" />-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

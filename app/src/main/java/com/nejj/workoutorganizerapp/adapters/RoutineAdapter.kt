@@ -18,7 +18,7 @@ class RoutineAdapter : SimpleItemPreviewAdapter<WorkoutRoutine>() {
     }
 
     override val differ = AsyncListDiffer(this, differCallback)
-    override fun getItemText(position: Int): String {
+    override fun getItemText(position: Int): String? {
         return differ.currentList[position].name
     }
 

@@ -5,16 +5,17 @@ import android.provider.ContactsContract.Data
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.nejj.workoutorganizerapp.models.Exercise
 import com.nejj.workoutorganizerapp.models.ExerciseCategory
 
 @Database(
-    entities = [ExerciseCategory::class],
-    version = 1
+    entities = [ExerciseCategory::class, Exercise::class],
+    version = 4
 )
 abstract class WorkoutDatabase : RoomDatabase() {
 
     abstract fun getExerciseCategoryDao(): ExerciseCategoryDao
-
+    abstract fun getExerciseDao(): ExerciseDao
     companion object {
         @Volatile
         private var instance: WorkoutDatabase? = null
@@ -29,6 +30,6 @@ abstract class WorkoutDatabase : RoomDatabase() {
                 context.applicationContext,
                 WorkoutDatabase::class.java,
                 "workout_db.db"
-            ).build()
+            ).fallbackToDestructiveMigration().build()
     }
 }

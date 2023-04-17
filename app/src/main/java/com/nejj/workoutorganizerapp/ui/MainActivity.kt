@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -17,13 +16,15 @@ import com.nejj.workoutorganizerapp.databinding.ActivityMainBinding
 import com.nejj.workoutorganizerapp.repositories.WorkoutRepository
 import com.nejj.workoutorganizerapp.ui.viewmodels.BasicViewModelProviderFactory
 import com.nejj.workoutorganizerapp.ui.viewmodels.CategoriesMainViewModel
+import com.nejj.workoutorganizerapp.ui.viewmodels.ExercisesMainViewModel
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var navController: NavController
     private lateinit var appBarConfiguration: AppBarConfiguration
-    lateinit var viewModel: CategoriesMainViewModel
+    lateinit var categoriesViewModel: CategoriesMainViewModel
+    lateinit var exercisesViewModel: ExercisesMainViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,8 +61,11 @@ class MainActivity : AppCompatActivity() {
             }
 
         val workoutRepository = WorkoutRepository(WorkoutDatabase(this))
+
         val viewModelProviderFactory = BasicViewModelProviderFactory(application, workoutRepository)
-        viewModel = ViewModelProvider(this, viewModelProviderFactory).get(CategoriesMainViewModel::class.java)
+
+        categoriesViewModel = ViewModelProvider(this, viewModelProviderFactory).get(CategoriesMainViewModel::class.java)
+        exercisesViewModel = ViewModelProvider(this, viewModelProviderFactory).get(ExercisesMainViewModel::class.java)
     }
 
     override fun onSupportNavigateUp(): Boolean {

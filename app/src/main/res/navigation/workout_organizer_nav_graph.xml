@@ -9,7 +9,11 @@
         android:id="@+id/workoutLogFragment"
         android:name="com.nejj.workoutorganizerapp.ui.fragment.WorkoutLogFragment"
         android:label="fragment_workout_log"
-        tools:layout="@layout/fragment_workout_log" />
+        tools:layout="@layout/fragment_workout_log" >
+        <action
+            android:id="@+id/action_workoutLogFragment_to_workoutFragment"
+            app:destination="@id/workoutFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/routinesFragment"
@@ -34,6 +38,9 @@
         <argument
             android:name="routine"
             app:argType="com.nejj.workoutorganizerapp.models.WorkoutRoutine" />
+        <action
+            android:id="@+id/action_routineFragment_to_workoutFragment"
+            app:destination="@id/workoutFragment" />
     </fragment>
     <fragment
         android:id="@+id/categoriesFragment"
@@ -54,6 +61,14 @@
         <argument
             android:name="exercise"
             app:argType="com.nejj.workoutorganizerapp.models.Exercise" />
+    </fragment>
+    <fragment
+        android:id="@+id/workoutFragment"
+        android:name="com.nejj.workoutorganizerapp.ui.fragment.WorkoutFragment"
+        android:label="WorkoutFragment" >
+        <argument
+            android:name="workoutRoutine"
+            app:argType="com.nejj.workoutorganizerapp.models.WorkoutRoutine" />
     </fragment>
 
 </navigation>
