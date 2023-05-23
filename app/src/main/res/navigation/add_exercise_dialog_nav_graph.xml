@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/add_exercise_dialog_nav_graph"
+    app:startDestination="@id/categoriesFragment2">
+
+    <fragment
+        android:id="@+id/categoriesFragment2"
+        android:name="com.nejj.workoutorganizerapp.ui.fragment.AddRoutineExerciseCategoriesFragment"
+        android:label="AddExerciseCategoriesFragment" >
+        <action
+            android:id="@+id/action_categoriesFragment2_to_exercisesFragment2"
+            app:destination="@id/exercisesFragment2" />
+    </fragment>
+    <fragment
+        android:id="@+id/exercisesFragment2"
+        android:name="com.nejj.workoutorganizerapp.ui.fragment.AddRoutineExerciseExercisesFragment"
+        android:label="ExercisesFragment" >
+        <argument
+            android:name="exerciseCategory"
+            app:argType="com.nejj.workoutorganizerapp.models.ExerciseCategory" />
+    </fragment>
+</navigation>

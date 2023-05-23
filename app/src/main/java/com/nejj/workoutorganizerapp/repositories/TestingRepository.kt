@@ -7,8 +7,8 @@ class TestingRepository() {
 
     fun getWorkoutRoutines() : MutableList<WorkoutRoutine> {
         val workoutRoutines: MutableList<WorkoutRoutine> = mutableListOf()
-        for(i in 1..10) {
-            workoutRoutines.add(WorkoutRoutine(name = "routine ${i}", notes = "note", workoutExercises = getWorkoutExercises()))
+        for(i in 1..5) {
+            workoutRoutines.add(WorkoutRoutine(name = "routine ${i}", notes = "note"))
         }
 
         return workoutRoutines
@@ -29,14 +29,30 @@ class TestingRepository() {
 
     fun getExercises() : MutableList<Exercise> {
         val exercises: MutableList<Exercise> = mutableListOf()
-        exercises.add(Exercise(null, "Crunches", "Abs", "Strength Weight", false))
-        exercises.add(Exercise(null, "Curls", "Abs", "Strength Weight", false))
-        exercises.add(Exercise(null, "Leg Press", "Abs", "Strength Weight", false))
-        exercises.add(Exercise(null, "Squat", "Abs", "Strength Weight", false))
-        exercises.add(Exercise(null, "Neck Curls", "Abs", "Strength Weight", false))
-        exercises.add(Exercise(null, "Push up", "Abs", "Strength Weight", false))
+        exercises.add(Exercise(null, "Sit Up", "Abs", "Strength Weight", false, true))
+        exercises.add(Exercise(null, "Curls", "Biceps", "Strength Weight", false, true))
+        exercises.add(Exercise(null, "Leg Press", "Abs", "Strength Weight", false, true))
+        exercises.add(Exercise(null, "Squat", "Legs", "Strength Weight", false, true))
+        exercises.add(Exercise(null, "Neck Curls", "HORSE NECK", "Strength Weight", false, true))
+        exercises.add(Exercise(null, "Push up", "Chest", "Strength Weight", false, true))
+        exercises.add(Exercise(null, "Bench Press", "Chest", "Strength Weight", false, true))
+        exercises.add(Exercise(null, "Pull up", "Back", "Strength Weight", false, true))
+        exercises.add(Exercise(null, "Barbell Row", "Back", "Strength Weight", false, true))
+        exercises.add(Exercise(null, "Skullcrushers", "Triceps", "Strength Weight", false, true))
 
         return exercises
+    }
+
+    fun getRoutineSets() : MutableList<RoutineSet> {
+        val routineSets: MutableList<RoutineSet> = mutableListOf()
+
+        for(i in 10..60) {
+            if(i % 10 == 0)
+                continue
+            routineSets.add(RoutineSet((i / 10).toLong(), (i % 10).toLong(), 0, 3, i % 10))
+        }
+
+        return routineSets
     }
 
     fun getWorkoutExercises() : MutableList<WorkoutExercise> {

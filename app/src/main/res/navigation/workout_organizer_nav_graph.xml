@@ -44,11 +44,11 @@
     </fragment>
     <fragment
         android:id="@+id/categoriesFragment"
-        android:name="com.nejj.workoutorganizerapp.ui.fragment.CategoriesFragment"
-        android:label="CategoriesFragment" />
+        android:name="com.nejj.workoutorganizerapp.ui.fragment.ModifyCategoriesFragment"
+        android:label="ModifyCategoriesFragment" />
     <fragment
         android:id="@+id/exercisesFragment"
-        android:name="com.nejj.workoutorganizerapp.ui.fragment.ExercisesFragment"
+        android:name="com.nejj.workoutorganizerapp.ui.fragment.ModifyExercisesFragment"
         android:label="ExercisesFragment" >
         <action
             android:id="@+id/action_exercisesFragment_to_editExerciseFragment"
@@ -67,8 +67,8 @@
         android:name="com.nejj.workoutorganizerapp.ui.fragment.WorkoutFragment"
         android:label="WorkoutFragment" >
         <argument
-            android:name="workoutRoutine"
-            app:argType="com.nejj.workoutorganizerapp.models.WorkoutRoutine" />
+            android:name="loggedWorkoutRoutine"
+            app:argType="com.nejj.workoutorganizerapp.models.relations.LoggedWorkoutRoutineWithLoggedRoutineSets" />
     </fragment>
 
 </navigation>

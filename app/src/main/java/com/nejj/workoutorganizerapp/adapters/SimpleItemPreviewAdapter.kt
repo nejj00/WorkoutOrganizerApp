@@ -9,7 +9,8 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.nejj.workoutorganizerapp.databinding.ItemRoutinePreviewBinding
 
-abstract class SimpleItemPreviewAdapter<T> : RecyclerView.Adapter<SimpleItemPreviewAdapter<T>.SimpleItemPreviewViewHolder>() {
+abstract class SimpleItemPreviewAdapter<T>(val hideOptions: Boolean = false) : RecyclerView.Adapter<SimpleItemPreviewAdapter<T>.SimpleItemPreviewViewHolder>() {
+
 
     inner class SimpleItemPreviewViewHolder(val viewBinding: ItemRoutinePreviewBinding) :
         RecyclerView.ViewHolder(viewBinding.root)
@@ -18,6 +19,18 @@ abstract class SimpleItemPreviewAdapter<T> : RecyclerView.Adapter<SimpleItemPrev
     abstract val differ: AsyncListDiffer<T>
 
     abstract fun getItemText(position: Int): String?
+
+    protected open fun getItemTextSize(): Float {
+        return 20f
+    }
+
+    protected open fun getPadding(): Int {
+        return 10
+    }
+
+    protected open fun getPaddingLeft(): Int {
+        return 10
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SimpleItemPreviewViewHolder {
         return SimpleItemPreviewViewHolder(
@@ -33,9 +46,14 @@ abstract class SimpleItemPreviewAdapter<T> : RecyclerView.Adapter<SimpleItemPrev
         val itemText = getItemText(position)
         val item = differ.currentList[position]
         holder.viewBinding.apply {
+            clRoutinePreview.setPadding(getPaddingLeft(), getPadding(), getPadding(), getPadding())
+            tvRoutineName.textSize = getItemTextSize()
             tvRoutineName.text = itemText
             tvRoutineName.setOnClickListener {
                 onItemClickListener?.let { it(item) }
+            }
+            if (hideOptions) {
+                textViewOptions.visibility = View.GONE
             }
             textViewOptions.setOnClickListener { view ->
                 onOptionsClickListener?.let { it(item, view) }

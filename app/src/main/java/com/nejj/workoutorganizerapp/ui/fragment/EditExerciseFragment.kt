@@ -116,7 +116,7 @@ class EditExerciseFragment : Fragment(R.layout.fragment_edit_exercise) {
             return false
         } else {
             exercisesViewModel.insertEntity(
-                Exercise(null, name, category, exerciseType, isSingleSide, true)
+                Exercise(args.exercise.exerciseId, name, category, exerciseType, isSingleSide, true)
             )
             Toast.makeText(activity, "Exercise saved", Toast.LENGTH_LONG).show()
         }

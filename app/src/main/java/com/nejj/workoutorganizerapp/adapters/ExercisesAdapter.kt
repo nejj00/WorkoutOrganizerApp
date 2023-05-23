@@ -4,7 +4,7 @@ import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import com.nejj.workoutorganizerapp.models.Exercise
 
-class ExercisesAdapter : SimpleItemPreviewAdapter<Exercise>() {
+class ExercisesAdapter(hideOptions: Boolean = false) : SimpleItemPreviewAdapter<Exercise>(hideOptions) {
 
     override val differCallback = object: DiffUtil.ItemCallback<Exercise>() {
         override fun areItemsTheSame(oldItem: Exercise, newItem: Exercise): Boolean {
