@@ -22,7 +22,7 @@ import java.util.concurrent.Executors
         LoggedRoutineSet::class,
         LoggedWorkoutRoutine::class
     ],
-    version = 13
+    version = 17
 )
 @TypeConverters(
     LocalDateConverter::class,

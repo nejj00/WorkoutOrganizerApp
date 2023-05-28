@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/miExerciseTimer"
+        android:icon="@drawable/ic_timer"
+        android:title="Timer"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/miEditLoggedRoutine"
+        android:icon="@drawable/ic_edit_pen"
+        android:title="Options"
+        app:showAsAction="ifRoom" />
+
+</menu>

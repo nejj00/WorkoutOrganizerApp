@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.nejj.workoutorganizerapp.databinding.ItemRoutineSetPreviewBinding
-import com.nejj.workoutorganizerapp.models.WorkoutExercise
 import com.nejj.workoutorganizerapp.models.relations.RoutineSetsWithExercise
 
 class RoutineSetsAdapter : RecyclerView.Adapter<RoutineSetsAdapter.RoutineSetsViewHolder>() {

@@ -10,13 +10,13 @@ import java.io.Serializable
 data class LoggedExerciseSet(
     @PrimaryKey(autoGenerate = true)
     val loggedExerciseSetId: Long? = null,
-    val loggedRoutineId: Long?,
-    val loggedRoutineSetId: Long?,
-    val weight: Double = 0.0,
-    val reps: Int = 0,
-    val setOrder: Int = 0,
+    var loggedRoutineId: Long? = null,
+    var loggedRoutineSetId: Long? = null,
+    var weight: Double = 0.0,
+    var reps: Int = 0,
+    var setOrder: Int = 0,
     val isWarmupSet: Boolean = false,
-    val notes: String = ""
+    var notes: String = ""
 ) : Serializable {
 
     constructor(loggedRoutineSet: LoggedRoutineSet, order: Int, isWarmupSet: Boolean): this(

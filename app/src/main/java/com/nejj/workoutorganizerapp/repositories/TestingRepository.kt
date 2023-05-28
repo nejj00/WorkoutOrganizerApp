@@ -49,22 +49,9 @@ class TestingRepository() {
         for(i in 10..60) {
             if(i % 10 == 0)
                 continue
-            routineSets.add(RoutineSet((i / 10).toLong(), (i % 10).toLong(), 0, 3, i % 10))
+            routineSets.add(RoutineSet(null, (i / 10).toLong(), (i % 10).toLong(), 0, 3, i % 10))
         }
 
         return routineSets
-    }
-
-    fun getWorkoutExercises() : MutableList<WorkoutExercise> {
-        val workoutExercises: MutableList<WorkoutExercise> = mutableListOf()
-        for(exercise in getExercises()) {
-            val exerciseSets: MutableList<ExerciseSet> = mutableListOf()
-            exerciseSets.add(ExerciseSet())
-            exerciseSets.add(ExerciseSet())
-            exerciseSets.add(ExerciseSet())
-            workoutExercises.add(WorkoutExercise(exercise, exerciseSets))
-        }
-
-        return workoutExercises
     }
 }

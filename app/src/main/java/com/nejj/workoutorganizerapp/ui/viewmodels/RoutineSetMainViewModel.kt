@@ -13,7 +13,6 @@ class RoutineSetMainViewModel(
 ) : AndroidViewModel(app){
 
     fun insertEntity(entity: RoutineSet) = viewModelScope.launch {
-
         workoutRepository.upsertRoutineSet(entity)
     }
 
@@ -26,9 +25,10 @@ class RoutineSetMainViewModel(
     fun getRoutineSetsWithExercise(routineId: Long) = workoutRepository.getRoutineSetsWithExercise(routineId)
 
     fun insertRoutineSet(routineId: Long, exerciseId: Long) =  viewModelScope.launch {
-        val maxOrder = workoutRepository.getRoutineSetMaxOrder(routineId)
+
+        val maxOrder = workoutRepository.getRoutineSetMaxOrder(routineId)?: 0
         workoutRepository.upsertRoutineSet(
-            RoutineSet(routineId, exerciseId, 0, 1, maxOrder + 1)
+            RoutineSet(null, routineId, exerciseId, 0, 1, maxOrder + 1)
         )
     }
 

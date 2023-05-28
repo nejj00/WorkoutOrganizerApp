@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.nejj.workoutorganizerapp.R
 import com.nejj.workoutorganizerapp.adapters.RoutineSetsAdapter
 import com.nejj.workoutorganizerapp.databinding.ActivityRoutineBinding
+import com.nejj.workoutorganizerapp.enums.AddExerciseDialogContext
 import com.nejj.workoutorganizerapp.models.LoggedExerciseSet
 import com.nejj.workoutorganizerapp.models.LoggedRoutineSet
 import com.nejj.workoutorganizerapp.models.LoggedWorkoutRoutine
@@ -56,6 +57,8 @@ class RoutineFragment : Fragment(R.layout.activity_routine) {
         //val workoutExercises = workoutRoutine.workoutExercises
         //routineSetsAdapter.differ.submitList(workoutRoutine.workoutExercises?.toList())
 
+        routineSetsAdapter.setOnItemClickListener(routineSetClickedListener)
+
         if(workoutRoutine.routineId != null) {
             routineSetViewModel.getRoutineSetsWithExercise(workoutRoutine.routineId).observe(viewLifecycleOwner) {
                 val routineSetsWithExercise = it
@@ -68,6 +71,7 @@ class RoutineFragment : Fragment(R.layout.activity_routine) {
             val fragmentManager = childFragmentManager
 
             addExerciseDialogFragment.arguments = Bundle().apply {
+                putSerializable("addDialogContext", AddExerciseDialogContext.ADD_ROUTINE_SET)
                 putSerializable(ROUTINE_ARGUMENT_KEY, workoutRoutine)
             }
 
@@ -115,15 +119,18 @@ class RoutineFragment : Fragment(R.layout.activity_routine) {
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
 
+    private val routineSetClickedListener = fun(routineSetWithExercise: RoutineSetsWithExercise) {
+        val bundle = Bundle().apply {
+            putSerializable("routineSet", routineSetWithExercise.routineSet)
+        }
+        findNavController().navigate(
+            R.id.action_routineFragment_to_editRoutineSetFragment,
+            bundle
+        )
+    }
+
     private fun startWorkout() {
         val workoutRoutine = args.routine
-
-        var workoutRoutineWithRoutineSets = WorkoutRoutineWithRoutineSets()
-        if(workoutRoutine.routineId != null) {
-            workoutRoutineViewModel.getWorkoutRoutineWithRoutineSets(workoutRoutine.routineId).observe(viewLifecycleOwner) {
-                workoutRoutineWithRoutineSets = it
-            }
-        }
 
         val routineSetsWithExercise = mutableListOf<RoutineSetsWithExercise>()
         if(workoutRoutine.routineId != null) {
@@ -133,31 +140,7 @@ class RoutineFragment : Fragment(R.layout.activity_routine) {
         }
 
         val loggedWorkoutRoutine = LoggedWorkoutRoutine(workoutRoutine)
-//
-//        loggedWorkoutRoutineViewModel.insertEntity(loggedWorkoutRoutine)
-//        var loggedWorkoutRoutineId: Long = 0
-//        loggedWorkoutRoutineViewModel.insertedId.observe(viewLifecycleOwner) {
-//            loggedWorkoutRoutineId = it
-//        }
-//
-//        // initialize logged routine sets from the routine sets loaded from the routine id
-//        // insert logged routine sets
-//        for(routineSet in routineSetsWithExercise) {
-//            val loggedRoutineSet = LoggedRoutineSet(routineSet, loggedWorkoutRoutineId)
-//            loggedRoutineSetViewModel.insertEntity(loggedRoutineSet)
-//
-//            // initialize exercise sets from the routine sets
-//            // insert exercise sets
-//            for(i in 1..loggedRoutineSet.warmupSetsCount) {
-//                val loggedExerciseSet = LoggedExerciseSet(loggedRoutineSet, 0, true)
-//                loggedExerciseSetViewModel.insertEntity(loggedExerciseSet)
-//            }
-//
-//            for(i in 1..loggedRoutineSet.setsCount) {
-//                val loggedExerciseSet = LoggedExerciseSet(loggedRoutineSet, i, false)
-//                loggedExerciseSetViewModel.insertEntity(loggedExerciseSet)
-//            }
-//        }
+
         loggedWorkoutRoutineViewModel.initializeLoggedWorkoutRoutine(loggedWorkoutRoutine, routineSetsWithExercise)
 
         loggedWorkoutRoutineViewModel.initializedLoggedWorkoutRoutineWithLoggedRoutineSets.observe(viewLifecycleOwner) {

@@ -59,7 +59,7 @@ class LoggedWorkoutRoutinesAdapter : RecyclerView.Adapter<LoggedWorkoutRoutinesA
                 layoutManager = LinearLayoutManager(context)
             }
 
-            loggedWorkoutRoutine.loggedRoutineSetsWithExercises.let {
+            loggedWorkoutRoutine.loggedRoutineSets.let {
                 loggedRoutineSetAdapter.differ.submitList(it)
             }
         }

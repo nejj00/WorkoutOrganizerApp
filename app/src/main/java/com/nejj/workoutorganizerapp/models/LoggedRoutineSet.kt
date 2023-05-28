@@ -11,12 +11,12 @@ import java.io.Serializable
 data class LoggedRoutineSet(
     @PrimaryKey(autoGenerate = true)
     var loggedRoutineSetId: Long? = null,
-    val loggedRoutineId: Long? = 0,
-    val exerciseId: Long? = 0,
-    val exerciseName: String = "",
+    var loggedRoutineId: Long? = 0,
+    var exerciseId: Long? = 0,
+    var exerciseName: String = "",
     val warmupSetsCount: Int = 0,
-    val setsCount: Int = 0,
-    val setsOrder: Int = 0
+    var setsCount: Int = 0,
+    var setsOrder: Int = 0
 ) : Serializable {
 
     constructor(routineSetWithExercise: RoutineSetsWithExercise, loggedRoutineId: Long) : this(

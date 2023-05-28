@@ -23,7 +23,7 @@ interface RoutineSetDao : DataAccessObject<RoutineSet> {
     fun getRoutineSetsWithExercise(routineId: Long): LiveData<List<RoutineSetsWithExercise>>
 
     @Query("SELECT MAX(setsOrder) FROM routine_sets WHERE routineId = :routineId")
-    suspend fun getMaxOrder(routineId: Long): Int
+    suspend fun getMaxOrder(routineId: Long): Int?
 
     @Query("SELECT * FROM routine_sets WHERE routineId = :routineId")
     fun getRoutineSetsByRoutineId(routineId: Long): LiveData<List<RoutineSet>>

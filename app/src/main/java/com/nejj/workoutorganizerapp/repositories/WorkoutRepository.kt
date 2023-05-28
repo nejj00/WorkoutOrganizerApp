@@ -51,10 +51,12 @@ class WorkoutRepository(
     suspend fun upsertLoggedRoutineSet(loggedRoutineSet: LoggedRoutineSet) = database.getLoggedRoutineSetDao().upsert(loggedRoutineSet)
     suspend fun deleteLoggedRoutineSet(loggedRoutineSet: LoggedRoutineSet) = database.getLoggedRoutineSetDao().deleteEntity(loggedRoutineSet)
     fun getLoggedRoutineSets() = database.getLoggedRoutineSetDao().getAllEntities()
-
+    fun getLoggedRoutineSetsWithLoggedExerciseSets(loggedRoutineId: Long) = database.getLoggedRoutineSetDao().getLoggedRoutineSetsWithLoggedExerciseSets(loggedRoutineId)
+    suspend fun getLoggedRouitneSetMaxOrder(loggedRoutineId: Long) = database.getLoggedRoutineSetDao().getMaxOrder(loggedRoutineId)
 
     // Logged Exercise Sets
     suspend fun upsertLoggedExerciseSet(loggedExerciseSet: LoggedExerciseSet) = database.getLoggedExerciseSetDao().upsert(loggedExerciseSet)
     suspend fun deleteLoggedExerciseSet(loggedExerciseSet: LoggedExerciseSet) = database.getLoggedExerciseSetDao().deleteEntity(loggedExerciseSet)
     fun getLoggedExerciseSets() = database.getLoggedExerciseSetDao().getAllEntities()
+    suspend fun getLoggedExerciseSetMaxOrder(loggedRoutineSetId: Long) = database.getLoggedExerciseSetDao().getMaxOrder(loggedRoutineSetId)
 }

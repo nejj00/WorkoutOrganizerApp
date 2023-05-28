@@ -13,5 +13,5 @@ data class LoggedWorkoutRoutineWithLoggedRoutineSets(
         entityColumn = "loggedRoutineId"
     )
 
-    val loggedRoutineSetsWithExercises: List<LoggedRoutineSet>
+    val loggedRoutineSets: List<LoggedRoutineSet>
 ) : Serializable
