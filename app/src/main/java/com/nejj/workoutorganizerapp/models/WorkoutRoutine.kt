@@ -11,7 +11,9 @@ import java.time.LocalTime
 )
 data class WorkoutRoutine(
     @PrimaryKey(autoGenerate = true)
-    val routineId: Long? = null,
+    var routineId: Long? = null,
     var name: String = "",
-    var notes: String = ""
+    var notes: String = "",
+    var isUserMade: Boolean = false,
+    var userUID: String? = null
 ): Serializable

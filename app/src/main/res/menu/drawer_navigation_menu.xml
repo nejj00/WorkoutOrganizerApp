@@ -7,4 +7,16 @@
     <item android:id="@+id/categoriesFragment"
         android:title="Categories"/>
 
+    <item android:id="@+id/userLogin"
+        android:title="Login"/>
+
+    <item android:id="@+id/userLogout"
+        android:title="Logout"/>
+
+    <item android:id="@+id/backupLocalData"
+        android:title="Backup"/>
+
+    <item android:id="@+id/deleteBackup"
+        android:title="Delete Backup"/>
+
 </menu>

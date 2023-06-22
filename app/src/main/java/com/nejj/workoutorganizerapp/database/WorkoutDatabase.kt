@@ -20,9 +20,10 @@ import java.util.concurrent.Executors
         RoutineSet::class,
         LoggedExerciseSet::class,
         LoggedRoutineSet::class,
-        LoggedWorkoutRoutine::class
+        LoggedWorkoutRoutine::class,
+        LastLoggedInUser::class
     ],
-    version = 17
+    version = 25
 )
 @TypeConverters(
     LocalDateConverter::class,
@@ -37,7 +38,7 @@ abstract class WorkoutDatabase : RoomDatabase() {
     abstract fun getLoggedWorkoutRoutineDao(): LoggedWorkoutRoutineDao
     abstract fun getLoggedRoutineSetDao(): LoggedRoutineSetDao
     abstract fun getLoggedExerciseSetDao(): LoggedExerciseSetDao
-
+    abstract fun getLastLoggedInUserDao(): LastLoggedInUserDao
     companion object {
         @Volatile
         private var instance: WorkoutDatabase? = null

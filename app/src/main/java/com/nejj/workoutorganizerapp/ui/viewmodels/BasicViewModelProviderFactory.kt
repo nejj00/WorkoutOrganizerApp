@@ -33,6 +33,9 @@ class BasicViewModelProviderFactory(
             modelClass.isAssignableFrom(LoggedExerciseSetViewModel::class.java) -> {
                 LoggedExerciseSetViewModel(app, workoutRepository) as T
             }
+            modelClass.isAssignableFrom(LastLoggedInUserViewModel::class.java) -> {
+                LastLoggedInUserViewModel(app, workoutRepository) as T
+            }
             else -> throw IllegalArgumentException("Unknown ViewModel class")
         }
     }

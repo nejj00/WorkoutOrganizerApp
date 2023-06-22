@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "672863711286",
+    "project_id": "workout-organizer-389808",
+    "storage_bucket": "workout-organizer-389808.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:672863711286:android:24fb59f23a745703696897",
+        "android_client_info": {
+          "package_name": "com.nejj.workoutorganizerapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "672863711286-fca8vd5vlg3lmrnmegt57bkbkf414su3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.nejj.workoutorganizerapp",
+            "certificate_hash": "53aa241b96ade1377600858662055ffacef2bebb"
+          }
+        },
+        {
+          "client_id": "672863711286-lebcp3jb39vs1kjfa8q0dsgffhli12a2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAoWkmkehWJWyrb7_dYslQRBli4icFL5kg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "672863711286-h249gv4uaam2aimqiet6i8rhv63spj20.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -13,10 +13,11 @@ data class Exercise(
     @PrimaryKey(autoGenerate = true)
     val exerciseId: Long? = null,
     val name: String = "",
-    val category: String? = null,
+    val category: String = "",
     val type: String = "",
     val isSingleSide: Boolean = false,
-    val isUserMade: Boolean = false
+    val isUserMade: Boolean = false,
+    val userUID: String? = ""
 ) : Serializable {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

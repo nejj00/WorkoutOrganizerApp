@@ -6,4 +6,8 @@
         android:title="Start"
         app:showAsAction="always"/>
 
+    <item android:id="@+id/miReorder"
+        android:title="Reorder"
+        app:showAsAction="never"/>
+
 </menu>

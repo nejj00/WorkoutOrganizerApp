@@ -10,8 +10,9 @@ import java.io.Serializable
 data class ExerciseCategory(
     @PrimaryKey(autoGenerate = true)
     var categoryId: Long? = null,
-    var name: String,
-    var isUserMade: Boolean = false
+    var name: String = "",
+    var isUserMade: Boolean = false,
+    var userUID: String? = ""
 ) : Serializable {
 
     override fun equals(other: Any?): Boolean {

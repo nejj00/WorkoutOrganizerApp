@@ -7,11 +7,11 @@ import com.nejj.workoutorganizerapp.models.LoggedWorkoutRoutine
 import java.io.Serializable
 
 data class LoggedWorkoutRoutineWithLoggedRoutineSets(
-    @Embedded val loggedWorkoutRoutine: LoggedWorkoutRoutine,
+    @Embedded val loggedWorkoutRoutine: LoggedWorkoutRoutine = LoggedWorkoutRoutine(),
     @Relation(
         parentColumn = "loggedRoutineId",
         entityColumn = "loggedRoutineId"
     )
 
-    val loggedRoutineSets: List<LoggedRoutineSet>
+    val loggedRoutineSets: List<LoggedRoutineSet> = listOf()
 ) : Serializable

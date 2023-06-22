@@ -11,13 +11,14 @@ import java.time.LocalTime
 )
 data class LoggedWorkoutRoutine(
     @PrimaryKey(autoGenerate = true)
-    val loggedRoutineId: Long? = null,
+    var loggedRoutineId: Long? = null,
     var name: String = "",
     var bodyweight: Double = 0.0,
     var notes: String = "",
-    val date: LocalDate = LocalDate.now(),
-    val startTime: LocalTime = LocalTime.now(),
-    val endTime: LocalTime? = null,
+    var date: LocalDate = LocalDate.now(),
+    var startTime: LocalTime = LocalTime.now(),
+    var endTime: LocalTime? = null,
+    var userUID: String? = ""
 ) : Serializable {
 
     constructor(routine: WorkoutRoutine) : this(

@@ -13,9 +13,15 @@ import java.io.Serializable
 data class RoutineSet(
     @PrimaryKey(autoGenerate = true)
     val routineSetId: Long? = null,
-    val routineId: Long,
-    var exerciseId: Long,
+    val routineId: Long? = null,
+    var exerciseId: Long? = null,
     var warmupSetsCount: Int = 0,
     var setsCount: Int = 0,
-    val setsOrder: Int = 0
-) : Serializable
+    var setsOrder: Int = 0,
+    var isUserMade: Boolean = false,
+    val userUID: String? = "",
+) : Serializable, ReorderableItem {
+    override fun getItemText(): String? {
+        return exerciseId.toString()
+    }
+}

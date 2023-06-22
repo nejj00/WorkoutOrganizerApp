@@ -4,7 +4,11 @@ plugins {
     id 'kotlin-android'
     id 'kotlin-kapt'
     id 'androidx.navigation.safeargs.kotlin'
+    id 'com.google.gms.google-services'
 }
+
+group = "io.data2viz"
+version = "1.0-SNAPSHOT"
 
 android {
     namespace 'com.nejj.workoutorganizerapp'
@@ -18,6 +22,8 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        multiDexEnabled true
     }
 
     buildFeatures {
@@ -39,12 +45,23 @@ android {
     }
 }
 
+//val chartsClientId: String by project
+//val chartsClientSecret: String by project
+
+
+
 dependencies {
 
-    implementation 'androidx.core:core-ktx:1.9.0'
+    implementation 'androidx.core:core-ktx:1.10.1'
     implementation 'androidx.appcompat:appcompat:1.6.1'
-    implementation 'com.google.android.material:material:1.8.0'
+    implementation 'com.google.android.material:material:1.9.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation 'com.google.firebase:firebase-auth-ktx:22.0.0'
+    implementation 'com.google.firebase:firebase-auth:22.0.0'
+    implementation 'com.google.firebase:firebase-database-ktx:20.2.2'
+    implementation 'com.google.firebase:firebase-firestore-ktx:24.6.1'
+    implementation 'io.data2viz.charts:core:1.1.0-eap1'
+    implementation 'io.data2viz.d2v:viz:0.8.12'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
@@ -68,6 +85,7 @@ dependencies {
     // Coroutine Lifecycle Scopes
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1"
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.5.1"
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.1.1'
 
     // Retrofit
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
@@ -80,4 +98,26 @@ dependencies {
 
     // Glide
     implementation 'com.github.bumptech.glide:glide:4.11.0'
+
+    // MPAndroidChart
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
+
+    // AAChartCore
+    implementation 'com.github.AAChartModel:AAChartCore-Kotlin:-SNAPSHOT'
+
+    // Supabase
+    implementation("io.github.jan-tennert.supabase:postgrest-kt:1.0.3")
+    implementation("io.github.jan-tennert.supabase:gotrue-kt:1.0.3")
+    implementation("io.ktor:ktor-client-cio:2.3.1")
+
+    // Kotlin Serialization
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")
+
+    // Google Sign In
+    implementation 'com.google.android.gms:play-services-auth:20.5.0'
+
+    // Data2Viz
+    implementation 'io.data2viz.charts:core:1.1.0-eap1'
+    implementation 'io.data2viz.d2v:viz:0.8.12'
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.5'
 }

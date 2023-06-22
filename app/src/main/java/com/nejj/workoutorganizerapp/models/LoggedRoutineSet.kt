@@ -16,8 +16,13 @@ data class LoggedRoutineSet(
     var exerciseName: String = "",
     val warmupSetsCount: Int = 0,
     var setsCount: Int = 0,
-    var setsOrder: Int = 0
-) : Serializable {
+    var setsOrder: Int = 0,
+    var userUID: String? = ""
+) : Serializable, ReorderableItem {
+
+    override fun getItemText(): String? {
+        return exerciseName
+    }
 
     constructor(routineSetWithExercise: RoutineSetsWithExercise, loggedRoutineId: Long) : this(
         loggedRoutineId = loggedRoutineId,

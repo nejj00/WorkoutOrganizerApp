@@ -16,7 +16,8 @@ data class LoggedExerciseSet(
     var reps: Int = 0,
     var setOrder: Int = 0,
     val isWarmupSet: Boolean = false,
-    var notes: String = ""
+    var notes: String = "",
+    var userUID: String? = ""
 ) : Serializable {
 
     constructor(loggedRoutineSet: LoggedRoutineSet, order: Int, isWarmupSet: Boolean): this(

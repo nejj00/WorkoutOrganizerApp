@@ -19,7 +19,7 @@
             android:padding="@dimen/text_input_layout_padding"
             app:layout_constraintEnd_toStartOf="@+id/tfBodyweight"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintHorizontal_weight="2"
+            app:layout_constraintHorizontal_weight="2.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
@@ -54,13 +54,15 @@
             android:padding="@dimen/text_input_layout_padding"
             app:layout_constraintEnd_toStartOf="@+id/tfWorkoutStartTime"
             app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_weight="1.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tfWorkoutName">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="date" />
+                android:inputType="none"
+                android:focusable="false"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -71,13 +73,15 @@
             android:padding="@dimen/text_input_layout_padding"
             app:layout_constraintEnd_toStartOf="@+id/tfWorkoutEndTime"
             app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_weight="1"
             app:layout_constraintStart_toEndOf="@+id/tfWotkoutDate"
             app:layout_constraintTop_toBottomOf="@+id/tfWorkoutName">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="time" />
+                android:inputType="none"
+                android:focusable="false"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -88,13 +92,15 @@
             android:padding="@dimen/text_input_layout_padding"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_weight="1"
             app:layout_constraintStart_toEndOf="@+id/tfWorkoutStartTime"
             app:layout_constraintTop_toBottomOf="@+id/tfWorkoutName">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="time" />
+                android:inputType="none"
+                android:focusable="false"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout

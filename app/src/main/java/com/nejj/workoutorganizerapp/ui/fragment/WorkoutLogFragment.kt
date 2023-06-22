@@ -1,9 +1,11 @@
 package com.nejj.workoutorganizerapp.ui.fragment
 
 import android.os.Bundle
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.PopupMenu
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -11,8 +13,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.nejj.workoutorganizerapp.R
 import com.nejj.workoutorganizerapp.adapters.LoggedWorkoutRoutinesAdapter
 import com.nejj.workoutorganizerapp.databinding.FragmentWorkoutLogBinding
-import com.nejj.workoutorganizerapp.models.LoggedWorkoutRoutine
-import com.nejj.workoutorganizerapp.models.WorkoutRoutine
 import com.nejj.workoutorganizerapp.models.relations.LoggedWorkoutRoutineWithLoggedRoutineSets
 import com.nejj.workoutorganizerapp.ui.viewmodels.LoggedWorkoutRoutineViewModel
 
@@ -39,26 +39,53 @@ class WorkoutLogFragment : Fragment(R.layout.fragment_workout_log) {
 
         loggedWorkoutRoutinesAdapter.setOnItemClickListener(loggedWorkoutClickedListener)
 
-        loggedWorkoutRoutineViewModel.getLoggedWorkoutRoutineWithLoggedRoutineSets().observe(viewLifecycleOwner) { loggedWorkoutRoutinesWithLoggedRoutineSets ->
+        loggedWorkoutRoutinesAdapter.setOnItemLongClickListener(loggedWorkoutLongClickListener)
+
+        loggedWorkoutRoutineViewModel.getLoggedWorkoutRoutineWithLoggedRoutineSetsLive().observe(viewLifecycleOwner) { loggedWorkoutRoutinesWithLoggedRoutineSets ->
             loggedWorkoutRoutinesAdapter.differ.submitList(loggedWorkoutRoutinesWithLoggedRoutineSets)
         }
 
         viewBinding.fabAddWorkout.setOnClickListener(addWourkoutListener)
+
     }
 
     private var loggedWorkoutClickedListener = fun(loggedWorkoutRoutineWithLoggedRoutineSets: LoggedWorkoutRoutineWithLoggedRoutineSets) {
-        val bundle = Bundle().apply {
-            putSerializable("loggedWorkoutRoutine", loggedWorkoutRoutineWithLoggedRoutineSets)
+        navigateToWorkout(loggedWorkoutRoutineWithLoggedRoutineSets)
+    }
+
+    private var loggedWorkoutLongClickListener = fun(
+        loggedWorkoutRoutineWithLoggedRoutineSets: LoggedWorkoutRoutineWithLoggedRoutineSets,
+        itemView: View
+    ) : Boolean {
+        val popupMenu = PopupMenu(activity, itemView, Gravity.BOTTOM)
+        popupMenu.inflate(R.menu.categories_bottom_popup_menu)
+
+        popupMenu.setOnMenuItemClickListener {
+            when (it?.itemId) {
+                R.id.editCategory -> {
+                    navigateToWorkout(loggedWorkoutRoutineWithLoggedRoutineSets)
+                    return@setOnMenuItemClickListener true
+                }
+                R.id.deleteCategory -> {
+                    loggedWorkoutRoutineViewModel.deleteEntity(loggedWorkoutRoutineWithLoggedRoutineSets.loggedWorkoutRoutine)
+                    return@setOnMenuItemClickListener true
+                }
+            }
+            return@setOnMenuItemClickListener false
         }
-        findNavController().navigate(
-            R.id.action_workoutLogFragment_to_workoutFragment,
-            bundle
-        )
+
+        popupMenu.show()
+
+        return true
     }
 
     private var addWourkoutListener = fun(_: View) {
+        navigateToWorkout(LoggedWorkoutRoutineWithLoggedRoutineSets())
+    }
+
+    private fun navigateToWorkout(loggedWorkoutRoutineWithLoggedRoutineSets: LoggedWorkoutRoutineWithLoggedRoutineSets) {
         val bundle = Bundle().apply {
-            putSerializable("loggedWorkoutRoutine", LoggedWorkoutRoutine())
+            putSerializable("loggedWorkoutRoutine", loggedWorkoutRoutineWithLoggedRoutineSets)
         }
         findNavController().navigate(
             R.id.action_workoutLogFragment_to_workoutFragment,

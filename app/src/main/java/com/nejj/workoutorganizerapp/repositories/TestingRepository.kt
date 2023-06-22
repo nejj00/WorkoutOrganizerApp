@@ -1,5 +1,6 @@
 package com.nejj.workoutorganizerapp.repositories
 
+import com.nejj.workoutorganizerapp.enums.ExerciseType
 import com.nejj.workoutorganizerapp.models.*
 
 class TestingRepository() {
@@ -29,16 +30,16 @@ class TestingRepository() {
 
     fun getExercises() : MutableList<Exercise> {
         val exercises: MutableList<Exercise> = mutableListOf()
-        exercises.add(Exercise(null, "Sit Up", "Abs", "Strength Weight", false, true))
-        exercises.add(Exercise(null, "Curls", "Biceps", "Strength Weight", false, true))
-        exercises.add(Exercise(null, "Leg Press", "Abs", "Strength Weight", false, true))
-        exercises.add(Exercise(null, "Squat", "Legs", "Strength Weight", false, true))
-        exercises.add(Exercise(null, "Neck Curls", "HORSE NECK", "Strength Weight", false, true))
-        exercises.add(Exercise(null, "Push up", "Chest", "Strength Weight", false, true))
-        exercises.add(Exercise(null, "Bench Press", "Chest", "Strength Weight", false, true))
-        exercises.add(Exercise(null, "Pull up", "Back", "Strength Weight", false, true))
-        exercises.add(Exercise(null, "Barbell Row", "Back", "Strength Weight", false, true))
-        exercises.add(Exercise(null, "Skullcrushers", "Triceps", "Strength Weight", false, true))
+        exercises.add(Exercise(null, "Sit Up", "Abs", ExerciseType.WEIGHT_REPS.toString(), false, false))
+        exercises.add(Exercise(null, "Curls", "Biceps", ExerciseType.WEIGHT_REPS.toString(), false, false))
+        exercises.add(Exercise(null, "Leg Press", "Abs", ExerciseType.WEIGHT_REPS.toString(), false, false))
+        exercises.add(Exercise(null, "Squat", "Legs", ExerciseType.WEIGHT_REPS.toString(), false, false))
+        exercises.add(Exercise(null, "Neck Curls", "HORSE NECK", ExerciseType.WEIGHT_REPS.toString(), false, false))
+        exercises.add(Exercise(null, "Push up", "Chest", ExerciseType.WEIGHT_REPS.toString(), false, false))
+        exercises.add(Exercise(null, "Bench Press", "Chest", ExerciseType.WEIGHT_REPS.toString(), false, false))
+        exercises.add(Exercise(null, "Pull up", "Back", ExerciseType.WEIGHT_REPS.toString(), false, false))
+        exercises.add(Exercise(null, "Barbell Row", "Back", ExerciseType.WEIGHT_REPS.toString(), false, false))
+        exercises.add(Exercise(null, "Skullcrushers", "Triceps", ExerciseType.WEIGHT_REPS.toString(), false, false))
 
         return exercises
     }

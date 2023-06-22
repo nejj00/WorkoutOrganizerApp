@@ -12,6 +12,8 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import com.nejj.workoutorganizerapp.R
 import com.nejj.workoutorganizerapp.databinding.FragmentEditExerciseBinding
 import com.nejj.workoutorganizerapp.enums.ExerciseType
@@ -116,7 +118,7 @@ class EditExerciseFragment : Fragment(R.layout.fragment_edit_exercise) {
             return false
         } else {
             exercisesViewModel.insertEntity(
-                Exercise(args.exercise.exerciseId, name, category, exerciseType, isSingleSide, true)
+                Exercise(args.exercise.exerciseId, name, category, exerciseType, isSingleSide, true, Firebase.auth.currentUser?.uid)
             )
             Toast.makeText(activity, "Exercise saved", Toast.LENGTH_LONG).show()
         }

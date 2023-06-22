@@ -1,6 +1,7 @@
 package com.nejj.workoutorganizerapp.adapters
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
@@ -53,6 +54,16 @@ class LoggedWorkoutRoutinesAdapter : RecyclerView.Adapter<LoggedWorkoutRoutinesA
                 onItemClickListener?.let { it(loggedWorkoutRoutine) }
             }
 
+            if(onItemLongClickListener != null) {
+                cardLoggedWorkout.setOnLongClickListener {
+                    (onItemLongClickListener!!)(loggedWorkoutRoutine, it)
+                }
+            }
+
+            rvLogCardExercises.setOnClickListener {
+                onItemClickListener?.let { it(loggedWorkoutRoutine) }
+            }
+
             loggedRoutineSetAdapter = LoggedRoutineSetAdapter()
             rvLogCardExercises.apply {
                 adapter = loggedRoutineSetAdapter
@@ -74,4 +85,12 @@ class LoggedWorkoutRoutinesAdapter : RecyclerView.Adapter<LoggedWorkoutRoutinesA
     fun setOnItemClickListener(listener: (LoggedWorkoutRoutineWithLoggedRoutineSets) -> Unit) {
         onItemClickListener = listener
     }
+
+    private var onItemLongClickListener: ((LoggedWorkoutRoutineWithLoggedRoutineSets, View) -> Boolean)? = null
+
+    fun setOnItemLongClickListener(listener: (LoggedWorkoutRoutineWithLoggedRoutineSets, view: View) -> Boolean) {
+        onItemLongClickListener = listener
+    }
+
+    //TODO Add OnHoldCLickListener for the card view to delete a logged workout routine
 }

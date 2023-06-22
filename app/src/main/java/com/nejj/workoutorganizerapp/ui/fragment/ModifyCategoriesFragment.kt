@@ -9,8 +9,11 @@ import android.view.View
 import android.widget.EditText
 import android.widget.PopupMenu
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import com.nejj.workoutorganizerapp.R
 import com.nejj.workoutorganizerapp.models.ExerciseCategory
+import com.nejj.workoutorganizerapp.sign_in.GoogleAuthUiClient
 
 class ModifyCategoriesFragment : CategoriesFragment() {
 
@@ -24,8 +27,6 @@ class ModifyCategoriesFragment : CategoriesFragment() {
         categoriesAdapter.setOnOptionsClickListener { category, optionsView ->
             onOptionsClickedListener(view, category, optionsView)
         }
-
-
 
         viewBinding.fabAddCategory.setOnClickListener {
             addCategoryDialog(view, ExerciseCategory(null, "")).show()
@@ -43,7 +44,11 @@ class ModifyCategoriesFragment : CategoriesFragment() {
                     return@setOnMenuItemClickListener true
                 }
                 R.id.deleteCategory -> {
-                    categoriesViewModel.deleteEntity(category)
+                    categoriesViewModel.deleteEntity(category).observe(viewLifecycleOwner) {
+                        if(!it)
+                            Snackbar.make(view, "Category is being used in exercises.", Snackbar.LENGTH_SHORT).show()
+
+                    }
                     return@setOnMenuItemClickListener true
                 }
             }
@@ -65,6 +70,9 @@ class ModifyCategoriesFragment : CategoriesFragment() {
             .setPositiveButton("Add", DialogInterface.OnClickListener { dialog, which ->
                 if(addCategoryInput.text.toString().isNotEmpty()) {
                     exerciseCategory.name = addCategoryInput.text.toString()
+                    exerciseCategory.isUserMade = true
+                    exerciseCategory.userUID = Firebase.auth.currentUser?.uid
+
                     categoriesViewModel.insertEntity(exerciseCategory)
                     Snackbar.make(view, "Category saved successfully", Snackbar.LENGTH_SHORT).show()
                 }
