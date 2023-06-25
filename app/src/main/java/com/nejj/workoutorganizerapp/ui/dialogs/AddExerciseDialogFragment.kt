@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.DialogFragment
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
@@ -39,6 +40,7 @@ class AddExerciseDialogFragment : DialogFragment() {
         savedInstanceState: Bundle?
     ): View? {
         viewBinding = DialogAddExerciseBinding.inflate(inflater, container, false)
+
         return viewBinding.root
     }
 
@@ -48,27 +50,27 @@ class AddExerciseDialogFragment : DialogFragment() {
         val navHostFragment = childFragmentManager.findFragmentById(viewBinding.addExerciseNavHostFragment.id) as NavHostFragment
         navController = navHostFragment.navController
 
-        val appBarConfiguration = AppBarConfiguration(
-            topLevelDestinationIds = setOf()
-        )
-        viewBinding.tabAddRoutineExercise.setupWithNavController(navController, appBarConfiguration)
-        viewBinding.tabAddRoutineExercise.setNavigationIcon(R.drawable.ic_close)
-
-        navController.addOnDestinationChangedListener() { _, destination, _ ->
-            when(destination.id) {
-                navController.graph.startDestinationId -> {
-                    viewBinding.tabAddRoutineExercise.setNavigationIcon(R.drawable.ic_close)
-                }
-            }
-        }
-
-        viewBinding.tabAddRoutineExercise.setNavigationOnClickListener {
-            if(navController.currentDestination!!.id == navController.graph.startDestinationId) {
-                dismiss()
-            } else {
-                navController.navigateUp()
-            }
-        }
+//        val appBarConfiguration = AppBarConfiguration(
+//            topLevelDestinationIds = setOf()
+//        )
+//        viewBinding.tabAddRoutineExercise.setupWithNavController(navController, appBarConfiguration)
+//        viewBinding.tabAddRoutineExercise.setNavigationIcon(R.drawable.ic_close)
+//
+//        navController.addOnDestinationChangedListener() { _, destination, _ ->
+//            when(destination.id) {
+//                navController.graph.startDestinationId -> {
+//                    viewBinding.tabAddRoutineExercise.setNavigationIcon(R.drawable.ic_close)
+//                }
+//            }
+//        }
+//
+//        viewBinding.tabAddRoutineExercise.setNavigationOnClickListener {
+//            if(navController.currentDestination!!.id == navController.graph.startDestinationId) {
+//                dismiss()
+//            } else {
+//                navController.navigateUp()
+//            }
+//        }
     }
 
 }

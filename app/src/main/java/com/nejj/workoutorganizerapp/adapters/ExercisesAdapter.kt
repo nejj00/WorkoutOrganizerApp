@@ -8,7 +8,7 @@ class ExercisesAdapter(hideOptions: Boolean = false) : SimpleItemPreviewAdapter<
 
     override val differCallback = object: DiffUtil.ItemCallback<Exercise>() {
         override fun areItemsTheSame(oldItem: Exercise, newItem: Exercise): Boolean {
-            return oldItem.name == newItem.name && oldItem.category == newItem.category
+            return oldItem.name == newItem.name && oldItem.categoryId == newItem.categoryId
         }
 
         override fun areContentsTheSame(oldItem: Exercise, newItem: Exercise): Boolean {

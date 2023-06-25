@@ -11,6 +11,9 @@ import com.nejj.workoutorganizerapp.models.relations.WorkoutRoutineWithRoutineSe
 @Dao
 interface RoutineSetDao : DataAccessObject<RoutineSet> {
 
+    @Query("SELECT * FROM routine_sets WHERE routineSetId = :routineSetId")
+    suspend fun getEntityById(routineSetId: Long): RoutineSet
+
     @Query("SELECT * FROM routine_sets")
     fun getAllEntities(): LiveData<RoutineSet>
 

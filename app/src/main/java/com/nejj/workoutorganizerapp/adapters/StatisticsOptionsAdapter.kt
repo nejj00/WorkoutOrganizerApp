@@ -2,6 +2,7 @@ package com.nejj.workoutorganizerapp.adapters
 
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
+import com.nejj.workoutorganizerapp.enums.OverallStatisticsType
 import com.nejj.workoutorganizerapp.enums.StatisticsType
 
 class StatisticsOptionsAdapter(hideOptions: Boolean = false) : SimpleItemPreviewAdapter<StatisticsType>(hideOptions) {
@@ -12,7 +13,7 @@ class StatisticsOptionsAdapter(hideOptions: Boolean = false) : SimpleItemPreview
         }
 
         override fun areContentsTheSame(oldItem: StatisticsType, newItem: StatisticsType): Boolean {
-            return oldItem == newItem
+            return oldItem.equals(newItem)
         }
     }
     override val differ = AsyncListDiffer(this, differCallback)

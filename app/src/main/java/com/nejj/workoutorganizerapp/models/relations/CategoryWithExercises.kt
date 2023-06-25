@@ -8,8 +8,8 @@ import com.nejj.workoutorganizerapp.models.ExerciseCategory
 data class CategoryWithExercises (
     @Embedded val category: ExerciseCategory,
     @Relation(
-        parentColumn = "name",
-        entityColumn = "category"
+        parentColumn = "categoryId",
+        entityColumn = "categoryId"
     )
     val exercises: List<Exercise>
 )

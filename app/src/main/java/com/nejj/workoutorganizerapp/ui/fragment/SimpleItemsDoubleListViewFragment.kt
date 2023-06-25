@@ -13,8 +13,8 @@ import com.nejj.workoutorganizerapp.databinding.FragmentStatisticsBinding
 abstract class SimpleItemsDoubleListViewFragment<T, Y> : Fragment(R.layout.fragment_statistics) {
 
     private lateinit var viewBinding: FragmentStatisticsBinding
-    lateinit var simpleItemPreviewTopRVAdapter: SimpleItemPreviewAdapter<T>
-    lateinit var simpleItemPreviewBottomRVAdapter: SimpleItemPreviewAdapter<Y>
+    open lateinit var simpleItemPreviewTopRVAdapter: SimpleItemPreviewAdapter<T>
+    open lateinit var simpleItemPreviewBottomRVAdapter: SimpleItemPreviewAdapter<Y>
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -44,7 +44,7 @@ abstract class SimpleItemsDoubleListViewFragment<T, Y> : Fragment(R.layout.fragm
 
     protected abstract fun getBottomRVAdapter() : SimpleItemPreviewAdapter<Y>
 
-    private fun setupTopRecyclerView() {
+    protected open fun setupTopRecyclerView() {
         simpleItemPreviewTopRVAdapter = getTopRVAdapter()
         viewBinding.rvTopItems.apply {
             adapter = simpleItemPreviewTopRVAdapter
@@ -52,7 +52,7 @@ abstract class SimpleItemsDoubleListViewFragment<T, Y> : Fragment(R.layout.fragm
         }
     }
 
-    private fun setupBottomRecyclerView() {
+    protected open fun setupBottomRecyclerView() {
         simpleItemPreviewBottomRVAdapter = getBottomRVAdapter()
         viewBinding.rvBottomItems.apply {
             adapter = simpleItemPreviewBottomRVAdapter

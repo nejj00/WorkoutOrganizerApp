@@ -36,9 +36,6 @@
         <action
             android:id="@+id/action_statisticsFragment_to_statisticsChartFragment"
             app:destination="@id/statisticsChartFragment" />
-        <action
-            android:id="@+id/action_statisticsFragment_to_statisticsChartActivity"
-            app:destination="@id/statisticsChartActivity" />
     </fragment>
 
     <fragment
@@ -57,6 +54,9 @@
         <action
             android:id="@+id/action_routineFragment_to_reorderFragment"
             app:destination="@id/reorderFragment" />
+        <action
+            android:id="@+id/action_routineFragment_to_addRoutineExerciseCategoriesFragment"
+            app:destination="@id/addRoutineExerciseCategoriesFragment" />
     </fragment>
     <fragment
         android:id="@+id/categoriesFragment"
@@ -88,6 +88,9 @@
         <action
             android:id="@+id/action_workoutFragment_to_reorderFragment"
             app:destination="@id/reorderFragment" />
+        <action
+            android:id="@+id/action_workoutFragment_to_addRoutineExerciseCategoriesFragment"
+            app:destination="@id/addRoutineExerciseCategoriesFragment" />
     </fragment>
     <fragment
         android:id="@+id/editRoutineSetFragment"
@@ -96,6 +99,9 @@
         <argument
             android:name="routineSet"
             app:argType="com.nejj.workoutorganizerapp.models.RoutineSet" />
+        <action
+            android:id="@+id/action_editRoutineSetFragment_to_addRoutineExerciseCategoriesFragment"
+            app:destination="@id/addRoutineExerciseCategoriesFragment" />
     </fragment>
     <fragment
         android:id="@+id/reorderFragment"
@@ -118,6 +124,9 @@
         <action
             android:id="@+id/action_categoriesStatisticsFragment_to_exercisesStatisticsFragment"
             app:destination="@id/exercisesStatisticsFragment" />
+        <action
+            android:id="@+id/action_categoriesStatisticsFragment_to_statisticsChartFragment"
+            app:destination="@id/statisticsChartFragment" />
     </fragment>
     <fragment
         android:id="@+id/exercisesStatisticsFragment"
@@ -126,6 +135,12 @@
         <argument
             android:name="exercise"
             app:argType="com.nejj.workoutorganizerapp.models.Exercise" />
+        <action
+            android:id="@+id/action_exercisesStatisticsFragment_to_statisticsChartFragment"
+            app:destination="@id/statisticsChartFragment" />
+        <action
+            android:id="@+id/action_exercisesStatisticsFragment_to_personalRecordsStatisticsFragment"
+            app:destination="@id/personalRecordsStatisticsFragment" />
     </fragment>
     <fragment
         android:id="@+id/statisticsChartFragment"
@@ -135,9 +150,52 @@
             android:name="statisticsDataSet"
             app:argType="com.nejj.workoutorganizerapp.models.StatisticsDataSet" />
     </fragment>
-    <activity
-        android:id="@+id/statisticsChartActivity"
-        android:name="com.nejj.workoutorganizerapp.ui.fragment.statistics.StatisticsChartActivity"
-        android:label="StatisticsChartActivity" />
+    <fragment
+        android:id="@+id/personalRecordsStatisticsFragment"
+        android:name="com.nejj.workoutorganizerapp.ui.fragment.statistics.PersonalRecordsStatisticsFragment"
+        android:label="PersonalRecordsStatisticsFragment" >
+        <argument
+            android:name="exercise"
+            app:argType="com.nejj.workoutorganizerapp.models.Exercise" />
+        <action
+            android:id="@+id/action_personalRecordsStatisticsFragment_to_personalRecordChartFragment"
+            app:destination="@id/personalRecordChartFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/personalRecordChartFragment"
+        android:name="com.nejj.workoutorganizerapp.ui.fragment.statistics.PersonalRecordChartFragment"
+        android:label="PersonalRecordChartFragment" >
+        <argument
+            android:name="personalRecord"
+            app:argType="com.nejj.workoutorganizerapp.models.PersonalRecord" />
+    </fragment>
+    <fragment
+        android:id="@+id/addRoutineExerciseCategoriesFragment"
+        android:name="com.nejj.workoutorganizerapp.ui.fragment.AddRoutineExerciseCategoriesFragment"
+        android:label="AddRoutineExerciseCategoriesFragment" >
+        <action
+            android:id="@+id/action_addRoutineExerciseCategoriesFragment_to_addRoutineExerciseExercisesFragment"
+            app:destination="@id/addRoutineExerciseExercisesFragment" />
+        <argument
+            android:name="entityId"
+            app:argType="long" />
+        <argument
+            android:name="fragmentContext"
+            app:argType="com.nejj.workoutorganizerapp.enums.FragmentContext" />
+    </fragment>
+    <fragment
+        android:id="@+id/addRoutineExerciseExercisesFragment"
+        android:name="com.nejj.workoutorganizerapp.ui.fragment.AddRoutineExerciseExercisesFragment"
+        android:label="AddRoutineExerciseExercisesFragment" >
+        <argument
+            android:name="entityId"
+            app:argType="long" />
+        <argument
+            android:name="fragmentContext"
+            app:argType="com.nejj.workoutorganizerapp.enums.FragmentContext" />
+        <argument
+            android:name="exerciseCategory"
+            app:argType="com.nejj.workoutorganizerapp.models.ExerciseCategory" />
+    </fragment>
 
 </navigation>

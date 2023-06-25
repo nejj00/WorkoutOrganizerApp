@@ -46,9 +46,9 @@ class LoggedWorkoutRoutinesAdapter : RecyclerView.Adapter<LoggedWorkoutRoutinesA
         val loggedWorkoutRoutine = differ.currentList[position]
         holder.viewBinding.apply {
             tvWorkoutTitle.text = loggedWorkoutRoutine.loggedWorkoutRoutine.name
-            tvDayOfWeek.text = loggedWorkoutRoutine.loggedWorkoutRoutine.date.dayOfWeek.toString()
+            tvDayOfWeek.text = loggedWorkoutRoutine.loggedWorkoutRoutine.date.dayOfWeek.toString().take(3)
             tvDayOfMonth.text = loggedWorkoutRoutine.loggedWorkoutRoutine.date.dayOfMonth.toString()
-            tvMonth.text = loggedWorkoutRoutine.loggedWorkoutRoutine.date.month.toString()
+            tvMonth.text = loggedWorkoutRoutine.loggedWorkoutRoutine.date.month.toString().take(3)
 
             cardLoggedWorkout.setOnClickListener {
                 onItemClickListener?.let { it(loggedWorkoutRoutine) }

@@ -21,11 +21,15 @@ interface ExerciseDao : DataAccessObject<Exercise> {
     suspend fun getAllUserMadeEntitiesList(): List<Exercise>
 
     @Transaction
-    @Query("SELECT * FROM exercises WHERE category = :category")
-    suspend fun getExercisesOfCategory(category: String): List<CategoryWithExercises>
+    @Query("SELECT * FROM exercises WHERE categoryId = :categoryId")
+    suspend fun getExercisesOfCategory(categoryId: Long): List<CategoryWithExercises>
 
-    @Query("SELECT * FROM exercises WHERE category = :category")
-    fun getExercisesOfCategoryLive(category: String): LiveData<List<Exercise>>
+    @Query("SELECT * FROM exercises WHERE categoryId = :categoryId")
+    fun getExercisesOfCategoryLive(categoryId: Long): LiveData<List<Exercise>>
+
+//    @Transaction
+//    @Query("SELECT * FROM exercises WHERE categoryId = :categoryId")
+//    suspend fun getExercisesWithExerciseSetsForCategory(categoryId: Long): List<ExerciseWithLoggedExerciseSets>
 
     @Transaction
     @Query("UPDATE exercises SET userUID = :userUID WHERE isUserMade = 1")

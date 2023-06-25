@@ -23,7 +23,7 @@ class RoutineSetMainViewModel(
     fun deleteEntity(entity: RoutineSet) = viewModelScope.launch {
         workoutRepository.deleteRoutineSet(entity)
     }
-
+    suspend fun getRoutineSetsById(routineSetId: Long) = workoutRepository.getRoutineSetById(routineSetId)
     fun getEntities() = workoutRepository.getRoutineSets()
 
     suspend fun getRoutineSetsWithExercise(routineId: Long) = workoutRepository.getRoutineSetsWithExercise(routineId)

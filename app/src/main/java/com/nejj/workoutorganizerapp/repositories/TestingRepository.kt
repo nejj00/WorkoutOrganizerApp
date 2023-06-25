@@ -17,29 +17,29 @@ class TestingRepository() {
 
     fun getCategories() : MutableList<ExerciseCategory> {
         val categories: MutableList<ExerciseCategory> = mutableListOf()
-        categories.add(ExerciseCategory(null, "Abs"))
-        categories.add(ExerciseCategory(null,"Chest"))
-        categories.add(ExerciseCategory(null,"Biceps"))
-        categories.add(ExerciseCategory(null,"Back"))
-        categories.add(ExerciseCategory(null,"Triceps"))
-        categories.add(ExerciseCategory(null,"Legs"))
-        categories.add(ExerciseCategory(null,"HORSE NECK"))
+        categories.add(ExerciseCategory(1, "Abs"))
+        categories.add(ExerciseCategory(2,"Chest"))
+        categories.add(ExerciseCategory(3,"Biceps"))
+        categories.add(ExerciseCategory(4,"Back"))
+        categories.add(ExerciseCategory(5,"Triceps"))
+        categories.add(ExerciseCategory(6,"Legs"))
+        categories.add(ExerciseCategory(7,"HORSE NECK"))
 
         return categories
     }
 
     fun getExercises() : MutableList<Exercise> {
         val exercises: MutableList<Exercise> = mutableListOf()
-        exercises.add(Exercise(null, "Sit Up", "Abs", ExerciseType.WEIGHT_REPS.toString(), false, false))
-        exercises.add(Exercise(null, "Curls", "Biceps", ExerciseType.WEIGHT_REPS.toString(), false, false))
-        exercises.add(Exercise(null, "Leg Press", "Abs", ExerciseType.WEIGHT_REPS.toString(), false, false))
-        exercises.add(Exercise(null, "Squat", "Legs", ExerciseType.WEIGHT_REPS.toString(), false, false))
-        exercises.add(Exercise(null, "Neck Curls", "HORSE NECK", ExerciseType.WEIGHT_REPS.toString(), false, false))
-        exercises.add(Exercise(null, "Push up", "Chest", ExerciseType.WEIGHT_REPS.toString(), false, false))
-        exercises.add(Exercise(null, "Bench Press", "Chest", ExerciseType.WEIGHT_REPS.toString(), false, false))
-        exercises.add(Exercise(null, "Pull up", "Back", ExerciseType.WEIGHT_REPS.toString(), false, false))
-        exercises.add(Exercise(null, "Barbell Row", "Back", ExerciseType.WEIGHT_REPS.toString(), false, false))
-        exercises.add(Exercise(null, "Skullcrushers", "Triceps", ExerciseType.WEIGHT_REPS.toString(), false, false))
+        exercises.add(Exercise(null, 1,"Sit Up",  ExerciseType.STRENGTH_WEIGHT_REPS.toString(), false, false))
+        exercises.add(Exercise(null, 3,"Curls",  ExerciseType.STRENGTH_WEIGHT_REPS.toString(), false, false))
+        exercises.add(Exercise(null, 1,"Leg Press",  ExerciseType.STRENGTH_WEIGHT_REPS.toString(), false, false))
+        exercises.add(Exercise(null, 6,"Squat",  ExerciseType.STRENGTH_WEIGHT_REPS.toString(), false, false))
+        exercises.add(Exercise(null, 7,"Neck Curls",  ExerciseType.STRENGTH_WEIGHT_REPS.toString(), false, false))
+        exercises.add(Exercise(null, 2,"Push up",  ExerciseType.BODYWEIGHT_WEIGHT_REPS.toString(), false, false))
+        exercises.add(Exercise(null, 2,"Bench Press",  ExerciseType.STRENGTH_WEIGHT_REPS.toString(), false, false))
+        exercises.add(Exercise(null, 4,"Pull up",  ExerciseType.BODYWEIGHT_WEIGHT_REPS.toString(), false, false))
+        exercises.add(Exercise(null, 4,"Barbell Row",  ExerciseType.STRENGTH_WEIGHT_REPS.toString(), false, false))
+        exercises.add(Exercise(null, 5,"Skullcrushers",  ExerciseType.STRENGTH_WEIGHT_REPS.toString(), false, false))
 
         return exercises
     }

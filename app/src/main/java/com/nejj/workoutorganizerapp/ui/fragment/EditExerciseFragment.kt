@@ -30,6 +30,7 @@ class EditExerciseFragment : Fragment(R.layout.fragment_edit_exercise) {
     private lateinit var categoriesViewModel: CategoriesMainViewModel
     private val exercisesViewModel: ExercisesMainViewModel by activityViewModels()
 
+    private val selectedCategoryId  = 0L
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -59,6 +60,7 @@ class EditExerciseFragment : Fragment(R.layout.fragment_edit_exercise) {
 
         categoryAutoCompleteTextView?.setOnItemClickListener { parent, view, position, id ->
             val selectedItem = parent.getItemAtPosition(position) as ExerciseCategory
+            val selectedCategoryId = selectedItem.categoryId
             Toast.makeText(
                 activity,
                 "You chose $selectedItem",
@@ -75,7 +77,8 @@ class EditExerciseFragment : Fragment(R.layout.fragment_edit_exercise) {
 
         val exercise = args.exercise
         viewBinding.tiExerciseName.editText?.setText(exercise.name)
-        viewBinding.actvCategory.setText(exercise.category, false)
+        viewBinding.actvCategory.setText(
+            exerciseCategoryList.find { it.categoryId == exercise.categoryId }?.name ?: "", false)
         viewBinding.actvExerciseType.setText(exercise.type, false)
         viewBinding.cbIsSingleSide.isChecked = exercise.isSingleSide;
     }
@@ -108,17 +111,17 @@ class EditExerciseFragment : Fragment(R.layout.fragment_edit_exercise) {
 
     private fun saveExercise(): Boolean {
         val name = viewBinding.tiExerciseName.editText?.text.toString()
-        val category = viewBinding.tiCategory.editText?.text.toString()
+        val categoryId = selectedCategoryId
         val exerciseType = viewBinding.tiExerciseType.editText?.text.toString()
         val isSingleSide = viewBinding.cbIsSingleSide.isChecked
 
-        if (name.isEmpty() || category.isEmpty() || exerciseType.isEmpty()) {
+        if (name.isEmpty() || categoryId == 0L || exerciseType.isEmpty()) {
             Toast.makeText(activity, "Please fill all fields", Toast.LENGTH_LONG).show()
 
             return false
         } else {
             exercisesViewModel.insertEntity(
-                Exercise(args.exercise.exerciseId, name, category, exerciseType, isSingleSide, true, Firebase.auth.currentUser?.uid)
+                Exercise(args.exercise.exerciseId, categoryId, name, exerciseType, isSingleSide, true, Firebase.auth.currentUser?.uid)
             )
             Toast.makeText(activity, "Exercise saved", Toast.LENGTH_LONG).show()
         }

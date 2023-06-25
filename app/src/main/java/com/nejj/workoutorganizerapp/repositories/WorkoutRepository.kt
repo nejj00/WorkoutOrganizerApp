@@ -25,8 +25,8 @@ class WorkoutRepository(
     fun getExercises() = database.getExerciseDao().getAllEntities()
     suspend fun getExercisesList() = database.getExerciseDao().getAllEntitiesList()
     suspend fun getUserMadeExercisesList() = database.getExerciseDao().getAllUserMadeEntitiesList()
-    suspend fun getExercisesByCategoryId(category: String) = database.getExerciseDao().getExercisesOfCategory(category)
-    fun getExercisesByCategoryIdLive(category: String) = database.getExerciseDao().getExercisesOfCategoryLive(category)
+    suspend fun getExercisesByCategoryId(categoryId: Long) = database.getExerciseDao().getExercisesOfCategory(categoryId)
+    fun getExercisesByCategoryIdLive(categoryId: Long) = database.getExerciseDao().getExercisesOfCategoryLive(categoryId)
     suspend fun updateExercisesUserUID(userUID: String) = database.getExerciseDao().updateExercisesUserUID(userUID)
 
     // Workout Routines
@@ -44,6 +44,7 @@ class WorkoutRepository(
     suspend fun upsertRoutineSet(routineSet: RoutineSet) = database.getRoutineSetDao().upsert(routineSet)
     suspend fun deleteRoutineSet(routineSet: RoutineSet) = database.getRoutineSetDao().deleteEntity(routineSet)
     suspend fun deleteAllRoutineSets() = database.getRoutineSetDao().deleteAllRoutineSets()
+    suspend fun getRoutineSetById(routineSetId: Long) = database.getRoutineSetDao().getEntityById(routineSetId)
     fun getRoutineSets() = database.getRoutineSetDao().getAllEntities()
     suspend fun getRoutineSetsList() = database.getRoutineSetDao().getAllEntitiesList()
     suspend fun getUserMadeRoutineSetsList() = database.getRoutineSetDao().getAllEntitiesList()
@@ -69,11 +70,13 @@ class WorkoutRepository(
     suspend fun upsertLoggedRoutineSet(loggedRoutineSet: LoggedRoutineSet) = database.getLoggedRoutineSetDao().upsert(loggedRoutineSet)
     suspend fun deleteLoggedRoutineSet(loggedRoutineSet: LoggedRoutineSet) = database.getLoggedRoutineSetDao().deleteEntity(loggedRoutineSet)
     suspend fun deleteAllLoggedRoutineSets() = database.getLoggedRoutineSetDao().deleteAllLoggedRoutineSets()
+    suspend fun getLoggedRoutineSetById(loggedRoutineSetId: Long) = database.getLoggedRoutineSetDao().getEntityById(loggedRoutineSetId)
     fun getLoggedRoutineSets() = database.getLoggedRoutineSetDao().getAllEntities()
     suspend fun getLoggedRoutineSetsList() = database.getLoggedRoutineSetDao().getAllEntitiesList()
     fun getLoggedRoutineSetsWithLoggedExerciseSets(loggedRoutineId: Long) = database.getLoggedRoutineSetDao().getLoggedRoutineSetsWithLoggedExerciseSets(loggedRoutineId)
     suspend fun getLoggedRouitneSetMaxOrder(loggedRoutineId: Long) = database.getLoggedRoutineSetDao().getMaxOrder(loggedRoutineId)
     suspend fun getLoggedRoutineSetsByRoutineId(loggedRoutineId: Long) = database.getLoggedRoutineSetDao().getLoggedRoutineSetsByRoutineId(loggedRoutineId)
+    suspend fun getMaxSetsCountForExercise(exerciseId: Long) = database.getLoggedRoutineSetDao().getMaxSetsCountForExercise(exerciseId)
     suspend fun updateLoggedRoutineSetsUserUID(userUID: String) = database.getLoggedRoutineSetDao().updateLoggedRoutineSetsUserUID(userUID)
 
     // Logged Exercise Sets
@@ -82,8 +85,14 @@ class WorkoutRepository(
     suspend fun deleteAllLoggedExerciseSets() = database.getLoggedExerciseSetDao().deleteAllLoggedExerciseSets()
     fun getLoggedExerciseSets() = database.getLoggedExerciseSetDao().getAllEntities()
     suspend fun getExerciseSetsForLoggedRoutine(loggedRoutineId: Long) = database.getLoggedExerciseSetDao().getExerciseSetsForLoggedRoutine(loggedRoutineId)
+    suspend fun getExerciseSetsForLoggedRoutineSet(loggedRoutineSetId: Long) = database.getLoggedExerciseSetDao().getExerciseSetsForLoggedRoutineSet(loggedRoutineSetId)
     suspend fun getLoggedExerciseSetsList() = database.getLoggedExerciseSetDao().getAllEntitiesList()
     suspend fun getLoggedExerciseSetMaxOrder(loggedRoutineSetId: Long) = database.getLoggedExerciseSetDao().getMaxOrder(loggedRoutineSetId)
+    suspend fun getLoggedExerciseSetsWithDateMap() = database.getLoggedExerciseSetDao().getLoggedExerciseSetsWithDateMap()
+    suspend fun getLoggedExerciseSetsWithDateMapByCategory(categoryId: Long) = database.getLoggedExerciseSetDao().getLoggedExerciseSetsWithDateMapByCategory(categoryId)
+    suspend fun getLoggedExerciseSetsWithDateMapByExercise(exerciseId: Long) = database.getLoggedExerciseSetDao().getLoggedExerciseSetsWithDateMapByExercise(exerciseId)
+    suspend fun getMaxWeightForExercise(exerciseId: Long) = database.getLoggedExerciseSetDao().getMaxWeightForExercise(exerciseId)
+    suspend fun getMaxRepsForExercise(exerciseId: Long) = database.getLoggedExerciseSetDao().getMaxRepsForExercise(exerciseId)
     suspend fun updateLoggedExerciseSetsUserUID(userUID: String) = database.getLoggedExerciseSetDao().updateLoggedExerciseSetsUserUID(userUID)
 
     // Last Logged In User

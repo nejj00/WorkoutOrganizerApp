@@ -7,13 +7,16 @@ import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.ktx.Firebase
-import com.nejj.workoutorganizerapp.models.Exercise
+import com.nejj.workoutorganizerapp.enums.ExerciseStatisticsType
+import com.nejj.workoutorganizerapp.enums.OverallStatisticsType
+import com.nejj.workoutorganizerapp.enums.StatisticsType
 import com.nejj.workoutorganizerapp.models.LoggedExerciseSet
 import com.nejj.workoutorganizerapp.models.LoggedRoutineSet
 import com.nejj.workoutorganizerapp.models.LoggedWorkoutRoutine
 import com.nejj.workoutorganizerapp.models.relations.LoggedWorkoutRoutineWithLoggedRoutineSets
 import com.nejj.workoutorganizerapp.models.relations.RoutineSetsWithExercise
 import com.nejj.workoutorganizerapp.repositories.WorkoutRepository
+import com.nejj.workoutorganizerapp.util.StatisticsDataSetProcessor
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.LocalTime
@@ -39,6 +42,11 @@ class LoggedWorkoutRoutineViewModel(
     fun deleteEntity(loggedWorkoutRoutine: LoggedWorkoutRoutine) = viewModelScope.launch {
         val loggedRoutineSets = workoutRepository.getLoggedRoutineSetsByRoutineId(loggedWorkoutRoutine.loggedRoutineId!!)
         loggedRoutineSets.forEach { loggedRoutineSet ->
+            val loggedExerciseSets = workoutRepository.getExerciseSetsForLoggedRoutineSet(loggedRoutineSet.loggedRoutineSetId!!)
+            loggedExerciseSets.forEach {
+                workoutRepository.deleteLoggedExerciseSet(it)
+            }
+
             workoutRepository.deleteLoggedRoutineSet(loggedRoutineSet)
         }
 
@@ -81,29 +89,6 @@ class LoggedWorkoutRoutineViewModel(
         }
 
         return workoutRepository.getLogWorkoutWithSets(loggedWorkoutRoutineId)
-    }
-
-    suspend fun getVolumeStatisticsDataSetMap() : MutableMap<String, Float> {
-        val workoutsWithRoutineSets = getLoggedWorkoutRoutineWithLoggedRoutineSets()
-        val dateToExerciseSetsMap = mutableMapOf<LocalDate, List<LoggedExerciseSet>>()
-
-        workoutsWithRoutineSets.forEach {
-            val exerciseSets = workoutRepository.getExerciseSetsForLoggedRoutine(it.loggedWorkoutRoutine.loggedRoutineId!!)
-            dateToExerciseSetsMap[it.loggedWorkoutRoutine.date] = exerciseSets
-        }
-
-        val dateVolumeMap = mutableMapOf<String, Float>()
-        dateToExerciseSetsMap.forEach { (date, exerciseSetsList) ->
-            var totalVolume = 0.0f
-            exerciseSetsList.forEach {loggedExerciseSet ->
-                val predicate: (LoggedExerciseSet) -> Boolean = {it.loggedRoutineSetId == loggedExerciseSet.loggedRoutineSetId}
-                totalVolume += loggedExerciseSet.reps.toFloat() * loggedExerciseSet.weight.toFloat() * exerciseSetsList.count(predicate).toFloat()
-            }
-
-            dateVolumeMap[date.toString()] = totalVolume
-        }
-
-        return dateVolumeMap
     }
 
     override val classToken: Class<LoggedWorkoutRoutine>

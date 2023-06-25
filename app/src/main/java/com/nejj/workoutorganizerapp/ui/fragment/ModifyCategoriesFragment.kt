@@ -5,10 +5,15 @@ import android.content.DialogInterface
 import android.os.Bundle
 import android.text.InputType
 import android.view.Gravity
+import android.view.LayoutInflater
 import android.view.View
 import android.widget.EditText
 import android.widget.PopupMenu
+import androidx.core.view.marginLeft
+import androidx.core.view.setPadding
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.nejj.workoutorganizerapp.R
@@ -58,26 +63,30 @@ class ModifyCategoriesFragment : CategoriesFragment() {
         popupMenu.show()
     }
 
-    private fun addCategoryDialog(view: View, exerciseCategory: ExerciseCategory) : AlertDialog {
-        val addCategoryInput = EditText(activity)
-        addCategoryInput.setHint("Enter category name")
-        addCategoryInput.inputType = InputType.TYPE_CLASS_TEXT
-        addCategoryInput.setText(exerciseCategory.name)
+    private fun addCategoryDialog(view: View, exerciseCategory: ExerciseCategory) : androidx.appcompat.app.AlertDialog {
+        val inputDialogLayout = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_input_text, null) as View
+        val inputEditText = inputDialogLayout.findViewById<EditText>(R.id.etDialogInput)
+        inputEditText.setText(exerciseCategory.name)
+        inputEditText.hint = "Name"
 
-        val addCategoryDialog = AlertDialog.Builder(activity)
+        val materialDialog = MaterialAlertDialogBuilder(requireContext())
             .setTitle("Category")
-            .setView(addCategoryInput)
-            .setPositiveButton("Add", DialogInterface.OnClickListener { dialog, which ->
-                if(addCategoryInput.text.toString().isNotEmpty()) {
-                    exerciseCategory.name = addCategoryInput.text.toString()
+            .setView(inputDialogLayout)
+            .setPositiveButton("Add", DialogInterface.OnClickListener { dialogInterface, i ->
+                if(inputEditText.text.toString().isNotEmpty()) {
+                    exerciseCategory.name = inputEditText.text.toString()
                     exerciseCategory.isUserMade = true
                     exerciseCategory.userUID = Firebase.auth.currentUser?.uid
 
                     categoriesViewModel.insertEntity(exerciseCategory)
                     Snackbar.make(view, "Category saved successfully", Snackbar.LENGTH_SHORT).show()
                 }
-            }).create()
+            })
+            .setNegativeButton("Cancel", DialogInterface.OnClickListener { dialogInterface, i ->
+                dialogInterface.dismiss()
+            })
+            .create()
 
-        return addCategoryDialog
+        return materialDialog
     }
 }

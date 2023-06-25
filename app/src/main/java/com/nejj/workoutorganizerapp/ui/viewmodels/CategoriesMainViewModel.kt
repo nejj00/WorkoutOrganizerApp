@@ -71,7 +71,7 @@ class CategoriesMainViewModel(
         val result = MutableLiveData<Boolean>()
 
         viewModelScope.launch {
-            val exercisesForCategory = workoutRepository.getExercisesByCategoryId(entity.name)
+            val exercisesForCategory = workoutRepository.getExercisesByCategoryId(entity.categoryId!!)
 
             if(exercisesForCategory.isEmpty())
             {

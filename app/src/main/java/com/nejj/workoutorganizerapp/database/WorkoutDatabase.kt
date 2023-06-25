@@ -23,7 +23,7 @@ import java.util.concurrent.Executors
         LoggedWorkoutRoutine::class,
         LastLoggedInUser::class
     ],
-    version = 25
+    version = 28
 )
 @TypeConverters(
     LocalDateConverter::class,

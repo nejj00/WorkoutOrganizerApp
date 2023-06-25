@@ -126,18 +126,28 @@ class WorkoutFragment : Fragment(R.layout.activity_workout) {
     }
 
     private fun openAddExerciseFragment(loggedWorkoutRoutineWithLoggedSets: LoggedWorkoutRoutineWithLoggedRoutineSets) {
-        val addExerciseDialogFragment = AddExerciseDialogFragment()
-        val fragmentManager = childFragmentManager
-
-        addExerciseDialogFragment.arguments = Bundle().apply {
-            putSerializable("addDialogContext", AddExerciseDialogContext.ADD_LOGGED_ROUTINE_SET)
-            putSerializable(
-                "loggedWorkoutRoutine",
-                loggedWorkoutRoutineWithLoggedSets.loggedWorkoutRoutine
-            )
+        saveLoggedWorkoutRoutine()
+        val bundle = Bundle().apply {
+            putSerializable("entityId", loggedWorkoutRoutineWithLoggedSets.loggedWorkoutRoutine.loggedRoutineId)
+            putSerializable("fragmentContext", FragmentContext.WORKOUT_CONTEXT)
         }
+        findNavController().navigate(
+            R.id.action_workoutFragment_to_addRoutineExerciseCategoriesFragment,
+            bundle
+        )
 
-        addExerciseDialogFragment.show(fragmentManager, "addExerciseDialogFragment")
+//        val addExerciseDialogFragment = AddExerciseDialogFragment()
+//        val fragmentManager = childFragmentManager
+//
+//        addExerciseDialogFragment.arguments = Bundle().apply {
+//            putSerializable("addDialogContext", AddExerciseDialogContext.ADD_LOGGED_ROUTINE_SET)
+//            putSerializable(
+//                "loggedWorkoutRoutine",
+//                loggedWorkoutRoutineWithLoggedSets.loggedWorkoutRoutine
+//            )
+//        }
+//
+//        addExerciseDialogFragment.show(fragmentManager, "addExerciseDialogFragment")
     }
 
     private fun setupRecyclerView() {
@@ -267,6 +277,7 @@ class WorkoutFragment : Fragment(R.layout.activity_workout) {
     }
 
     private val addExerciseSetClickedListener = fun(loggedRoutineSetsWithLoggedExerciseSet: LoggedRoutineSetWithLoggedExerciseSet) {
+        saveLoggedWorkoutRoutine()
         loggedExerciseSetViewModel.insertNewExerciseSetToLoggedRoutineSet(loggedRoutineSetsWithLoggedExerciseSet.loggedRoutineSet)
     }
 
@@ -285,6 +296,7 @@ class WorkoutFragment : Fragment(R.layout.activity_workout) {
                     return@setOnMenuItemClickListener true
                 }
                 R.id.miDeleteExerciseSet -> {
+                    saveLoggedWorkoutRoutine()
                     loggedExerciseSetViewModel.deleteEntity(loggedExerciseSet)
                     return@setOnMenuItemClickListener true
                 }

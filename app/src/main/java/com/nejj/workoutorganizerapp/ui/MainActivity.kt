@@ -1,12 +1,18 @@
 package com.nejj.workoutorganizerapp.ui
 
+import android.app.SearchManager
+import android.content.Context
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Menu
 import android.view.View
+import android.widget.SearchView
 import android.widget.Toast
 import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -30,7 +36,7 @@ import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
 
-        private lateinit var binding: ActivityMainBinding
+    private lateinit var binding: ActivityMainBinding
     private lateinit var navController: NavController
     private lateinit var appBarConfiguration: AppBarConfiguration
     lateinit var categoriesViewModel: CategoriesMainViewModel
@@ -41,6 +47,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var loggedRoutineSetViewModel: LoggedRoutineSetViewModel
     lateinit var loggedExerciseSetViewModel: LoggedExerciseSetViewModel
     lateinit var lastLoggedInUserViewModel: LastLoggedInUserViewModel
+    lateinit var statisticsViewModel: StatisticsViewModel
 
     private val signInViewModel = SignInViewModel()
 
@@ -91,6 +98,7 @@ class MainActivity : AppCompatActivity() {
         loggedRoutineSetViewModel = ViewModelProvider(this, viewModelProviderFactory).get(LoggedRoutineSetViewModel::class.java)
         loggedExerciseSetViewModel = ViewModelProvider(this, viewModelProviderFactory).get(LoggedExerciseSetViewModel::class.java)
         lastLoggedInUserViewModel = ViewModelProvider(this, viewModelProviderFactory).get(LastLoggedInUserViewModel::class.java)
+        statisticsViewModel = ViewModelProvider(this, viewModelProviderFactory).get(StatisticsViewModel::class.java)
 
         binding.drawerNavigationView.setNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {

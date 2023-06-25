@@ -1,12 +1,25 @@
 package com.nejj.workoutorganizerapp.ui.fragment
 
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
+import androidx.appcompat.widget.SearchView
+import androidx.core.view.MenuHost
+import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.google.android.material.appbar.MaterialToolbar
+import com.nejj.workoutorganizerapp.R
+import com.nejj.workoutorganizerapp.databinding.DialogAddExerciseBinding
 import com.nejj.workoutorganizerapp.enums.AddExerciseDialogContext
+import com.nejj.workoutorganizerapp.enums.FragmentContext
 import com.nejj.workoutorganizerapp.models.Exercise
 import com.nejj.workoutorganizerapp.models.LoggedWorkoutRoutine
 import com.nejj.workoutorganizerapp.models.RoutineSet
@@ -16,71 +29,108 @@ import com.nejj.workoutorganizerapp.ui.viewmodels.LoggedRoutineSetViewModel
 import com.nejj.workoutorganizerapp.ui.viewmodels.RoutineSetMainViewModel
 import com.nejj.workoutorganizerapp.util.Constants
 import com.nejj.workoutorganizerapp.util.Constants.Companion.ROUTINE_ARGUMENT_KEY
+import kotlinx.coroutines.launch
+import java.util.*
 
 class AddRoutineExerciseExercisesFragment : ExercisesFragment() {
-
-    private lateinit var navHostFragment: NavHostFragment
-    private lateinit var dialogFragment: AddExerciseDialogFragment
 
     private val args: AddRoutineExerciseExercisesFragmentArgs by navArgs()
     private val routineSetViewModel: RoutineSetMainViewModel by activityViewModels()
     private val loggedRoutineSetViewModel: LoggedRoutineSetViewModel by activityViewModels()
+    val exerciseList = mutableListOf<Exercise>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        navHostFragment = parentFragment as NavHostFragment
-        dialogFragment = navHostFragment.parentFragment as AddExerciseDialogFragment
-
-        val context = dialogFragment.arguments?.getSerializable("addDialogContext")
-
-        when(context) {
-            AddExerciseDialogContext.ADD_ROUTINE_SET ->
+        when(args.fragmentContext) {
+            FragmentContext.ROUTINE_CONTEXT ->
                 exercisesAdapter.setOnItemClickListener(exerciseClickedListenerAdd)
-            AddExerciseDialogContext.EDIT_ROUTINE_SET ->
+            FragmentContext.EDIT_ROUTINE_SET_CONTEXT ->
                 exercisesAdapter.setOnItemClickListener(exerciseClickedListenerEdit)
-            AddExerciseDialogContext.ADD_LOGGED_ROUTINE_SET ->
+            FragmentContext.WORKOUT_CONTEXT ->
                 exercisesAdapter.setOnItemClickListener(exerciseClickedListenerAddLogged)
         }
-
-
 
         viewBinding.fabAddExercise.visibility = View.GONE
 
         val category = args.exerciseCategory;
 
         exercisesViewModel.getEntities().observe(viewLifecycleOwner) { exercisesList ->
-            val filteredExercises = exercisesList.filter { exercise -> exercise.category == category.name }
+            val filteredExercises = exercisesList.filter { exercise -> exercise.categoryId == category.categoryId }
+            exerciseList.addAll(filteredExercises)
             exercisesAdapter.differ.submitList(filteredExercises)
         }
+
+        setUpAppBarMenuItems(view)
     }
 
     private val exerciseClickedListenerAdd = fun(exercise: Exercise) {
-        val workoutRoutine = dialogFragment.arguments?.getSerializable(ROUTINE_ARGUMENT_KEY) as WorkoutRoutine
+        val workoutRoutineId = args.entityId
 
-        routineSetViewModel.insertRoutineSet(workoutRoutine.routineId!!, exercise.exerciseId!!)
+        routineSetViewModel.insertRoutineSet(workoutRoutineId, exercise.exerciseId!!)
 
-        dialogFragment.dismiss()
+        findNavController().popBackStack(R.id.routineFragment, false)
     }
 
     private val exerciseClickedListenerEdit = fun(exercise: Exercise) {
-        val routineSet = dialogFragment.arguments?.getSerializable("routineSet") as RoutineSet
+        val routineSetId = args.entityId
 
-        routineSet.exerciseId = exercise.exerciseId!!
-        routineSetViewModel.insertEntity(routineSet)
-
-        dialogFragment.dismiss()
+        lifecycleScope.launch {
+            val routineSet = routineSetViewModel.getRoutineSetsById(routineSetId)
+            routineSet.exerciseId = exercise.exerciseId!!
+            routineSetViewModel.insertEntity(routineSet)
+            findNavController().popBackStack(R.id.routineFragment, false)
+        }
     }
 
     private val exerciseClickedListenerAddLogged = fun(exercise: Exercise) {
-        val loggedWorkoutRoutine = dialogFragment.arguments?.getSerializable("loggedWorkoutRoutine") as LoggedWorkoutRoutine
+        val loggedWorkoutRoutineId = args.entityId
 
-        loggedRoutineSetViewModel.insertNewLoggedRoutineSet(loggedWorkoutRoutine.loggedRoutineId!!, exercise)
+        loggedRoutineSetViewModel.insertNewLoggedRoutineSet(loggedWorkoutRoutineId, exercise)
 
-        dialogFragment.dismiss()
+        findNavController().popBackStack(R.id.workoutFragment, false)
     }
 
     override fun hideOptionsIcon() : Boolean {
         return true
+    }
+
+    private fun setUpAppBarMenuItems(view: View) {
+        val menuHost: MenuHost = requireActivity()
+
+        // Add menu items without using the Fragment Menu APIs
+        // Note how we can tie the MenuProvider to the viewLifecycleOwner
+        // and an optional Lifecycle.State (here, RESUMED) to indicate when
+        // the menu should be visible
+        menuHost.addMenuProvider(object : MenuProvider {
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                menuInflater.inflate(R.menu.add_exercise_toolbar, menu)
+                val searchItem = menu.findItem(R.id.searchExercise)
+                val searchView = searchItem.actionView as SearchView
+                searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                    override fun onQueryTextSubmit(query: String?): Boolean {
+                        return false
+                    }
+                    override fun onQueryTextChange(newText: String?): Boolean {
+                        exerciseList.filter { exercise ->
+                            exercise.name.lowercase(Locale.ROOT).contains(newText.toString().lowercase(), true)
+                        }.let {
+                            exercisesAdapter.differ.submitList(it)
+                        }
+                        return true
+                    }
+                })
+            }
+
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                when (menuItem.itemId) {
+                    R.id.addExercise -> {
+                        return true
+                    }
+                }
+                return false
+            }
+
+        }, viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
 }

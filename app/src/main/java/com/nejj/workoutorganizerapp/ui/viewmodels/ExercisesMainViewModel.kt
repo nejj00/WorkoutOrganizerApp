@@ -28,7 +28,7 @@ class ExercisesMainViewModel(
 
     fun getEntities() = workoutRepository.getExercises()
 
-    fun getExercisesByCategoryIdLive(category: String) = workoutRepository.getExercisesByCategoryIdLive(category)
+    fun getExercisesByCategoryIdLive(categoryId: Long) = workoutRepository.getExercisesByCategoryIdLive(categoryId)
 
     fun updateExercisesUserUID(userUID: String) = viewModelScope.launch {
         workoutRepository.updateExercisesUserUID(userUID)
@@ -56,7 +56,7 @@ class ExercisesMainViewModel(
         val map = mutableMapOf<String, Any>()
         map["exerciseId"] = entity.exerciseId!!
         map["name"] = entity.name
-        map["category"] = entity.category
+        map["categoryId"] = entity.categoryId!!
         map["type"] = entity.type
         map["isSingleSide"] = entity.isSingleSide
         map["isUserMade"] = entity.isUserMade

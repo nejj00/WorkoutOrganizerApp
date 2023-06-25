@@ -34,35 +34,9 @@ open class CategoriesFragment : Fragment(R.layout.fragment_categories) {
         super.onViewCreated(view, savedInstanceState)
 
         setupRecyclerView()
-
-        val allCategories : MutableList<ExerciseCategory> = mutableListOf()
         categoriesViewModel.getEntities().observe(viewLifecycleOwner) { categories ->
-            //allCategories.addAll(categories)
             categoriesAdapter.differ.submitList(categories)
-        }
-
-//        categoriesViewModel.categories.observe(viewLifecycleOwner, Observer { response ->
-//            when(response) {
-//                is Resource.Success -> {
-//                    response.data?.let { categoriesResponse ->
-//                        //allCategories.addAll(categoriesResponse.categories)
-//                        categoriesAdapter.differ.submitList(categoriesResponse.categories)
-//                    }
-//                }
-//                is Resource.Error -> {
-//                    response.message?.let { message ->
-//                        Log.e(TAG, "An error occured: $message")
-//                    }
-//                }
-//                is Resource.Loading -> {
-//
-//                }
-//            }
-//        })
-
-        //categoriesAdapter.differ.submitList(allCategories)
-        //categoriesAdapter.differ.submitList(TestingRepository().getCategories().toList())
-    }
+        } }
 
     protected open fun hideOptionsIcon() : Boolean {
         return false

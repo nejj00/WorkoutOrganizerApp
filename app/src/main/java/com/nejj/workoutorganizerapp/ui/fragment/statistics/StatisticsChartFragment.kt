@@ -10,14 +10,6 @@ import com.github.aachartmodel.aainfographics.aachartcreator.*
 import com.github.aachartmodel.aainfographics.aaoptionsmodel.AAScrollablePlotArea
 import com.nejj.workoutorganizerapp.R
 import com.nejj.workoutorganizerapp.databinding.FragmentStatisticChartBinding
-import com.nejj.workoutorganizerapp.models.StatisticsDataSet
-import com.nejj.workoutorganizerapp.ui.charts.TemperatureChart
-import io.data2viz.charts.chart.chart
-import io.data2viz.charts.chart.discrete
-import io.data2viz.charts.chart.mark.line
-import io.data2viz.charts.chart.quantitative
-import io.data2viz.viz.VizContainerView
-import java.time.LocalDate
 
 class StatisticsChartFragment : Fragment(R.layout.fragment_statistic_chart) {
 
@@ -37,10 +29,10 @@ class StatisticsChartFragment : Fragment(R.layout.fragment_statistic_chart) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val statisticsDataSet = args.statisticsDataSet as StatisticsDataSet
+        val statisticsDataSet = args.statisticsDataSet
 
         val categoriesArray = statisticsDataSet.categories.toTypedArray()
-        val dataSetArray: Array<Any> = statisticsDataSet.dataSet.toTypedArray()
+        val dataSetArray = statisticsDataSet.dataSet.toTypedArray()
 
         val aaChartView = viewBinding.aaChartView as AAChartView
         val scrollablePlotArea = AAScrollablePlotArea()
@@ -64,7 +56,7 @@ class StatisticsChartFragment : Fragment(R.layout.fragment_statistic_chart) {
             .categories(categoriesArray)
             .series(arrayOf(
                 AASeriesElement()
-                    .name("Volume")
+                    .name(statisticsDataSet.overallStatisticsType.toString())
                     .data(dataSetArray),
             )
             )

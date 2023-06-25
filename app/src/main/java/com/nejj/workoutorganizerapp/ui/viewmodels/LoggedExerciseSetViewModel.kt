@@ -23,6 +23,10 @@ class LoggedExerciseSetViewModel(
 
     fun deleteEntity(entity: LoggedExerciseSet) = viewModelScope.launch {
         workoutRepository.deleteLoggedExerciseSet(entity)
+
+        val loggedRoutineSet = workoutRepository.getLoggedRoutineSetById(entity.loggedRoutineSetId!!)
+        loggedRoutineSet.setsCount--
+        workoutRepository.upsertLoggedRoutineSet(loggedRoutineSet)
     }
 
     fun updateLoggedExerciseSetsUserUID(userUID: String) = viewModelScope.launch {
@@ -39,6 +43,9 @@ class LoggedExerciseSetViewModel(
         loggedExerciseSet.userUID = Firebase.auth.uid.toString()
 
         workoutRepository.upsertLoggedExerciseSet(loggedExerciseSet)
+
+        loggedRoutineSet.setsCount++
+        workoutRepository.upsertLoggedRoutineSet(loggedRoutineSet)
     }
 
     override val classToken: Class<LoggedExerciseSet>

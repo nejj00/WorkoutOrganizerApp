@@ -12,8 +12,8 @@ import java.io.Serializable
 data class Exercise(
     @PrimaryKey(autoGenerate = true)
     val exerciseId: Long? = null,
+    val categoryId: Long? = null,
     val name: String = "",
-    val category: String = "",
     val type: String = "",
     val isSingleSide: Boolean = false,
     val isUserMade: Boolean = false,
