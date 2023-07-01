@@ -41,7 +41,7 @@ class StatisticsChartFragment : Fragment(R.layout.fragment_statistic_chart) {
         scrollablePlotArea.opacity = 80f
 
         val aaChartModel : AAChartModel = AAChartModel()
-            .chartType(AAChartType.Line)
+            .chartType(AAChartType.Spline)
             .title("title")
             .subtitle("subtitle")
             .dataLabelsEnabled(true)

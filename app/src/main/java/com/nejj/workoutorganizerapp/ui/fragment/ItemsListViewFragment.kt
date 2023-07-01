@@ -31,12 +31,18 @@ abstract class ItemsListViewFragment<T> : Fragment(R.layout.items_list_view_frag
 
         simpleItemPreviewAdapter.setOnItemClickListener(itemClickedListener)
 
+        simpleItemPreviewAdapter.setOnOptionsClickListener(itemOptionsListener)
+
         viewBinding.fabAddItem.setOnClickListener(addItemListener)
     }
 
     protected abstract val itemClickedListener: (T) -> Unit
 
     protected abstract val addItemListener: (View) -> Unit
+
+    protected open val itemOptionsListener: (T, View) -> Unit = {
+        item, view ->
+    }
 
     protected abstract fun getAdapter() : SimpleItemPreviewAdapter<T>
 

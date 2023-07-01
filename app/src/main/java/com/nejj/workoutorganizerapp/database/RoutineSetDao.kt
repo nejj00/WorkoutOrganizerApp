@@ -23,10 +23,6 @@ interface RoutineSetDao : DataAccessObject<RoutineSet> {
     @Query("SELECT * FROM routine_sets WHERE isUserMade = 1")
     suspend fun getAllUserMadeEntitiesList(): List<RoutineSet>
 
-//    @Transaction
-//    @Query("SELECT * FROM routine_sets WHERE routine_id = :routineId")
-//    suspend fun getSetsOfRoutine(routineId: Long): List<WorkoutRoutineWithRoutineSets>
-
     @Transaction
     @Query("SELECT * FROM routine_sets WHERE routineId = :routineId")
     suspend fun getRoutineSetsWithExercise(routineId: Long): List<RoutineSetsWithExercise>
@@ -44,10 +40,16 @@ interface RoutineSetDao : DataAccessObject<RoutineSet> {
     @Query("SELECT * FROM routine_sets WHERE routineId = :routineId")
     fun getRoutineSetsListByRoutineId(routineId: Long): List<RoutineSet>
 
+    @Query("SELECT * FROM routine_sets WHERE exerciseId = :exerciseId")
+    suspend fun getRoutineSetsByExerciseId(exerciseId: Long): List<RoutineSet>
+
     @Transaction
     @Query("UPDATE routine_sets SET userUID = :userUID WHERE isUserMade = 1")
     suspend fun updateRoutineSetsUserUID(userUID: String)
 
-    @Query("DELETE FROM routine_sets")
+    @Query("DELETE FROM routine_sets WHERE isUserMade = 1")
     suspend fun deleteAllRoutineSets()
+
+    @Query("DELETE FROM routine_sets WHERE exerciseId = :exerciseId")
+    suspend fun deleteRoutineSetsByExerciseId(exerciseId: Long)
 }

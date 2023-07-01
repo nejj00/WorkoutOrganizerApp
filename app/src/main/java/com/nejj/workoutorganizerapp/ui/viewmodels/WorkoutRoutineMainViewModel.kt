@@ -14,8 +14,8 @@ import kotlinx.coroutines.launch
 
 class WorkoutRoutineMainViewModel(
     app: Application,
-    workoutRepository: WorkoutRepository
-) : MainViewModel<WorkoutRoutine>(app, workoutRepository, "workout_routines") {
+    val workoutRepository: WorkoutRepository
+) : AndroidViewModel(app) {
 
     private val _workoutRoutineID = MutableLiveData<Long>()
     val workoutRoutineID: LiveData<Long>
@@ -45,41 +45,7 @@ class WorkoutRoutineMainViewModel(
 
     fun getEntities() = workoutRepository.getWorkoutRoutines()
 
-
-
     fun getWorkoutRoutineWithRoutineSets(routineId: Long) = workoutRepository.getWorkoutRoutineWithRoutineSets(routineId)
 
     fun getWorkoutRoutineWithExercises(routineId: Long) = workoutRepository.getWorkoutRoutineWithExercises(routineId)
-    override val classToken: Class<WorkoutRoutine>
-        get() = WorkoutRoutine::class.java
-
-    override suspend fun getLocalEntitiesList(): List<WorkoutRoutine> {
-        return workoutRepository.getUserMadeWorkoutRoutinesList()
-    }
-
-    override fun getIdFieldName(): String {
-        return "routineId"
-    }
-
-    override fun insertToFirestoreList(
-        document: DocumentSnapshot,
-        entitiesListFirestore: MutableList<WorkoutRoutine>
-    ) {
-        entitiesListFirestore.add(document.toObject(classToken)!!)
-    }
-
-    override fun getMapFromEntity(entity: WorkoutRoutine): Map<String, Any> {
-        val map = mutableMapOf<String, Any>()
-        map["routineId"] = entity.routineId!!
-        map["name"] = entity.name
-        map["notes"] = entity.notes
-        map["isUserMade"] = entity.isUserMade
-        map["userUID"] = entity.userUID ?: ""
-
-        return map
-    }
-
-    override fun getEntityId(entity: WorkoutRoutine): Long {
-        return entity.routineId!!
-    }
 }

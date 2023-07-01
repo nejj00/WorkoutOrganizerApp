@@ -1,6 +1,7 @@
 package com.nejj.workoutorganizerapp.ui.viewmodels
 
 import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -24,8 +25,8 @@ import java.time.format.DateTimeFormatter
 
 class LoggedWorkoutRoutineViewModel(
     app: Application,
-    workoutRepository: WorkoutRepository
-) : MainViewModel<LoggedWorkoutRoutine>(app, workoutRepository, "logged_workout_routines") {
+    val workoutRepository: WorkoutRepository
+) : AndroidViewModel(app) {
 
     private val _loggedWorkoutRoutineID = MutableLiveData<Long>()
     val loggedWorkoutRoutineID: LiveData<Long>
@@ -89,66 +90,5 @@ class LoggedWorkoutRoutineViewModel(
         }
 
         return workoutRepository.getLogWorkoutWithSets(loggedWorkoutRoutineId)
-    }
-
-    override val classToken: Class<LoggedWorkoutRoutine>
-        get() = LoggedWorkoutRoutine::class.java
-
-    override suspend fun getLocalEntitiesList(): List<LoggedWorkoutRoutine> {
-        return workoutRepository.getLoggedWorkoutRoutinesList()
-    }
-
-    override fun getIdFieldName(): String {
-        return "loggedRoutineId"
-    }
-
-    override fun insertToFirestoreList(
-        document: DocumentSnapshot,
-        entitiesListFirestore: MutableList<LoggedWorkoutRoutine>
-    ) {
-        val loggedWorkoutRoutine = LoggedWorkoutRoutine()
-
-        loggedWorkoutRoutine.loggedRoutineId =  document.data?.get("loggedRoutineId") as Long
-        loggedWorkoutRoutine.name = document.data?.get("name") as String
-        loggedWorkoutRoutine.bodyweight = document.data?.get("bodyweight") as Double
-        loggedWorkoutRoutine.notes = document.data?.get("notes") as String
-        loggedWorkoutRoutine.date = LocalDate.parse(document.data?.get("date") as String, DateTimeFormatter.ISO_LOCAL_DATE)
-        loggedWorkoutRoutine.startTime = LocalTime.parse(document.data?.get("startTime") as String, DateTimeFormatter.ISO_LOCAL_TIME)
-
-        val endTime = document.data?.get("endTime") as String
-        if(endTime.isEmpty()) {
-            loggedWorkoutRoutine.endTime = null
-        } else {
-            loggedWorkoutRoutine.endTime = LocalTime.parse(document.data?.get("endTime") as String, DateTimeFormatter.ISO_LOCAL_TIME)
-        }
-
-        loggedWorkoutRoutine.userUID = document.data?.get("userUID") as String
-
-        entitiesListFirestore.add(loggedWorkoutRoutine)
-    }
-
-    override fun getMapFromEntity(entity: LoggedWorkoutRoutine): Map<String, Any> {
-        val map = mutableMapOf<String, Any>()
-        map["loggedRoutineId"] = entity.loggedRoutineId!!
-        map["name"] = entity.name
-        map["bodyweight"] = entity.bodyweight
-        map["notes"] = entity.notes
-        map["date"] = entity.date.toString()
-
-        val localizedTimeFormatter = DateTimeFormatter.ofPattern("HH:mm")
-        map["startTime"] = entity.startTime.format(localizedTimeFormatter)
-
-        if(entity.endTime != null)
-            map["endTime"] = entity.endTime!!.format(localizedTimeFormatter)
-        else
-            map["endTime"] = ""
-
-        map["userUID"] = entity.userUID ?: ""
-
-        return map
-    }
-
-    override fun getEntityId(entity: LoggedWorkoutRoutine): Long {
-        return entity.loggedRoutineId!!
     }
 }

@@ -17,14 +17,10 @@ import com.google.firebase.ktx.Firebase
 import com.nejj.workoutorganizerapp.R
 import com.nejj.workoutorganizerapp.adapters.RoutineSetsAdapter
 import com.nejj.workoutorganizerapp.databinding.ActivityRoutineBinding
-import com.nejj.workoutorganizerapp.enums.AddExerciseDialogContext
 import com.nejj.workoutorganizerapp.enums.FragmentContext
 import com.nejj.workoutorganizerapp.models.*
 import com.nejj.workoutorganizerapp.models.relations.RoutineSetsWithExercise
-import com.nejj.workoutorganizerapp.models.relations.WorkoutRoutineWithRoutineSets
-import com.nejj.workoutorganizerapp.ui.dialogs.AddExerciseDialogFragment
 import com.nejj.workoutorganizerapp.ui.viewmodels.*
-import com.nejj.workoutorganizerapp.util.Constants.Companion.ROUTINE_ARGUMENT_KEY
 import kotlinx.coroutines.launch
 
 class RoutineFragment : Fragment(R.layout.activity_routine) {
@@ -59,6 +55,8 @@ class RoutineFragment : Fragment(R.layout.activity_routine) {
         }
 
         val workoutRoutine = args.routine
+        requireActivity().title = workoutRoutine.name
+
         viewBinding.tiRoutineName.editText?.setText(workoutRoutine.name)
         viewBinding.tiRoutineNotes.editText?.setText(workoutRoutine.notes)
 
@@ -192,7 +190,7 @@ class RoutineFragment : Fragment(R.layout.activity_routine) {
                 val loggedWorkoutRoutineWorkoutRoutineSets = loggedWorkoutRoutineViewModel.initializeLoggedWorkoutRoutine(loggedWorkoutRoutine, routineSetsWithExercise)
 
                 val bundle = Bundle().apply {
-                    putSerializable("loggedWorkoutRoutine", loggedWorkoutRoutineWorkoutRoutineSets)
+                    putSerializable("loggedWorkoutRoutineWithLoggedSets", loggedWorkoutRoutineWorkoutRoutineSets)
                 }
                 findNavController().navigate(
                     R.id.action_routineFragment_to_workoutFragment,

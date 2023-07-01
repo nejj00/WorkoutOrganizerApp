@@ -63,8 +63,8 @@ interface LoggedExerciseSetDao : DataAccessObject<LoggedExerciseSet> {
             "INNER JOIN logged_routine_sets ON logged_exercise_sets.loggedRoutineSetId = logged_routine_sets.loggedRoutineSetId " +
             "INNER JOIN routine_sets ON logged_routine_sets.exerciseId = routine_sets.exerciseId " +
             "WHERE routine_sets.exerciseId = :exerciseId " +
-            "ORDER BY logged_workout_routines.date ASC")
-    suspend fun getMaxWeightForExercise(exerciseId: Long): Map<LocalDate, Double>?
+            "ORDER BY logged_workout_routines.date ASC LIMIT 1")
+    suspend fun getMaxWeightForExercise(exerciseId: Long): Map<LocalDate?, Double?>
 
     @MapInfo(keyColumn = "date", valueColumn = "maxReps")
     @Query("SELECT MAX(reps) AS maxReps, logged_workout_routines.date AS date FROM logged_exercise_sets " +
@@ -73,7 +73,7 @@ interface LoggedExerciseSetDao : DataAccessObject<LoggedExerciseSet> {
             "INNER JOIN exercises ON logged_routine_sets.exerciseId = exercises.exerciseId " +
             "WHERE exercises.exerciseId = :exerciseId " +
             "ORDER BY logged_workout_routines.date ASC")
-    suspend fun getMaxRepsForExercise(exerciseId: Long): Map<LocalDate, Int>?
+    suspend fun getMaxRepsForExercise(exerciseId: Long): Map<LocalDate?, Int?>
 
     @Transaction
     @Query("UPDATE logged_exercise_sets SET userUID = :userUID")

@@ -30,6 +30,9 @@ class CategoriesStatisticsFragment : SimpleItemsDoubleListViewFragment<Statistic
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val exerciseCategory = args.exerciseCategory
+        requireActivity().title = exerciseCategory.name
+        viewBinding.tvTopText.text = getString(R.string.category_statistics)
+        viewBinding.tvBottomText.text = getString(R.string.exercises)
 
         exercisesViewModel.getExercisesByCategoryIdLive(exerciseCategory.categoryId!!).observe(viewLifecycleOwner) { exercises ->
             //allCategories.addAll(categories)

@@ -10,7 +10,6 @@
         android:id="@+id/tvRecordType"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:text="Max Weight"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/constraintLayout"
@@ -32,7 +31,6 @@
             android:id="@+id/tvRecord"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="20"
             android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -41,7 +39,6 @@
             android:id="@+id/tvRecordDate"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="12 Jan 2023"
             android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvRecord" />

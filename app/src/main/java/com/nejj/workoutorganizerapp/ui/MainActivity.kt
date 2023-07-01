@@ -1,18 +1,12 @@
 package com.nejj.workoutorganizerapp.ui
 
-import android.app.SearchManager
-import android.content.Context
-import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.Menu
 import android.view.View
-import android.widget.SearchView
 import android.widget.Toast
 import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.content.ContextCompat
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -22,7 +16,12 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import androidx.work.Constraints
+import androidx.work.PeriodicWorkRequestBuilder
 import com.google.android.gms.auth.api.identity.Identity
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
+import com.nejj.workoutorganizerapp.synchronizers.FirebaseSyncWorker
 import com.nejj.workoutorganizerapp.R
 import com.nejj.workoutorganizerapp.database.WorkoutDatabase
 import com.nejj.workoutorganizerapp.databinding.ActivityMainBinding
@@ -31,8 +30,11 @@ import com.nejj.workoutorganizerapp.repositories.TestingRepository
 import com.nejj.workoutorganizerapp.repositories.WorkoutRepository
 import com.nejj.workoutorganizerapp.sign_in.GoogleAuthUiClient
 import com.nejj.workoutorganizerapp.sign_in.SignInViewModel
+import com.nejj.workoutorganizerapp.synchronizers.FirestoreSynchronizationManager
 import com.nejj.workoutorganizerapp.ui.viewmodels.*
 import kotlinx.coroutines.launch
+import java.time.Duration
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -46,8 +48,9 @@ class MainActivity : AppCompatActivity() {
     lateinit var loggedWorkoutRoutineViewModel: LoggedWorkoutRoutineViewModel
     lateinit var loggedRoutineSetViewModel: LoggedRoutineSetViewModel
     lateinit var loggedExerciseSetViewModel: LoggedExerciseSetViewModel
-    lateinit var lastLoggedInUserViewModel: LastLoggedInUserViewModel
+    lateinit var userViewModel: UserViewModel
     lateinit var statisticsViewModel: StatisticsViewModel
+
 
     private val signInViewModel = SignInViewModel()
 
@@ -64,13 +67,20 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        //supportActionBar?.hide()
-
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         val navHostFragment = supportFragmentManager.findFragmentById(binding.workoutsNavHostFragment.id) as NavHostFragment
         navController = navHostFragment.navController
+
+        navHostFragment.findNavController()
+            .addOnDestinationChangedListener { _, destination, _ ->
+                when(destination.id) {
+                    R.id.routinesFragment, R.id.workoutLogFragment, R.id.statisticsFragment ->
+                        binding.bottomNavigationView.visibility = View.VISIBLE
+                    else -> binding.bottomNavigationView.visibility = View.GONE
+                }
+            }
 
         binding.bottomNavigationView.setupWithNavController(navController)
 
@@ -81,24 +91,31 @@ class MainActivity : AppCompatActivity() {
 
         setupActionBarWithNavController(navController, appBarConfiguration)
 
-//        val appBarConfiguration = AppBarConfiguration(navController.graph)
-//        binding.abMainAppBar.setupWithNavController(navController, appBarConfiguration)
-
-        binding.drawerNavigationView.setupWithNavController(navController)
-
         val workoutRepository = WorkoutRepository(WorkoutDatabase(this))
 
-        val viewModelProviderFactory = BasicViewModelProviderFactory(application, workoutRepository)
+        initViewModels(workoutRepository)
 
-        categoriesViewModel = ViewModelProvider(this, viewModelProviderFactory).get(CategoriesMainViewModel::class.java)
-        exercisesViewModel = ViewModelProvider(this, viewModelProviderFactory).get(ExercisesMainViewModel::class.java)
-        workoutRoutineViewModel = ViewModelProvider(this, viewModelProviderFactory).get(WorkoutRoutineMainViewModel::class.java)
-        routineSetMainViewModel = ViewModelProvider(this, viewModelProviderFactory).get(RoutineSetMainViewModel::class.java)
-        loggedWorkoutRoutineViewModel = ViewModelProvider(this, viewModelProviderFactory).get(LoggedWorkoutRoutineViewModel::class.java)
-        loggedRoutineSetViewModel = ViewModelProvider(this, viewModelProviderFactory).get(LoggedRoutineSetViewModel::class.java)
-        loggedExerciseSetViewModel = ViewModelProvider(this, viewModelProviderFactory).get(LoggedExerciseSetViewModel::class.java)
-        lastLoggedInUserViewModel = ViewModelProvider(this, viewModelProviderFactory).get(LastLoggedInUserViewModel::class.java)
-        statisticsViewModel = ViewModelProvider(this, viewModelProviderFactory).get(StatisticsViewModel::class.java)
+        setupDrawerNavigationMenu(workoutRepository)
+
+        //initializeData()
+
+        val firebaseSyncRequest = PeriodicWorkRequestBuilder<FirebaseSyncWorker>(
+            Duration.ofHours(24,)
+        )
+            .setConstraints(
+                Constraints.Builder()
+                    .setRequiredNetworkType(androidx.work.NetworkType.CONNECTED)
+                    .build()
+            )
+            .build()
+
+        val workManager = androidx.work.WorkManager.getInstance(applicationContext)
+        workManager.enqueue(firebaseSyncRequest)
+
+    }
+
+    private fun setupDrawerNavigationMenu(workoutRepository: WorkoutRepository) {
+        binding.drawerNavigationView.setupWithNavController(navController)
 
         binding.drawerNavigationView.setNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
@@ -111,67 +128,97 @@ class MainActivity : AppCompatActivity() {
                     binding.drawerLayout.closeDrawer(GravityCompat.START)
                 }
                 R.id.userLogin -> {
-                    if(googleAuthUiClient.getSignedInUser() != null) {
+                    if (googleAuthUiClient.getSignedInUser() != null) {
                         Toast.makeText(this, "Already logged in", Toast.LENGTH_SHORT).show()
                     } else {
                         loginGoogleAuth()
                         googleAuthUiClient.userUID.observe(this) {
-                            lastLoggedInUserViewModel.upsertEntity(LastLoggedInUser(null, it))
-                            lastLoggedInUserViewModel.updateAllEntitiesUserUID(it)
+                            userViewModel.upsertEntity(LastLoggedInUser(null, it))
+                            userViewModel.updateAllEntitiesUserUID(it)
+                            userViewModel.upsertEntityFirebaseLogin(it, Firebase.auth.currentUser?.email.toString())
+
                         }
                     }
                     binding.drawerLayout.closeDrawer(GravityCompat.START)
                 }
                 R.id.userLogout -> {
-                    if(googleAuthUiClient.getSignedInUser() != null) {
+                    if (googleAuthUiClient.getSignedInUser() != null) {
                         logOutUser()
-                    }else {
+                    } else {
                         Toast.makeText(this, "Not logged in", Toast.LENGTH_SHORT).show()
                     }
                     binding.drawerLayout.closeDrawer(GravityCompat.START)
                 }
                 R.id.backupLocalData -> {
-                    if(googleAuthUiClient.getSignedInUser() != null) {
-                        categoriesViewModel.saveExerciseCategoriesFirebase()
-                        exercisesViewModel.saveExerciseCategoriesFirebase()
-                        workoutRoutineViewModel.saveExerciseCategoriesFirebase()
-                        routineSetMainViewModel.saveExerciseCategoriesFirebase()
-                        loggedWorkoutRoutineViewModel.saveExerciseCategoriesFirebase()
-                        loggedRoutineSetViewModel.saveExerciseCategoriesFirebase()
-                        loggedExerciseSetViewModel.saveExerciseCategoriesFirebase()
-                    }else {
-                        Toast.makeText(this, "Not logged in", Toast.LENGTH_SHORT).show()
-                    }
-                    binding.drawerLayout.closeDrawer(GravityCompat.START)
+                    backUpLocalData(workoutRepository)
                 }
                 R.id.deleteBackup -> {
-                    if(googleAuthUiClient.getSignedInUser() != null) {
-                        categoriesViewModel.deleteEntitiesFirebase()
-                        exercisesViewModel.deleteEntitiesFirebase()
-                        workoutRoutineViewModel.deleteEntitiesFirebase()
-                        routineSetMainViewModel.deleteEntitiesFirebase()
-                        loggedWorkoutRoutineViewModel.deleteEntitiesFirebase()
-                        loggedRoutineSetViewModel.deleteEntitiesFirebase()
-                        loggedExerciseSetViewModel.deleteEntitiesFirebase()
-                    }else {
-                        Toast.makeText(this, "Not logged in", Toast.LENGTH_SHORT).show()
-                    }
-                    binding.drawerLayout.closeDrawer(GravityCompat.START)
+                    deleteBackedUpData(workoutRepository)
                 }
             }
             true
         }
+    }
 
-        navHostFragment.findNavController()
-            .addOnDestinationChangedListener { _, destination, _ ->
-                when(destination.id) {
-                    R.id.routinesFragment, R.id.workoutLogFragment, R.id.statisticsFragment ->
-                        binding.bottomNavigationView.visibility = View.VISIBLE
-                    else -> binding.bottomNavigationView.visibility = View.GONE
-                }
-            }
+    private fun deleteBackedUpData(workoutRepository: WorkoutRepository) {
+        if (googleAuthUiClient.getSignedInUser() != null) {
+            val firestoreSynchronizationManager = FirestoreSynchronizationManager(workoutRepository)
+            firestoreSynchronizationManager.deleteFirestoreData()
+        } else {
+            Toast.makeText(this, "Not logged in", Toast.LENGTH_SHORT).show()
+        }
+        binding.drawerLayout.closeDrawer(GravityCompat.START)
+    }
 
-        //initializeData()
+    private fun backUpLocalData(workoutRepository: WorkoutRepository) {
+        if (googleAuthUiClient.getSignedInUser() != null) {
+            val firestoreSynchronizationManager = FirestoreSynchronizationManager(workoutRepository)
+            firestoreSynchronizationManager.synchronize()
+
+        } else {
+            Toast.makeText(this, "Not logged in", Toast.LENGTH_SHORT).show()
+        }
+        binding.drawerLayout.closeDrawer(GravityCompat.START)
+    }
+
+    private fun initViewModels(workoutRepository: WorkoutRepository) {
+
+        val viewModelProviderFactory = BasicViewModelProviderFactory(application, workoutRepository)
+
+        categoriesViewModel = ViewModelProvider(
+            this,
+            viewModelProviderFactory
+        ).get(CategoriesMainViewModel::class.java)
+        exercisesViewModel = ViewModelProvider(
+            this,
+            viewModelProviderFactory
+        ).get(ExercisesMainViewModel::class.java)
+        workoutRoutineViewModel = ViewModelProvider(
+            this,
+            viewModelProviderFactory
+        ).get(WorkoutRoutineMainViewModel::class.java)
+        routineSetMainViewModel = ViewModelProvider(
+            this,
+            viewModelProviderFactory
+        ).get(RoutineSetMainViewModel::class.java)
+        loggedWorkoutRoutineViewModel = ViewModelProvider(
+            this,
+            viewModelProviderFactory
+        ).get(LoggedWorkoutRoutineViewModel::class.java)
+        loggedRoutineSetViewModel = ViewModelProvider(
+            this,
+            viewModelProviderFactory
+        ).get(LoggedRoutineSetViewModel::class.java)
+        loggedExerciseSetViewModel = ViewModelProvider(
+            this,
+            viewModelProviderFactory
+        ).get(LoggedExerciseSetViewModel::class.java)
+        userViewModel = ViewModelProvider(
+            this,
+            viewModelProviderFactory
+        ).get(UserViewModel::class.java)
+        statisticsViewModel =
+            ViewModelProvider(this, viewModelProviderFactory).get(StatisticsViewModel::class.java)
     }
 
     private fun logOutUser() {

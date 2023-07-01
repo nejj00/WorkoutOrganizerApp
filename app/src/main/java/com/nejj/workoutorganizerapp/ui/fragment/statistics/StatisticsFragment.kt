@@ -55,8 +55,14 @@ class StatisticsFragment : SimpleItemsDoubleListViewFragment<StatisticsType, Exe
                 putSerializable("statisticsDataSet", statisticsDataSet)
             }
 
+            val action = if(statisticType == OverallStatisticsType.MUSCLE_RANKING_CHART) {
+                R.id.action_statisticsFragment_to_muscleRankingChartFragment
+            } else {
+                R.id.action_statisticsFragment_to_statisticsChartFragment
+            }
+
             findNavController().navigate(
-                R.id.action_statisticsFragment_to_statisticsChartFragment,
+                action,
                 bundle
             )
         }

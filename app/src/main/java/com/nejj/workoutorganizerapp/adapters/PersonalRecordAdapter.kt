@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.nejj.workoutorganizerapp.databinding.ItemPersonalRecordPreviwBinding
 import com.nejj.workoutorganizerapp.models.PersonalRecord
 import com.nejj.workoutorganizerapp.util.StringFormatter
+import java.time.LocalDate
 
 class PersonalRecordAdapter(private var personalRecords: MutableList<PersonalRecord>) : RecyclerView.Adapter<PersonalRecordAdapter.PersonalRecordViewHolder>() {
 
@@ -30,8 +31,10 @@ class PersonalRecordAdapter(private var personalRecords: MutableList<PersonalRec
         val personalRecord = personalRecords[position]
         holder.viewBinding.apply {
             tvRecordType.text = personalRecord.personalRecordStatisticsType.toString()
-            tvRecord.text = StringFormatter.formatDouble(personalRecord.record)
-            tvRecordDate.text = StringFormatter.formatLocalDate(personalRecord.date)
+            tvRecord.text = StringFormatter.formatDouble(personalRecord.record.toDouble())
+
+            if(personalRecord.date != LocalDate.MIN)
+                tvRecordDate.text = StringFormatter.formatLocalDate(personalRecord.date)
 
             clPersonalRecordItem.setOnClickListener {
                 onItemClickListener?.let { it(personalRecord) }

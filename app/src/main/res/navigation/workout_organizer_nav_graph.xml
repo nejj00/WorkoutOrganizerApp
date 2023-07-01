@@ -8,8 +8,8 @@
     <fragment
         android:id="@+id/workoutLogFragment"
         android:name="com.nejj.workoutorganizerapp.ui.fragment.WorkoutLogFragment"
-        android:label="fragment_workout_log"
-        tools:layout="@layout/fragment_workout_log" >
+        android:label="Workout Log"
+        tools:layout="@layout/fragment_workout_log">
         <action
             android:id="@+id/action_workoutLogFragment_to_workoutFragment"
             app:destination="@id/workoutFragment" />
@@ -18,7 +18,7 @@
     <fragment
         android:id="@+id/routinesFragment"
         android:name="com.nejj.workoutorganizerapp.ui.fragment.RoutinesFragment"
-        android:label="fragment_routines"
+        android:label="Routines"
         tools:layout="@layout/items_list_view_fragment" >
         <action
             android:id="@+id/action_routinesFragment_to_routineFragment"
@@ -28,20 +28,23 @@
     <fragment
         android:id="@+id/statisticsFragment"
         android:name="com.nejj.workoutorganizerapp.ui.fragment.statistics.StatisticsFragment"
-        android:label="StatisticsFragment"
-        tools:layout="@layout/fragment_statistics">
+        android:label="Statistics"
+        tools:layout="@layout/fragment_double_list_view">
         <action
             android:id="@+id/action_statisticsFragment_to_categoriesStatisticsFragment"
             app:destination="@id/categoriesStatisticsFragment" />
         <action
             android:id="@+id/action_statisticsFragment_to_statisticsChartFragment"
             app:destination="@id/statisticsChartFragment" />
+        <action
+            android:id="@+id/action_statisticsFragment_to_muscleRankingChartFragment"
+            app:destination="@id/muscleRankingChartFragment" />
     </fragment>
 
     <fragment
         android:id="@+id/routineFragment"
         android:name="com.nejj.workoutorganizerapp.ui.fragment.RoutineFragment"
-        android:label="RoutineFragment" >
+        android:label="Routine" >
         <argument
             android:name="routine"
             app:argType="com.nejj.workoutorganizerapp.models.WorkoutRoutine" />
@@ -61,11 +64,11 @@
     <fragment
         android:id="@+id/categoriesFragment"
         android:name="com.nejj.workoutorganizerapp.ui.fragment.ModifyCategoriesFragment"
-        android:label="ModifyCategoriesFragment" />
+        android:label="Categories" />
     <fragment
         android:id="@+id/exercisesFragment"
         android:name="com.nejj.workoutorganizerapp.ui.fragment.ModifyExercisesFragment"
-        android:label="ExercisesFragment" >
+        android:label="Exercises">
         <action
             android:id="@+id/action_exercisesFragment_to_editExerciseFragment"
             app:destination="@id/editExerciseFragment" />
@@ -73,7 +76,7 @@
     <fragment
         android:id="@+id/editExerciseFragment"
         android:name="com.nejj.workoutorganizerapp.ui.fragment.EditExerciseFragment"
-        android:label="EditExerciseFragment" >
+        android:label="Edit Exercise">
         <argument
             android:name="exercise"
             app:argType="com.nejj.workoutorganizerapp.models.Exercise" />
@@ -81,21 +84,21 @@
     <fragment
         android:id="@+id/workoutFragment"
         android:name="com.nejj.workoutorganizerapp.ui.fragment.WorkoutFragment"
-        android:label="WorkoutFragment" >
-        <argument
-            android:name="loggedWorkoutRoutine"
-            app:argType="com.nejj.workoutorganizerapp.models.relations.LoggedWorkoutRoutineWithLoggedRoutineSets" />
+        android:label="Workout">
         <action
             android:id="@+id/action_workoutFragment_to_reorderFragment"
             app:destination="@id/reorderFragment" />
         <action
             android:id="@+id/action_workoutFragment_to_addRoutineExerciseCategoriesFragment"
             app:destination="@id/addRoutineExerciseCategoriesFragment" />
+        <argument
+            android:name="loggedWorkoutRoutineWithLoggedSets"
+            app:argType="com.nejj.workoutorganizerapp.models.relations.LoggedWorkoutRoutineWithLoggedRoutineSets" />
     </fragment>
     <fragment
         android:id="@+id/editRoutineSetFragment"
         android:name="com.nejj.workoutorganizerapp.ui.fragment.EditRoutineSetFragment"
-        android:label="EditRoutineSetFragment" >
+        android:label="Edit Routine Set">
         <argument
             android:name="routineSet"
             app:argType="com.nejj.workoutorganizerapp.models.RoutineSet" />
@@ -106,7 +109,7 @@
     <fragment
         android:id="@+id/reorderFragment"
         android:name="com.nejj.workoutorganizerapp.ui.fragment.ReorderFragment"
-        android:label="ReorderFragment" >
+        android:label="Reorder">
         <argument
             android:name="routineId"
             app:argType="long" />
@@ -117,7 +120,7 @@
     <fragment
         android:id="@+id/categoriesStatisticsFragment"
         android:name="com.nejj.workoutorganizerapp.ui.fragment.statistics.CategoriesStatisticsFragment"
-        android:label="CategoriesStatisticsFragment" >
+        android:label="Category">
         <argument
             android:name="exerciseCategory"
             app:argType="com.nejj.workoutorganizerapp.models.ExerciseCategory" />
@@ -131,7 +134,7 @@
     <fragment
         android:id="@+id/exercisesStatisticsFragment"
         android:name="com.nejj.workoutorganizerapp.ui.fragment.statistics.ExercisesStatisticsFragment"
-        android:label="ExercisesStatisticsFragment" >
+        android:label="Exercise">
         <argument
             android:name="exercise"
             app:argType="com.nejj.workoutorganizerapp.models.Exercise" />
@@ -145,7 +148,7 @@
     <fragment
         android:id="@+id/statisticsChartFragment"
         android:name="com.nejj.workoutorganizerapp.ui.fragment.statistics.StatisticsChartFragment"
-        android:label="StatisticsChartFragment" >
+        android:label="Chart">
         <argument
             android:name="statisticsDataSet"
             app:argType="com.nejj.workoutorganizerapp.models.StatisticsDataSet" />
@@ -153,7 +156,7 @@
     <fragment
         android:id="@+id/personalRecordsStatisticsFragment"
         android:name="com.nejj.workoutorganizerapp.ui.fragment.statistics.PersonalRecordsStatisticsFragment"
-        android:label="PersonalRecordsStatisticsFragment" >
+        android:label="Personal Records">
         <argument
             android:name="exercise"
             app:argType="com.nejj.workoutorganizerapp.models.Exercise" />
@@ -164,7 +167,7 @@
     <fragment
         android:id="@+id/personalRecordChartFragment"
         android:name="com.nejj.workoutorganizerapp.ui.fragment.statistics.PersonalRecordChartFragment"
-        android:label="PersonalRecordChartFragment" >
+        android:label="PR Chart">
         <argument
             android:name="personalRecord"
             app:argType="com.nejj.workoutorganizerapp.models.PersonalRecord" />
@@ -172,7 +175,7 @@
     <fragment
         android:id="@+id/addRoutineExerciseCategoriesFragment"
         android:name="com.nejj.workoutorganizerapp.ui.fragment.AddRoutineExerciseCategoriesFragment"
-        android:label="AddRoutineExerciseCategoriesFragment" >
+        android:label="Select Category">
         <action
             android:id="@+id/action_addRoutineExerciseCategoriesFragment_to_addRoutineExerciseExercisesFragment"
             app:destination="@id/addRoutineExerciseExercisesFragment" />
@@ -186,7 +189,7 @@
     <fragment
         android:id="@+id/addRoutineExerciseExercisesFragment"
         android:name="com.nejj.workoutorganizerapp.ui.fragment.AddRoutineExerciseExercisesFragment"
-        android:label="AddRoutineExerciseExercisesFragment" >
+        android:label="Select Exercises">
         <argument
             android:name="entityId"
             app:argType="long" />
@@ -197,5 +200,9 @@
             android:name="exerciseCategory"
             app:argType="com.nejj.workoutorganizerapp.models.ExerciseCategory" />
     </fragment>
+    <fragment
+        android:id="@+id/muscleRankingChartFragment"
+        android:name="com.nejj.workoutorganizerapp.ui.fragment.statistics.MuscleRankingChartFragment"
+        android:label="Muscle Rank" />
 
 </navigation>

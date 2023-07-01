@@ -18,40 +18,8 @@ import kotlinx.coroutines.launch
 
 class CategoriesMainViewModel(
     app: Application,
-    workoutRepository: WorkoutRepository
-) : MainViewModel<ExerciseCategory>(app, workoutRepository, "exercise_categories") {
-
-    override val classToken: Class<ExerciseCategory>
-        get() = ExerciseCategory::class.java
-
-    override suspend fun getLocalEntitiesList(): List<ExerciseCategory> {
-        return workoutRepository.getUserMadeCategoriesList()
-    }
-
-    override fun getIdFieldName(): String {
-        return "categoryId"
-    }
-
-    override fun insertToFirestoreList(
-        document: DocumentSnapshot,
-        entitiesListFirestore: MutableList<ExerciseCategory>
-    ) {
-        entitiesListFirestore.add(document.toObject(classToken)!!)
-    }
-
-    override fun getMapFromEntity(entity: ExerciseCategory): Map<String, Any> {
-        val map = mutableMapOf<String, Any>()
-        map["categoryId"] = entity.categoryId!!
-        map["name"] = entity.name
-        map["isUserMade"] = entity.isUserMade
-        map["userUID"] = entity.userUID ?: ""
-
-        return map
-    }
-
-    override fun getEntityId(entity: ExerciseCategory): Long {
-        return entity.categoryId!!
-    }
+    val workoutRepository: WorkoutRepository
+) : AndroidViewModel(app) {
 
 //    init {
 //        val databaseSynchronizer = DatabaseSynchronizer()
@@ -67,24 +35,18 @@ class CategoriesMainViewModel(
     fun insertEntity(entity: ExerciseCategory) = viewModelScope.launch {
             workoutRepository.upsertCategory(entity)
     }
-    fun deleteEntity(entity: ExerciseCategory): LiveData<Boolean> {
+    fun checkIfCategoryIsUsed(entity: ExerciseCategory): LiveData<Boolean> {
         val result = MutableLiveData<Boolean>()
 
         viewModelScope.launch {
             val exercisesForCategory = workoutRepository.getExercisesByCategoryId(entity.categoryId!!)
-
-            if(exercisesForCategory.isEmpty())
-            {
-                workoutRepository.deleteCategory(entity)
-                result.value = true
-            }
-            else
-            {
-                result.value = false
-            }
+            result.value = exercisesForCategory.isNotEmpty()
         }
 
         return result
+    }
+    fun deleteEntity(entity: ExerciseCategory) = viewModelScope.launch {
+        workoutRepository.deleteCategory(entity)
     }
     fun getEntities() = workoutRepository.getCategories()
     fun updateCategoriesUserUID(userUID: String) = viewModelScope.launch {

@@ -30,7 +30,7 @@ class EditExerciseFragment : Fragment(R.layout.fragment_edit_exercise) {
     private lateinit var categoriesViewModel: CategoriesMainViewModel
     private val exercisesViewModel: ExercisesMainViewModel by activityViewModels()
 
-    private val selectedCategoryId  = 0L
+    private var selectedCategoryId  = 0L
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -60,7 +60,7 @@ class EditExerciseFragment : Fragment(R.layout.fragment_edit_exercise) {
 
         categoryAutoCompleteTextView?.setOnItemClickListener { parent, view, position, id ->
             val selectedItem = parent.getItemAtPosition(position) as ExerciseCategory
-            val selectedCategoryId = selectedItem.categoryId
+            selectedCategoryId = selectedItem.categoryId!!
             Toast.makeText(
                 activity,
                 "You chose $selectedItem",
@@ -76,6 +76,8 @@ class EditExerciseFragment : Fragment(R.layout.fragment_edit_exercise) {
         exerciseTypeAutoCompleteTextView?.setAdapter(exerciseTypeAdapter)
 
         val exercise = args.exercise
+        requireActivity().title = exercise.name
+
         viewBinding.tiExerciseName.editText?.setText(exercise.name)
         viewBinding.actvCategory.setText(
             exerciseCategoryList.find { it.categoryId == exercise.categoryId }?.name ?: "", false)
@@ -100,8 +102,10 @@ class EditExerciseFragment : Fragment(R.layout.fragment_edit_exercise) {
                 // Handle the menu selection
                 return when (menuItem.itemId) {
                     R.id.miSave -> {
-                        saveExercise()
-                        findNavController().navigateUp()
+                        if(saveExercise()) {
+                            findNavController().navigateUp()
+                        }
+                        false
                     }
                     else -> false
                 }

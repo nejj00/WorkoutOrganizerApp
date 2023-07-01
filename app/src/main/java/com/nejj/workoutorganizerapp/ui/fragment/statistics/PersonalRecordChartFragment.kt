@@ -58,7 +58,7 @@ class PersonalRecordChartFragment : Fragment(R.layout.fragment_personal_record_c
             personalRecordsHistoryAdapter.differ.submitList(recordsHistory)
 
             val aaChartModel : AAChartModel = AAChartModel()
-                .chartType(AAChartType.Area)
+                .chartType(AAChartType.Areaspline)
                 .title("title")
                 .subtitle("subtitle")
                 .dataLabelsEnabled(true)

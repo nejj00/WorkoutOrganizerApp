@@ -85,7 +85,7 @@ class WorkoutLogFragment : Fragment(R.layout.fragment_workout_log) {
 
     private fun navigateToWorkout(loggedWorkoutRoutineWithLoggedRoutineSets: LoggedWorkoutRoutineWithLoggedRoutineSets) {
         val bundle = Bundle().apply {
-            putSerializable("loggedWorkoutRoutine", loggedWorkoutRoutineWithLoggedRoutineSets)
+            putSerializable("loggedWorkoutRoutineWithLoggedSets", loggedWorkoutRoutineWithLoggedRoutineSets)
         }
         findNavController().navigate(
             R.id.action_workoutLogFragment_to_workoutFragment,

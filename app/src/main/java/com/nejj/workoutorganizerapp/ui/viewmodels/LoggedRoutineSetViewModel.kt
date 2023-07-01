@@ -15,8 +15,8 @@ import kotlinx.coroutines.launch
 
 class LoggedRoutineSetViewModel(
     app: Application,
-    workoutRepository: WorkoutRepository
-) : MainViewModel<LoggedRoutineSet>(app, workoutRepository, "logged_routine_sets") {
+    val workoutRepository: WorkoutRepository
+) : AndroidViewModel(app) {
 
     fun insertEntity(entity: LoggedRoutineSet) = viewModelScope.launch {
         workoutRepository.upsertLoggedRoutineSet(entity)
@@ -58,40 +58,4 @@ class LoggedRoutineSetViewModel(
     fun getLoggedRoutineSetsWithLoggedExerciseSets(loggedRoutineId: Long) = workoutRepository.getLoggedRoutineSetsWithLoggedExerciseSets(loggedRoutineId)
 
     suspend fun getLoggedRoutineSetsByLoggedRoutineId(loggedRoutineId: Long) = workoutRepository.getLoggedRoutineSetsByRoutineId(loggedRoutineId)
-
-    override val classToken: Class<LoggedRoutineSet>
-        get() = LoggedRoutineSet::class.java
-
-    override suspend fun getLocalEntitiesList(): List<LoggedRoutineSet> {
-        return workoutRepository.getLoggedRoutineSetsList()
-    }
-
-    override fun getIdFieldName(): String {
-        return "loggedRoutineSetId"
-    }
-
-    override fun insertToFirestoreList(
-        document: DocumentSnapshot,
-        entitiesListFirestore: MutableList<LoggedRoutineSet>
-    ) {
-        entitiesListFirestore.add(document.toObject(classToken)!!)
-    }
-
-    override fun getMapFromEntity(entity: LoggedRoutineSet): Map<String, Any> {
-        val map = mutableMapOf<String, Any>()
-        map["loggedRoutineSetId"] = entity.loggedRoutineSetId!!
-        map["loggedRoutineId"] = entity.loggedRoutineId!!
-        map["exerciseId"] = entity.exerciseId!!
-        map["exerciseName"] = entity.exerciseName
-        map["warmupSetsCount"] = entity.warmupSetsCount
-        map["setsCount"] = entity.setsCount
-        map["setsOrder"] = entity.setsOrder
-        map["userUID"] = entity.userUID ?: ""
-
-        return map
-    }
-
-    override fun getEntityId(entity: LoggedRoutineSet): Long {
-        return entity.loggedRoutineSetId!!
-    }
 }

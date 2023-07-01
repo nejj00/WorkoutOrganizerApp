@@ -21,14 +21,8 @@ import com.nejj.workoutorganizerapp.databinding.DialogAddExerciseBinding
 import com.nejj.workoutorganizerapp.enums.AddExerciseDialogContext
 import com.nejj.workoutorganizerapp.enums.FragmentContext
 import com.nejj.workoutorganizerapp.models.Exercise
-import com.nejj.workoutorganizerapp.models.LoggedWorkoutRoutine
-import com.nejj.workoutorganizerapp.models.RoutineSet
-import com.nejj.workoutorganizerapp.models.WorkoutRoutine
-import com.nejj.workoutorganizerapp.ui.dialogs.AddExerciseDialogFragment
 import com.nejj.workoutorganizerapp.ui.viewmodels.LoggedRoutineSetViewModel
 import com.nejj.workoutorganizerapp.ui.viewmodels.RoutineSetMainViewModel
-import com.nejj.workoutorganizerapp.util.Constants
-import com.nejj.workoutorganizerapp.util.Constants.Companion.ROUTINE_ARGUMENT_KEY
 import kotlinx.coroutines.launch
 import java.util.*
 

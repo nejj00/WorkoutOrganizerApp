@@ -49,10 +49,22 @@ class ModifyCategoriesFragment : CategoriesFragment() {
                     return@setOnMenuItemClickListener true
                 }
                 R.id.deleteCategory -> {
-                    categoriesViewModel.deleteEntity(category).observe(viewLifecycleOwner) {
-                        if(!it)
+                    categoriesViewModel.checkIfCategoryIsUsed(category).observe(viewLifecycleOwner) { result ->
+                        if(result)
                             Snackbar.make(view, "Category is being used in exercises.", Snackbar.LENGTH_SHORT).show()
-
+                        else {
+                            MaterialAlertDialogBuilder(requireContext())
+                                .setTitle("Delete")
+                                .setMessage("Are you sure you want to delete this category?")
+                                .setNegativeButton("Cancel") { dialog, which ->
+                                    return@setNegativeButton
+                                }
+                                .setPositiveButton("Delete") { dialog, which ->
+                                    categoriesViewModel.deleteEntity(category)
+                                    Snackbar.make(view, "Category deleted", Snackbar.LENGTH_SHORT).show()
+                                }
+                                .show()
+                        }
                     }
                     return@setOnMenuItemClickListener true
                 }

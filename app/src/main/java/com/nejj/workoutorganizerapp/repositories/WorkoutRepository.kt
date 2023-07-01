@@ -47,13 +47,15 @@ class WorkoutRepository(
     suspend fun getRoutineSetById(routineSetId: Long) = database.getRoutineSetDao().getEntityById(routineSetId)
     fun getRoutineSets() = database.getRoutineSetDao().getAllEntities()
     suspend fun getRoutineSetsList() = database.getRoutineSetDao().getAllEntitiesList()
-    suspend fun getUserMadeRoutineSetsList() = database.getRoutineSetDao().getAllEntitiesList()
+    suspend fun getUserMadeRoutineSetsList() = database.getRoutineSetDao().getAllUserMadeEntitiesList()
     suspend fun getRoutineSetsWithExercise(routineId: Long) = database.getRoutineSetDao().getRoutineSetsWithExercise(routineId)
     fun getRoutineSetsWithExerciseLive(routineId: Long) = database.getRoutineSetDao().getRoutineSetsWithExerciseLive(routineId)
     suspend fun getRoutineSetMaxOrder(routineId: Long) = database.getRoutineSetDao().getMaxOrder(routineId)
     suspend fun getRoutineSetsByRoutineId(routineId: Long) = database.getRoutineSetDao().getRoutineSetsByRoutineId(routineId)
     fun getRoutineSetsListByRoutineId(routineId: Long) = database.getRoutineSetDao().getRoutineSetsListByRoutineId(routineId)
+    suspend fun getRoutineSetsByExerciseId(exerciseId: Long) = database.getRoutineSetDao().getRoutineSetsByExerciseId(exerciseId)
     suspend fun updateRoutineSetsUserUID(userUID: String) = database.getRoutineSetDao().updateRoutineSetsUserUID(userUID)
+    suspend fun deleteRoutineSetsByExerciseId(exerciseId: Long) = database.getRoutineSetDao().deleteRoutineSetsByExerciseId(exerciseId)
 
     // Logged Workout Routines
     suspend fun upsertLoggedWorkoutRoutine(loggedWorkoutRoutine: LoggedWorkoutRoutine) = database.getLoggedWorkoutRoutineDao().upsert(loggedWorkoutRoutine)

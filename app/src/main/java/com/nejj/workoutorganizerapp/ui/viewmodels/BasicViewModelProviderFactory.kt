@@ -33,8 +33,8 @@ class BasicViewModelProviderFactory(
             modelClass.isAssignableFrom(LoggedExerciseSetViewModel::class.java) -> {
                 LoggedExerciseSetViewModel(app, workoutRepository) as T
             }
-            modelClass.isAssignableFrom(LastLoggedInUserViewModel::class.java) -> {
-                LastLoggedInUserViewModel(app, workoutRepository) as T
+            modelClass.isAssignableFrom(UserViewModel::class.java) -> {
+                UserViewModel(app, workoutRepository) as T
             }
             modelClass.isAssignableFrom(StatisticsViewModel::class.java) -> {
                 StatisticsViewModel(app, workoutRepository) as T

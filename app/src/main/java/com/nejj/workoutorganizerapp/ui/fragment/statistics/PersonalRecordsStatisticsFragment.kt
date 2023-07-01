@@ -12,16 +12,14 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.nejj.workoutorganizerapp.R
 import com.nejj.workoutorganizerapp.adapters.PersonalRecordAdapter
-import com.nejj.workoutorganizerapp.databinding.FragmentStatisticsBinding
-import com.nejj.workoutorganizerapp.enums.StatisticsType
+import com.nejj.workoutorganizerapp.databinding.FragmentDoubleListViewBinding
 import com.nejj.workoutorganizerapp.models.PersonalRecord
-import com.nejj.workoutorganizerapp.ui.viewmodels.LoggedWorkoutRoutineViewModel
 import com.nejj.workoutorganizerapp.ui.viewmodels.StatisticsViewModel
 import kotlinx.coroutines.launch
 
-class PersonalRecordsStatisticsFragment : Fragment(R.layout.fragment_statistics) {
+class PersonalRecordsStatisticsFragment : Fragment(R.layout.fragment_double_list_view) {
 
-    private lateinit var viewBinding: FragmentStatisticsBinding
+    private lateinit var viewBinding: FragmentDoubleListViewBinding
     private lateinit var topItemsAdapter: PersonalRecordAdapter
     private lateinit var bottomItemsAdapter: PersonalRecordAdapter
     private val statisticsViewModel: StatisticsViewModel by activityViewModels()
@@ -33,7 +31,7 @@ class PersonalRecordsStatisticsFragment : Fragment(R.layout.fragment_statistics)
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        viewBinding = FragmentStatisticsBinding.inflate(inflater, container, false)
+        viewBinding = FragmentDoubleListViewBinding.inflate(inflater, container, false)
         return viewBinding.root
     }
 
@@ -42,6 +40,7 @@ class PersonalRecordsStatisticsFragment : Fragment(R.layout.fragment_statistics)
 
         lifecycleScope.launch {
             val personalRecords = statisticsViewModel.getPersonalRecordsForExercise(args.exercise.exerciseId!!)
+
             setupBottomRecyclerView(personalRecords)
             bottomItemsAdapter.setOnItemClickListener(itemClickedListener)
         }

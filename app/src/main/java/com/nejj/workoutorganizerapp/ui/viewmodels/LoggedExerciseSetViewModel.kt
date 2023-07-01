@@ -14,8 +14,8 @@ import kotlinx.coroutines.launch
 
 class LoggedExerciseSetViewModel(
     app: Application,
-    workoutRepository: WorkoutRepository
-) : MainViewModel<LoggedExerciseSet>(app, workoutRepository, "logged_exercise_sets") {
+    val workoutRepository: WorkoutRepository
+) : AndroidViewModel(app) {
 
     fun insertEntity(entity: LoggedExerciseSet) = viewModelScope.launch {
         workoutRepository.upsertLoggedExerciseSet(entity)
@@ -46,42 +46,5 @@ class LoggedExerciseSetViewModel(
 
         loggedRoutineSet.setsCount++
         workoutRepository.upsertLoggedRoutineSet(loggedRoutineSet)
-    }
-
-    override val classToken: Class<LoggedExerciseSet>
-        get() = LoggedExerciseSet::class.java
-
-    override suspend fun getLocalEntitiesList(): List<LoggedExerciseSet> {
-        return workoutRepository.getLoggedExerciseSetsList()
-    }
-
-    override fun getIdFieldName(): String {
-        return "loggedExerciseSetId"
-    }
-
-    override fun insertToFirestoreList(
-        document: DocumentSnapshot,
-        entitiesListFirestore: MutableList<LoggedExerciseSet>
-    ) {
-        entitiesListFirestore.add(document.toObject(classToken)!!)
-    }
-
-    override fun getMapFromEntity(entity: LoggedExerciseSet): Map<String, Any> {
-        val map = mutableMapOf<String, Any>()
-        map["loggedExerciseSetId"] = entity.loggedExerciseSetId!!
-        map["loggedRoutineId"] = entity.loggedRoutineId!!
-        map["loggedRoutineSetId"] = entity.loggedRoutineSetId!!
-        map["weight"] = entity.weight
-        map["reps"] = entity.reps
-        map["setOrder"] = entity.setOrder
-        map["isWarmupSet"] = entity.isWarmupSet
-        map["notes"] = entity.notes
-        map["userUID"] = entity.userUID ?: ""
-
-        return map
-    }
-
-    override fun getEntityId(entity: LoggedExerciseSet): Long {
-        return entity.loggedExerciseSetId!!
     }
 }

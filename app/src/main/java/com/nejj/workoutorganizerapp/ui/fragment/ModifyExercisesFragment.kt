@@ -8,8 +8,11 @@ import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.lifecycle.Lifecycle
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.snackbar.Snackbar
 import com.nejj.workoutorganizerapp.R
 import com.nejj.workoutorganizerapp.models.Exercise
+import com.nejj.workoutorganizerapp.ui.dialogs.ConfirmationDialogMaker
 import java.util.*
 
 class ModifyExercisesFragment : ExercisesFragment() {
@@ -62,7 +65,7 @@ class ModifyExercisesFragment : ExercisesFragment() {
                     return@setOnMenuItemClickListener true
                 }
                 R.id.deleteCategory -> {
-                    exercisesViewModel.deleteEntity(exercise)
+                    deleteExercise(exercise, optionsView)
                     return@setOnMenuItemClickListener true
                 }
             }
@@ -70,6 +73,40 @@ class ModifyExercisesFragment : ExercisesFragment() {
         }
 
         popupMenu.show()
+    }
+
+    private fun deleteExercise(
+        exercise: Exercise,
+        optionsView: View
+    ) {
+        exercisesViewModel.checkIfExerciseIsUsed(exercise).observe(viewLifecycleOwner) { result ->
+            if (result) {
+                MaterialAlertDialogBuilder(requireContext())
+                    .setTitle("Warning")
+                    .setMessage("Deleting this exercise will hide it from the exercises list, routines and statistics. Logged data will not be affected.")
+                    .setNegativeButton("Cancel") { dialog, which ->
+                        return@setNegativeButton
+                    }
+                    .setPositiveButton("Delete") { dialog, which ->
+                        exercisesViewModel.deleteExerciseWithRoutineSets(exercise)
+                        Snackbar.make(optionsView, "Exercise deleted.", Snackbar.LENGTH_SHORT)
+                            .show()
+                    }
+                    .show()
+            } else {
+                MaterialAlertDialogBuilder(requireContext())
+                    .setTitle("Delete")
+                    .setMessage("Are you sure you want to delete this exercise?")
+                    .setNegativeButton("Cancel") { dialog, which ->
+                        return@setNegativeButton
+                    }
+                    .setPositiveButton("Delete") { dialog, which ->
+                        exercisesViewModel.deleteEntity(exercise)
+                    }
+                    .show()
+            }
+
+        }
     }
 
     private fun setUpAppBarMenuItems() {

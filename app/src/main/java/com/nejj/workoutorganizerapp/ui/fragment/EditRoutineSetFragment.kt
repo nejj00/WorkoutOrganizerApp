@@ -12,11 +12,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.nejj.workoutorganizerapp.R
 import com.nejj.workoutorganizerapp.databinding.FragmentRoutineSetEditBinding
-import com.nejj.workoutorganizerapp.enums.AddExerciseDialogContext
 import com.nejj.workoutorganizerapp.enums.FragmentContext
-import com.nejj.workoutorganizerapp.ui.dialogs.AddExerciseDialogFragment
 import com.nejj.workoutorganizerapp.ui.viewmodels.RoutineSetMainViewModel
-import com.nejj.workoutorganizerapp.util.Constants
 
 class EditRoutineSetFragment : Fragment(R.layout.fragment_routine_set_edit){
 
@@ -44,6 +41,7 @@ class EditRoutineSetFragment : Fragment(R.layout.fragment_routine_set_edit){
         }
 
         val routineSet = args.routineSet
+
         viewBinding.tiSets.editText?.setText(routineSet.setsCount.toString())
         viewBinding.tiWarmupSets.editText?.setText(routineSet.warmupSetsCount.toString())
 

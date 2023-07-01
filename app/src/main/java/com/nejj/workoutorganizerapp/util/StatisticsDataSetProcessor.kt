@@ -51,11 +51,22 @@ class StatisticsDataSetProcessor {
             OverallStatisticsType.REPS_PER_SET.toString() -> {
                 data = loggedExerciseSets.map { it.reps }.average().toFloat()
             }
+            OverallStatisticsType.MUSCLE_RANKING_CHART.toString() -> {
+                loggedExerciseSets.forEach {loggedExerciseSet ->
+                    val predicate: (LoggedExerciseSet) -> Boolean = {it.loggedRoutineSetId == loggedExerciseSet.loggedRoutineSetId}
+                    data += loggedExerciseSet.reps.toFloat() * loggedExerciseSet.weight.toFloat() //* exerciseSetsList.count(predicate).toFloat()
+                }
+            }
             PersonalRecordStatisticsType.MAX_WEIGHT.toString() -> {
                 data = loggedExerciseSets.maxOf { it.weight }.toFloat()
             }
             PersonalRecordStatisticsType.MAX_REPS.toString() -> {
                 data = loggedExerciseSets.maxOf { it.reps }.toFloat()
+            }
+            ExerciseStatisticsType.AVG_WEIGHT.toString() -> {
+                data = loggedExerciseSets.filter { it.weight != 0.0 }
+                    .map { it.weight }
+                    .average().toFloat()
             }
 
             else -> {}

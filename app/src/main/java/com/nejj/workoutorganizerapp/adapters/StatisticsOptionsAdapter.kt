@@ -21,4 +21,7 @@ class StatisticsOptionsAdapter(hideOptions: Boolean = false) : SimpleItemPreview
     override fun getItemText(position: Int): String {
         return differ.currentList[position].toString()
     }
+    override fun getPadding() = 20
+
+    override fun getPaddingLeft() = 20
 }

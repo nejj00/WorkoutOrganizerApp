@@ -8,11 +8,11 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.nejj.workoutorganizerapp.R
 import com.nejj.workoutorganizerapp.adapters.SimpleItemPreviewAdapter
-import com.nejj.workoutorganizerapp.databinding.FragmentStatisticsBinding
+import com.nejj.workoutorganizerapp.databinding.FragmentDoubleListViewBinding
 
-abstract class SimpleItemsDoubleListViewFragment<T, Y> : Fragment(R.layout.fragment_statistics) {
+abstract class SimpleItemsDoubleListViewFragment<T, Y> : Fragment(R.layout.fragment_double_list_view) {
 
-    private lateinit var viewBinding: FragmentStatisticsBinding
+    protected lateinit var viewBinding: FragmentDoubleListViewBinding
     open lateinit var simpleItemPreviewTopRVAdapter: SimpleItemPreviewAdapter<T>
     open lateinit var simpleItemPreviewBottomRVAdapter: SimpleItemPreviewAdapter<Y>
 
@@ -21,7 +21,7 @@ abstract class SimpleItemsDoubleListViewFragment<T, Y> : Fragment(R.layout.fragm
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        viewBinding = FragmentStatisticsBinding.inflate(inflater, container, false)
+        viewBinding = FragmentDoubleListViewBinding.inflate(inflater, container, false)
         return viewBinding.root
     }
 

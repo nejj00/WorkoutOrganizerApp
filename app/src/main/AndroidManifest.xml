@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION"/>
 
     <application
         android:allowBackup="true"
@@ -30,12 +31,6 @@
                 <!-- Accepts URIs that begin with "neji://wokoutorganizer” -->
                 <data android:scheme="neji"
                     android:host="wokoutorganizer" />
-            </intent-filter>
-        </activity>
-        <activity android:name=".ui.fragment.statistics.StatisticsChartActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.DEFAULT" />
             </intent-filter>
         </activity>
     </application>

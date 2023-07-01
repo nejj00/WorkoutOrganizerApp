@@ -27,15 +27,11 @@ interface ExerciseDao : DataAccessObject<Exercise> {
     @Query("SELECT * FROM exercises WHERE categoryId = :categoryId")
     fun getExercisesOfCategoryLive(categoryId: Long): LiveData<List<Exercise>>
 
-//    @Transaction
-//    @Query("SELECT * FROM exercises WHERE categoryId = :categoryId")
-//    suspend fun getExercisesWithExerciseSetsForCategory(categoryId: Long): List<ExerciseWithLoggedExerciseSets>
-
     @Transaction
     @Query("UPDATE exercises SET userUID = :userUID WHERE isUserMade = 1")
     suspend fun updateExercisesUserUID(userUID: String)
 
-    @Query("DELETE FROM exercises")
+    @Query("DELETE FROM exercises WHERE isUserMade = 1")
     suspend fun deleteAllExercises()
 
 }

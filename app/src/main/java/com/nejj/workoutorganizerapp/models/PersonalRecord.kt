@@ -7,7 +7,7 @@ import java.time.LocalDate
 
 data class PersonalRecord(
     val personalRecordStatisticsType: PersonalRecordStatisticsType,
-    val record: Double,
+    val record: Number,
     val date: LocalDate,
     val exerciseId: Long
 ) : Serializable

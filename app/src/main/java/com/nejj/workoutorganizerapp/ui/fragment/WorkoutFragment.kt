@@ -21,12 +21,11 @@ import com.google.firebase.ktx.Firebase
 import com.nejj.workoutorganizerapp.R
 import com.nejj.workoutorganizerapp.adapters.LoggedRoutineSetInWorkoutAdapter
 import com.nejj.workoutorganizerapp.databinding.ActivityWorkoutBinding
-import com.nejj.workoutorganizerapp.enums.AddExerciseDialogContext
 import com.nejj.workoutorganizerapp.enums.FragmentContext
+import com.nejj.workoutorganizerapp.google_fit.GoogleFitSynchronizer
 import com.nejj.workoutorganizerapp.models.LoggedExerciseSet
 import com.nejj.workoutorganizerapp.models.relations.LoggedRoutineSetWithLoggedExerciseSet
 import com.nejj.workoutorganizerapp.models.relations.LoggedWorkoutRoutineWithLoggedRoutineSets
-import com.nejj.workoutorganizerapp.ui.dialogs.AddExerciseDialogFragment
 import com.nejj.workoutorganizerapp.ui.dialogs.CountdownTimerBottomSheet
 import com.nejj.workoutorganizerapp.ui.viewmodels.LoggedExerciseSetViewModel
 import com.nejj.workoutorganizerapp.ui.viewmodels.LoggedRoutineSetViewModel
@@ -67,7 +66,9 @@ class WorkoutFragment : Fragment(R.layout.activity_workout) {
             findNavController().navigateUp()
         }
 
-        val loggedWorkoutRoutineWithLoggedSets = args.loggedWorkoutRoutine
+        val loggedWorkoutRoutineWithLoggedSets = args.loggedWorkoutRoutineWithLoggedSets
+        requireActivity().title = loggedWorkoutRoutineWithLoggedSets.loggedWorkoutRoutine.name
+
         viewBinding.tfWorkoutName.editText?.setText(loggedWorkoutRoutineWithLoggedSets.loggedWorkoutRoutine.name)
         viewBinding.tfWorkoutNotes.editText?.setText(loggedWorkoutRoutineWithLoggedSets.loggedWorkoutRoutine.notes)
         viewBinding.tfBodyweight.editText?.setText(loggedWorkoutRoutineWithLoggedSets.loggedWorkoutRoutine.bodyweight.toString())
@@ -135,19 +136,6 @@ class WorkoutFragment : Fragment(R.layout.activity_workout) {
             R.id.action_workoutFragment_to_addRoutineExerciseCategoriesFragment,
             bundle
         )
-
-//        val addExerciseDialogFragment = AddExerciseDialogFragment()
-//        val fragmentManager = childFragmentManager
-//
-//        addExerciseDialogFragment.arguments = Bundle().apply {
-//            putSerializable("addDialogContext", AddExerciseDialogContext.ADD_LOGGED_ROUTINE_SET)
-//            putSerializable(
-//                "loggedWorkoutRoutine",
-//                loggedWorkoutRoutineWithLoggedSets.loggedWorkoutRoutine
-//            )
-//        }
-//
-//        addExerciseDialogFragment.show(fragmentManager, "addExerciseDialogFragment")
     }
 
     private fun setupRecyclerView() {
@@ -190,7 +178,7 @@ class WorkoutFragment : Fragment(R.layout.activity_workout) {
 
     private fun reorderRoutineSets() {
         val bundle = Bundle().apply {
-            putSerializable("routineId", args.loggedWorkoutRoutine.loggedWorkoutRoutine.loggedRoutineId)
+            putSerializable("routineId", args.loggedWorkoutRoutineWithLoggedSets.loggedWorkoutRoutine.loggedRoutineId)
             putSerializable("fragmentContext", FragmentContext.WORKOUT_CONTEXT)
         }
         findNavController().navigate(
@@ -219,7 +207,7 @@ class WorkoutFragment : Fragment(R.layout.activity_workout) {
     }
 
     private fun saveLoggedWorkoutRoutine() {
-        val loggedWorkoutRoutine = args.loggedWorkoutRoutine.loggedWorkoutRoutine
+        val loggedWorkoutRoutine = args.loggedWorkoutRoutineWithLoggedSets.loggedWorkoutRoutine
         val loggedRoutineName = viewBinding.tfWorkoutName.editText?.text.toString()
         val bodyweight = viewBinding.tfBodyweight.editText?.text.toString()
         val loggedRoutineNotes = viewBinding.tfWorkoutNotes.editText?.text.toString()
@@ -242,8 +230,13 @@ class WorkoutFragment : Fragment(R.layout.activity_workout) {
         if(workoutStartTime.isNotEmpty())
             loggedWorkoutRoutine.startTime = LocalTime.parse(workoutStartTime, DateTimeFormatter.ISO_LOCAL_TIME)
 
-        if(workoutEndTime.isNotEmpty())
+        if(workoutEndTime.isNotEmpty()) {
             loggedWorkoutRoutine.endTime = LocalTime.parse(workoutEndTime, DateTimeFormatter.ISO_LOCAL_TIME)
+            val googleFirActivitySender =
+                activity?.let { GoogleFitSynchronizer(requireContext(), it.parent) }
+
+            googleFirActivitySender?.sessionInsertActivity(loggedWorkoutRoutine)
+        }
 
         loggedWorkoutRoutine.userUID = Firebase.auth.currentUser?.uid
 

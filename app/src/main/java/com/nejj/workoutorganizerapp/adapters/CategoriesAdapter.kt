@@ -20,4 +20,7 @@ class CategoriesAdapter(hideOptions: Boolean = false) : SimpleItemPreviewAdapter
     override fun getItemText(position: Int): String {
         return differ.currentList[position].name
     }
+
+    override fun getPadding() = 20
+    override fun getPaddingLeft() = 20
 }

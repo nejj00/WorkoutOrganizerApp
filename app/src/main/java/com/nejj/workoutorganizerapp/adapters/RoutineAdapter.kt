@@ -22,4 +22,6 @@ class RoutineAdapter : SimpleItemPreviewAdapter<WorkoutRoutine>() {
         return differ.currentList[position].name
     }
 
+    override fun getPadding() = 20
+    override fun getPaddingLeft() = 20
 }

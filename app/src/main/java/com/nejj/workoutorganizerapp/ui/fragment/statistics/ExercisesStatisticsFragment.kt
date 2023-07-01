@@ -26,6 +26,7 @@ class ExercisesStatisticsFragment : ItemsListViewFragment<StatisticsType>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val exercise = args.exercise
+        requireActivity().title = exercise.name
 
         val sexerciseStatistics = ExerciseStatisticsType.values()
         simpleItemPreviewAdapter.differ.submitList(sexerciseStatistics.toList())

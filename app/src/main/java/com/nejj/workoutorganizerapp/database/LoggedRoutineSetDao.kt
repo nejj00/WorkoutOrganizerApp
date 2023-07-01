@@ -36,7 +36,7 @@ interface LoggedRoutineSetDao : DataAccessObject<LoggedRoutineSet> {
     @Query("SELECT MAX(setsCount) AS maxSets, logged_workout_routines.date AS date FROM logged_routine_sets " +
             "INNER JOIN logged_workout_routines ON logged_routine_sets.loggedRoutineId = logged_workout_routines.loggedRoutineId " +
             "WHERE exerciseId = :exerciseId")
-    suspend fun getMaxSetsCountForExercise(exerciseId: Long): Map<LocalDate, Int>?
+    suspend fun getMaxSetsCountForExercise(exerciseId: Long): Map<LocalDate?, Int?>
 
     @Transaction
     @Query("UPDATE logged_routine_sets SET userUID = :userUID")

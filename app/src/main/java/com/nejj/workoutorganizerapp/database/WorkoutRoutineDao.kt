@@ -32,6 +32,7 @@ interface WorkoutRoutineDao : DataAccessObject<WorkoutRoutine> {
     @Query("UPDATE workout_routines SET userUID = :userUID WHERE isUserMade = 1")
     suspend fun updateWorkoutRoutinesUserUID(userUID: String)
 
-    @Query("DELETE FROM workout_routines")
+    @Query("DELETE FROM workout_routines WHERE isUserMade = 1")
     suspend fun deleteAllWorkoutRoutines()
+
 }
