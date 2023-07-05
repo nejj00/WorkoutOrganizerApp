@@ -103,15 +103,6 @@ class RoutineFragment : Fragment(R.layout.activity_routine) {
             R.id.action_routineFragment_to_addRoutineExerciseCategoriesFragment,
             bundle
         )
-
-//        val addExerciseDialogFragment = AddExerciseDialogFragment()
-//        val fragmentManager = childFragmentManager
-//        addExerciseDialogFragment.arguments = Bundle().apply {
-//            putSerializable("addDialogContext", AddExerciseDialogContext.ADD_ROUTINE_SET)
-//            putSerializable(ROUTINE_ARGUMENT_KEY, workoutRoutine)
-//        }
-//
-//        addExerciseDialogFragment.show(fragmentManager, "addExerciseDialogFragment")
     }
 
     private fun setupRecyclerView() {

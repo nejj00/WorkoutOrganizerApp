@@ -5,7 +5,6 @@ import java.time.LocalDate
 
 
 class LocalDateConverter {
-
     @TypeConverter
     fun fromStringToDate(value: String?): LocalDate? {
         return value?.let { LocalDate.parse(it) }

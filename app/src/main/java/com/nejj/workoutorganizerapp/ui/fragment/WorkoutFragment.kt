@@ -9,7 +9,7 @@ import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.*
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -30,6 +30,7 @@ import com.nejj.workoutorganizerapp.ui.dialogs.CountdownTimerBottomSheet
 import com.nejj.workoutorganizerapp.ui.viewmodels.LoggedExerciseSetViewModel
 import com.nejj.workoutorganizerapp.ui.viewmodels.LoggedRoutineSetViewModel
 import com.nejj.workoutorganizerapp.ui.viewmodels.LoggedWorkoutRoutineViewModel
+import kotlinx.coroutines.launch
 import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalTime
@@ -114,9 +115,8 @@ class WorkoutFragment : Fragment(R.layout.activity_workout) {
         viewBinding.fabAddWorkoutExercise.setOnClickListener{
 
             if(loggedWorkoutRoutineWithLoggedSets.loggedWorkoutRoutine.loggedRoutineId == null) {
-                loggedWorkoutRoutineViewModel.insertEntityAndGetID(loggedWorkoutRoutineWithLoggedSets.loggedWorkoutRoutine)
-
-                loggedWorkoutRoutineViewModel.loggedWorkoutRoutineID.observe(viewLifecycleOwner) { loggedWorkoutRoutineID ->
+                lifecycleScope.launch {
+                    val loggedWorkoutRoutineID = loggedWorkoutRoutineViewModel.insertEntityAndGetID(loggedWorkoutRoutineWithLoggedSets.loggedWorkoutRoutine)
                     loggedWorkoutRoutineWithLoggedSets.loggedWorkoutRoutine.loggedRoutineId = loggedWorkoutRoutineID
                     openAddExerciseFragment(loggedWorkoutRoutineWithLoggedSets)
                 }
@@ -298,5 +298,14 @@ class WorkoutFragment : Fragment(R.layout.activity_workout) {
         }
 
         popupMenu.show()
+    }
+
+    fun <T> LiveData<T>.observeOnce(owner: LifecycleOwner, observer: Observer<T>) {
+        observe(owner, object : Observer<T> {
+            override fun onChanged(t: T) {
+                observer.onChanged(t)
+                removeObserver(this)
+            }
+        })
     }
 }

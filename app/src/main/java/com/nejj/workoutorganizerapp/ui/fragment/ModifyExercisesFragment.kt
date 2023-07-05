@@ -12,7 +12,6 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.nejj.workoutorganizerapp.R
 import com.nejj.workoutorganizerapp.models.Exercise
-import com.nejj.workoutorganizerapp.ui.dialogs.ConfirmationDialogMaker
 import java.util.*
 
 class ModifyExercisesFragment : ExercisesFragment() {

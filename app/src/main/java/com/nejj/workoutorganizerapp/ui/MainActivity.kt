@@ -25,7 +25,6 @@ import com.nejj.workoutorganizerapp.synchronizers.FirebaseSyncWorker
 import com.nejj.workoutorganizerapp.R
 import com.nejj.workoutorganizerapp.database.WorkoutDatabase
 import com.nejj.workoutorganizerapp.databinding.ActivityMainBinding
-import com.nejj.workoutorganizerapp.models.LastLoggedInUser
 import com.nejj.workoutorganizerapp.repositories.TestingRepository
 import com.nejj.workoutorganizerapp.repositories.WorkoutRepository
 import com.nejj.workoutorganizerapp.sign_in.GoogleAuthUiClient
@@ -133,7 +132,7 @@ class MainActivity : AppCompatActivity() {
                     } else {
                         loginGoogleAuth()
                         googleAuthUiClient.userUID.observe(this) {
-                            userViewModel.upsertEntity(LastLoggedInUser(null, it))
+                            userViewModel.upsertUser(it)
                             userViewModel.updateAllEntitiesUserUID(it)
                             userViewModel.upsertEntityFirebaseLogin(it, Firebase.auth.currentUser?.email.toString())
 

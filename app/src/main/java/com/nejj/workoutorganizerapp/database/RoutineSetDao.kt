@@ -15,7 +15,7 @@ interface RoutineSetDao : DataAccessObject<RoutineSet> {
     suspend fun getEntityById(routineSetId: Long): RoutineSet
 
     @Query("SELECT * FROM routine_sets")
-    fun getAllEntities(): LiveData<RoutineSet>
+    fun getAllEntities(): LiveData<List<RoutineSet>>
 
     @Query("SELECT * FROM routine_sets")
     suspend fun getAllEntitiesList(): List<RoutineSet>

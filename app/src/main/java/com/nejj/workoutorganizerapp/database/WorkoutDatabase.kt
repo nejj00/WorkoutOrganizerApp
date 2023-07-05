@@ -8,6 +8,7 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.nejj.workoutorganizerapp.models.*
 import com.nejj.workoutorganizerapp.models.converters.LocalDateConverter
+import com.nejj.workoutorganizerapp.models.converters.LocalDateTimeConverter
 import com.nejj.workoutorganizerapp.models.converters.LocalTimeConverter
 import com.nejj.workoutorganizerapp.util.DatabaseQueryLoggerCallback
 import java.util.concurrent.Executors
@@ -21,13 +22,14 @@ import java.util.concurrent.Executors
         LoggedExerciseSet::class,
         LoggedRoutineSet::class,
         LoggedWorkoutRoutine::class,
-        LastLoggedInUser::class
+        User::class
     ],
-    version = 28
+    version = 31
 )
 @TypeConverters(
     LocalDateConverter::class,
-    LocalTimeConverter::class
+    LocalTimeConverter::class,
+    LocalDateTimeConverter::class
 )
 abstract class WorkoutDatabase : RoomDatabase() {
 
@@ -38,7 +40,7 @@ abstract class WorkoutDatabase : RoomDatabase() {
     abstract fun getLoggedWorkoutRoutineDao(): LoggedWorkoutRoutineDao
     abstract fun getLoggedRoutineSetDao(): LoggedRoutineSetDao
     abstract fun getLoggedExerciseSetDao(): LoggedExerciseSetDao
-    abstract fun getLastLoggedInUserDao(): LastLoggedInUserDao
+    abstract fun getUserDao(): UserDao
     companion object {
         @Volatile
         private var instance: WorkoutDatabase? = null

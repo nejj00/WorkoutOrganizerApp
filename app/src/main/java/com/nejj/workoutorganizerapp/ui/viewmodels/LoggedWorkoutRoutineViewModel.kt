@@ -28,16 +28,12 @@ class LoggedWorkoutRoutineViewModel(
     val workoutRepository: WorkoutRepository
 ) : AndroidViewModel(app) {
 
-    private val _loggedWorkoutRoutineID = MutableLiveData<Long>()
-    val loggedWorkoutRoutineID: LiveData<Long>
-        get() = _loggedWorkoutRoutineID
-
     fun insertEntity(loggedWorkoutRoutine: LoggedWorkoutRoutine)  = viewModelScope.launch {
         workoutRepository.upsertLoggedWorkoutRoutine(loggedWorkoutRoutine)
     }
 
-    fun insertEntityAndGetID(loggedWorkoutRoutine: LoggedWorkoutRoutine)  = viewModelScope.launch {
-        _loggedWorkoutRoutineID.value = workoutRepository.upsertLoggedWorkoutRoutine(loggedWorkoutRoutine)
+    suspend fun insertEntityAndGetID(loggedWorkoutRoutine: LoggedWorkoutRoutine) : Long {
+        return workoutRepository.upsertLoggedWorkoutRoutine(loggedWorkoutRoutine)
     }
 
     fun deleteEntity(loggedWorkoutRoutine: LoggedWorkoutRoutine) = viewModelScope.launch {

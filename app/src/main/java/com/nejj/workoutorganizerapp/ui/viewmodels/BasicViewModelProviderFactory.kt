@@ -13,7 +13,7 @@ class BasicViewModelProviderFactory(
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return when {
             modelClass.isAssignableFrom(ExercisesMainViewModel::class.java) -> {
-                ExercisesMainViewModel(app, workoutRepository) as T
+                ExercisesMainViewModel(workoutRepository) as T
             }
             modelClass.isAssignableFrom(CategoriesMainViewModel::class.java) -> {
                 CategoriesMainViewModel(app, workoutRepository) as T

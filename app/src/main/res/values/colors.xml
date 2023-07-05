@@ -7,4 +7,11 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="dark_green">#1B5E20</color>      <!-- Dark Green -->
+    <color name="amber">#FF9800</color>       <!-- Amber -->
+    <color name="raisin_black">#212121</color>   <!-- Black -->
+    <color name="seashell">#EEE2DF</color>
+    <color name="imperialRed">#F8333C</color>
+    <color name="darkPurple">#2F0A28</color>
+    <color name="slateGrey">#69747C</color>
 </resources>

@@ -1,23 +1,16 @@
 package com.nejj.workoutorganizerapp.ui.viewmodels
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.firebase.firestore.DocumentSnapshot
-import com.nejj.workoutorganizerapp.models.CategoriesResponse
 import com.nejj.workoutorganizerapp.models.Exercise
-import com.nejj.workoutorganizerapp.models.ExerciseCategory
 import com.nejj.workoutorganizerapp.repositories.WorkoutRepository
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import retrofit2.Response
 
 class ExercisesMainViewModel(
-    app: Application,
     val workoutRepository: WorkoutRepository
-) : AndroidViewModel(app) {
+) : ViewModel() {
 
     fun insertEntity(entity: Exercise) = viewModelScope.launch {
         workoutRepository.upsertExercise(entity)
@@ -42,7 +35,7 @@ class ExercisesMainViewModel(
         workoutRepository.deleteExercise(entity)
     }
 
-    fun getEntities() = workoutRepository.getExercises()
+    fun getEntities() = workoutRepository.getAllExercises()
 
     fun getExercisesByCategoryIdLive(categoryId: Long) = workoutRepository.getExercisesByCategoryIdLive(categoryId)
 

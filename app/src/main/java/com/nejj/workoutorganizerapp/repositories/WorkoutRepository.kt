@@ -11,7 +11,7 @@ class WorkoutRepository(
     suspend fun upsertCategory(exerciseCategory: ExerciseCategory) = database.getExerciseCategoryDao().upsert(exerciseCategory)
     suspend fun deleteCategory(exerciseCategory: ExerciseCategory) = database.getExerciseCategoryDao().deleteEntity(exerciseCategory)
     suspend fun deleteAllCategories() = database.getExerciseCategoryDao().deleteAllCategories()
-    fun getCategories() = database.getExerciseCategoryDao().getAllEntities()
+    fun getAllCategories() = database.getExerciseCategoryDao().getAllEntities()
     suspend fun getCategoriesList() = database.getExerciseCategoryDao().getAllEntitiesList()
     suspend fun getUserMadeCategoriesList() = database.getExerciseCategoryDao().getAllUserMadeEntitiesList()
     suspend fun updateCategoriesUserUID(userUID: String) = database.getExerciseCategoryDao().updateCategoriesUserUID(userUID)
@@ -22,7 +22,7 @@ class WorkoutRepository(
     suspend fun upsertExercise(exercise: Exercise) = database.getExerciseDao().upsert(exercise)
     suspend fun deleteExercise(exercise: Exercise) = database.getExerciseDao().deleteEntity(exercise)
     suspend fun deleteAllExercises() = database.getExerciseDao().deleteAllExercises()
-    fun getExercises() = database.getExerciseDao().getAllEntities()
+    fun getAllExercises() = database.getExerciseDao().getAllEntities()
     suspend fun getExercisesList() = database.getExerciseDao().getAllEntitiesList()
     suspend fun getUserMadeExercisesList() = database.getExerciseDao().getAllUserMadeEntitiesList()
     suspend fun getExercisesByCategoryId(categoryId: Long) = database.getExerciseDao().getExercisesOfCategory(categoryId)
@@ -97,11 +97,11 @@ class WorkoutRepository(
     suspend fun getMaxRepsForExercise(exerciseId: Long) = database.getLoggedExerciseSetDao().getMaxRepsForExercise(exerciseId)
     suspend fun updateLoggedExerciseSetsUserUID(userUID: String) = database.getLoggedExerciseSetDao().updateLoggedExerciseSetsUserUID(userUID)
 
-    // Last Logged In User
-    suspend fun upsertLastLoggedInUser(lastLoggedInUser: LastLoggedInUser) = database.getLastLoggedInUserDao().upsert(lastLoggedInUser)
-    suspend fun deleteLastLoggedInUser(lastLoggedInUser: LastLoggedInUser) = database.getLastLoggedInUserDao().deleteEntity(lastLoggedInUser)
-    fun getLastLoggedInUser() = database.getLastLoggedInUserDao().getAllEntities()
-    suspend fun getLastLoggedInUserList() = database.getLastLoggedInUserDao().getAllEntitiesList()
+    // Users
+    suspend fun upsertUser(user: User) = database.getUserDao().upsert(user)
+    suspend fun deleteUser(user: User) = database.getUserDao().deleteEntity(user)
+    suspend fun getMostRecentUser() = database.getUserDao().getMostRecentUser()
+    suspend fun getUserByUID(userUID: String) = database.getUserDao().getUserByUID(userUID)
 
 
     // Batch Functions

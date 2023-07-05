@@ -5,12 +5,13 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import com.nejj.workoutorganizerapp.models.*
 import com.nejj.workoutorganizerapp.repositories.FirestoreRepository
 import com.nejj.workoutorganizerapp.repositories.WorkoutRepository
 import com.nejj.workoutorganizerapp.synchronizers.FirestoreSynchronizationManager
 import kotlinx.coroutines.launch
-import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
@@ -25,6 +26,18 @@ class UserViewModel(
 
     private val firestoreRepository = FirestoreRepository("users")
 
+    fun upsertUser(userUID: String) = viewModelScope.launch {
+        var user = workoutRepository.getUserByUID(userUID)
+
+        if(user == null) {
+            user = User(null, userUID, Firebase.auth.currentUser?.email.toString(), 0.0, LocalDateTime.now(), LocalDateTime.now())
+        } else {
+            user.userLastLogin = LocalDateTime.now()
+        }
+
+        workoutRepository.upsertUser(user)
+    }
+
     suspend fun getLastLoggedInUserFirebase(): User? {
         val userSnapshot = firestoreRepository.getLastLoggedInUser()
 
@@ -37,16 +50,10 @@ class UserViewModel(
             val userCreated = LocalDateTime.parse(document.data?.get("userCreated") as String, DateTimeFormatter.ISO_LOCAL_DATE)
             val userLastLogin = LocalDateTime.parse(document.data?.get("userLastLogin") as String, DateTimeFormatter.ISO_LOCAL_DATE)
 
-            return User(userUID, email, bodyweight, userCreated, userLastLogin)
+            //return User(userUID, email, bodyweight, userCreated, userLastLogin)
         }
 
         return null
-    }
-    fun upsertEntity(entity: LastLoggedInUser) = viewModelScope.launch {
-        val entites = getLastLoggedInUserList()
-        entites.forEach{ deleteEntity(it) }
-
-        workoutRepository.upsertLastLoggedInUser(entity)
     }
 
     fun upsertEntityFirebaseLogin(userUID: String, email: String) = viewModelScope.launch {
@@ -82,7 +89,7 @@ class UserViewModel(
     }
 
     fun updateAllEntitiesUserUID(userUID: String) = viewModelScope.launch {
-        val lastLoggedInUser = getLastLoggedInUserFirebase()
+        val lastLoggedInUser = workoutRepository.getMostRecentUser()
         val firestoreSynchronizationManager = FirestoreSynchronizationManager(workoutRepository)
         if(lastLoggedInUser == null) {
             workoutRepository.batchUpdateUserUIDs(userUID)
@@ -107,12 +114,4 @@ class UserViewModel(
         workoutRepository.nukeDatabase()
         firestoreSynchronizationManager.saveFirebaseDataToLocalDB(userUID)
     }
-
-    fun deleteEntity(entity: LastLoggedInUser) = viewModelScope.launch {
-        workoutRepository.deleteLastLoggedInUser(entity)
-    }
-
-    fun getLastLoggedInUser() = workoutRepository.getLastLoggedInUser()
-
-    suspend fun getLastLoggedInUserList() = workoutRepository.getLastLoggedInUserList()
 }

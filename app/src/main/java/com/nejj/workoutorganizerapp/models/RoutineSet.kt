@@ -24,4 +24,10 @@ data class RoutineSet(
     override fun getItemText(): String? {
         return exerciseId.toString()
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is RoutineSet) return false
+        return exerciseId == other.exerciseId
+    }
 }

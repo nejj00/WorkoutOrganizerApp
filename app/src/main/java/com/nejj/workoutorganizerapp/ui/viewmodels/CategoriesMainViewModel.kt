@@ -5,15 +5,8 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.google.firebase.firestore.DocumentSnapshot
-import com.google.firebase.firestore.ktx.toObject
-import com.nejj.workoutorganizerapp.models.CategoriesResponse
 import com.nejj.workoutorganizerapp.models.ExerciseCategory
-import com.nejj.workoutorganizerapp.repositories.DatabaseSynchronizer
-import com.nejj.workoutorganizerapp.repositories.FirestoreRepository
 import com.nejj.workoutorganizerapp.repositories.WorkoutRepository
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class CategoriesMainViewModel(
@@ -48,7 +41,7 @@ class CategoriesMainViewModel(
     fun deleteEntity(entity: ExerciseCategory) = viewModelScope.launch {
         workoutRepository.deleteCategory(entity)
     }
-    fun getEntities() = workoutRepository.getCategories()
+    fun getEntities() = workoutRepository.getAllCategories()
     fun updateCategoriesUserUID(userUID: String) = viewModelScope.launch {
         workoutRepository.updateCategoriesUserUID(userUID)
     }

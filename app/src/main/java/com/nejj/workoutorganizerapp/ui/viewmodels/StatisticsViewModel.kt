@@ -2,13 +2,11 @@ package com.nejj.workoutorganizerapp.ui.viewmodels
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
-import com.nejj.workoutorganizerapp.enums.ExerciseStatisticsType
 import com.nejj.workoutorganizerapp.enums.PersonalRecordStatisticsType
 import com.nejj.workoutorganizerapp.enums.StatisticsType
 import com.nejj.workoutorganizerapp.models.LoggedExerciseSet
 import com.nejj.workoutorganizerapp.models.PersonalRecord
 import com.nejj.workoutorganizerapp.repositories.WorkoutRepository
-import com.nejj.workoutorganizerapp.util.DefaultMapEntry
 import com.nejj.workoutorganizerapp.util.StatisticsDataSetProcessor
 import java.time.LocalDate
 

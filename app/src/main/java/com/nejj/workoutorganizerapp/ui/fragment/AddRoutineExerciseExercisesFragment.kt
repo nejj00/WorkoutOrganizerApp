@@ -8,17 +8,12 @@ import android.view.View
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.google.android.material.appbar.MaterialToolbar
 import com.nejj.workoutorganizerapp.R
-import com.nejj.workoutorganizerapp.databinding.DialogAddExerciseBinding
-import com.nejj.workoutorganizerapp.enums.AddExerciseDialogContext
 import com.nejj.workoutorganizerapp.enums.FragmentContext
 import com.nejj.workoutorganizerapp.models.Exercise
 import com.nejj.workoutorganizerapp.ui.viewmodels.LoggedRoutineSetViewModel

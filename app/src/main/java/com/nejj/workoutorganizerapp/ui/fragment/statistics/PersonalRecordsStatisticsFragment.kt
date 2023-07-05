@@ -12,16 +12,16 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.nejj.workoutorganizerapp.R
 import com.nejj.workoutorganizerapp.adapters.PersonalRecordAdapter
-import com.nejj.workoutorganizerapp.databinding.FragmentDoubleListViewBinding
+import com.nejj.workoutorganizerapp.databinding.ItemsListViewFragmentBinding
 import com.nejj.workoutorganizerapp.models.PersonalRecord
 import com.nejj.workoutorganizerapp.ui.viewmodels.StatisticsViewModel
 import kotlinx.coroutines.launch
 
-class PersonalRecordsStatisticsFragment : Fragment(R.layout.fragment_double_list_view) {
+class PersonalRecordsStatisticsFragment : Fragment(R.layout.items_list_view_fragment) {
 
-    private lateinit var viewBinding: FragmentDoubleListViewBinding
+    private lateinit var viewBinding: ItemsListViewFragmentBinding
     private lateinit var topItemsAdapter: PersonalRecordAdapter
-    private lateinit var bottomItemsAdapter: PersonalRecordAdapter
+    private lateinit var itemsAdapter: PersonalRecordAdapter
     private val statisticsViewModel: StatisticsViewModel by activityViewModels()
 
     private val args: PersonalRecordsStatisticsFragmentArgs by navArgs()
@@ -31,7 +31,7 @@ class PersonalRecordsStatisticsFragment : Fragment(R.layout.fragment_double_list
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        viewBinding = FragmentDoubleListViewBinding.inflate(inflater, container, false)
+        viewBinding = ItemsListViewFragmentBinding.inflate(inflater, container, false)
         return viewBinding.root
     }
 
@@ -42,7 +42,7 @@ class PersonalRecordsStatisticsFragment : Fragment(R.layout.fragment_double_list
             val personalRecords = statisticsViewModel.getPersonalRecordsForExercise(args.exercise.exerciseId!!)
 
             setupBottomRecyclerView(personalRecords)
-            bottomItemsAdapter.setOnItemClickListener(itemClickedListener)
+            itemsAdapter.setOnItemClickListener(itemClickedListener)
         }
 
     }
@@ -57,18 +57,10 @@ class PersonalRecordsStatisticsFragment : Fragment(R.layout.fragment_double_list
         )
     }
 
-    private fun setupTopRecyclerView(personalRecords: MutableList<PersonalRecord>) {
-        topItemsAdapter = PersonalRecordAdapter(personalRecords)
-        viewBinding.rvTopItems.apply {
-            adapter = topItemsAdapter
-            layoutManager = LinearLayoutManager(activity)
-        }
-    }
-
     private fun setupBottomRecyclerView(personalRecords: MutableList<PersonalRecord>) {
-        bottomItemsAdapter = PersonalRecordAdapter(personalRecords)
-        viewBinding.rvBottomItems.apply {
-            adapter = bottomItemsAdapter
+        itemsAdapter = PersonalRecordAdapter(personalRecords)
+        viewBinding.rvItems.apply {
+            adapter = itemsAdapter
             layoutManager = LinearLayoutManager(activity)
         }
     }
