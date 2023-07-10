@@ -20,7 +20,6 @@ import kotlinx.coroutines.launch
 class PersonalRecordsStatisticsFragment : Fragment(R.layout.items_list_view_fragment) {
 
     private lateinit var viewBinding: ItemsListViewFragmentBinding
-    private lateinit var topItemsAdapter: PersonalRecordAdapter
     private lateinit var itemsAdapter: PersonalRecordAdapter
     private val statisticsViewModel: StatisticsViewModel by activityViewModels()
 
@@ -37,6 +36,7 @@ class PersonalRecordsStatisticsFragment : Fragment(R.layout.items_list_view_frag
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewBinding.fabAddItem.visibility = View.GONE
 
         lifecycleScope.launch {
             val personalRecords = statisticsViewModel.getPersonalRecordsForExercise(args.exercise.exerciseId!!)

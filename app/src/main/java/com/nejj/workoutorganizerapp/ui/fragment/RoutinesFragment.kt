@@ -47,7 +47,7 @@ class RoutinesFragment : ItemsListViewFragment<WorkoutRoutine>() {
                 R.id.deleteCategory -> {
                     MaterialAlertDialogBuilder(requireContext())
                         .setTitle("Delete")
-                        .setMessage("Are you sure you want to delete this exercise?")
+                        .setMessage("Are you sure you want to delete this routine?")
                         .setNegativeButton("Cancel") { dialog, which ->
                             return@setNegativeButton
                         }

@@ -6,7 +6,8 @@ enum class OverallStatisticsType(private val statisticsName: String) : Statistic
     TOTAL_SETS("Total Sets"),
     REPS_PER_SET("Reps per Set"),
     NUMBER_OF_WORKOUTS("Number of Workouts"),
-    MUSCLE_RANKING_CHART("Muscle Ranking Chart");
+    //MUSCLE_RANKING_CHART("Muscle Ranking Chart"),
+    BODYWEIGHT_OVERTIME("Bodyweight Overtime");
 
     override fun toString() = statisticsName
 

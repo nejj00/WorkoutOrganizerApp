@@ -57,8 +57,8 @@ abstract class FirestoreSynchronizer<T : Any>(
         }
     }
 
-    fun deleteEntitiesFirebase() = CoroutineScope(Dispatchers.IO).launch {
-        val entitiesDocuments = firestoreRepository.getAllEntities()
+    fun deleteEntitiesFirebase(userUID: String) = CoroutineScope(Dispatchers.IO).launch {
+        val entitiesDocuments = firestoreRepository.getAllEntities(userUID)
         for(document in entitiesDocuments) {
             firestoreRepository.deleteEntity(document.id)
         }

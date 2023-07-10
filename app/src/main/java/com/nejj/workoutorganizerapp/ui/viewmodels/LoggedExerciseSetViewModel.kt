@@ -1,8 +1,7 @@
 package com.nejj.workoutorganizerapp.ui.viewmodels
 
 import android.app.Application
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.ktx.Firebase
@@ -13,9 +12,8 @@ import com.nejj.workoutorganizerapp.repositories.WorkoutRepository
 import kotlinx.coroutines.launch
 
 class LoggedExerciseSetViewModel(
-    app: Application,
     val workoutRepository: WorkoutRepository
-) : AndroidViewModel(app) {
+) : ViewModel() {
 
     fun insertEntity(entity: LoggedExerciseSet) = viewModelScope.launch {
         workoutRepository.upsertLoggedExerciseSet(entity)
@@ -46,5 +44,20 @@ class LoggedExerciseSetViewModel(
 
         loggedRoutineSet.setsCount++
         workoutRepository.upsertLoggedRoutineSet(loggedRoutineSet)
+    }
+
+    fun getMaxWeightForExercise(exerciseId: Long) : LiveData<Double>  {
+        val maxWeight: MutableLiveData<Double> = MutableLiveData<Double>()
+
+
+        viewModelScope.launch {
+            val loggedRoutineSet = workoutRepository.getLoggedRoutineSetById(exerciseId)
+
+
+            val maxWeightDate = workoutRepository.getMaxWeightForExercise(loggedRoutineSet.exerciseId!!)?.entries?.iterator()?.next()
+            maxWeight.postValue(maxWeightDate?.value)
+        }
+
+        return maxWeight
     }
 }

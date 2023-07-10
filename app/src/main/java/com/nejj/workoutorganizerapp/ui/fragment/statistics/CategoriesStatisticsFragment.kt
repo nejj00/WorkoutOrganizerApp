@@ -1,11 +1,13 @@
 package com.nejj.workoutorganizerapp.ui.fragment.statistics
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.nejj.workoutorganizerapp.R
 import com.nejj.workoutorganizerapp.adapters.ExercisesAdapter
 import com.nejj.workoutorganizerapp.adapters.SimpleItemPreviewAdapter
@@ -27,6 +29,9 @@ class CategoriesStatisticsFragment : SimpleItemsDoubleListViewFragment<Statistic
 
     private val args: CategoriesStatisticsFragmentArgs by navArgs()
 
+    companion object {
+        val TAG = "CategoriesStatisticsFragment"
+    }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val exerciseCategory = args.exerciseCategory
@@ -47,6 +52,18 @@ class CategoriesStatisticsFragment : SimpleItemsDoubleListViewFragment<Statistic
     override val topTVItemClickedListener = fun(statisticType: StatisticsType) {
         lifecycleScope.launch {
             val dateVolumeMap = statisticsViewModel.getStatisticsDataSetMapForCategory(statisticType, args.exerciseCategory.categoryId!!)
+
+            if(dateVolumeMap.isEmpty()) {
+                MaterialAlertDialogBuilder(requireContext())
+                    .setTitle("No data")
+                    .setMessage("There is not enough data to show statistics.")
+                    .setPositiveButton("OK") { dialog, which ->
+                    }
+                    .show()
+
+                Log.d(TAG, "dateVolumeMap is empty")
+                return@launch
+            }
 
             val(categories, dataSet) = dateVolumeMap.toList().unzip()
 

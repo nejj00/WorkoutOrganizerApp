@@ -16,28 +16,28 @@ class BasicViewModelProviderFactory(
                 ExercisesMainViewModel(workoutRepository) as T
             }
             modelClass.isAssignableFrom(CategoriesMainViewModel::class.java) -> {
-                CategoriesMainViewModel(app, workoutRepository) as T
+                CategoriesMainViewModel(workoutRepository) as T
             }
             modelClass.isAssignableFrom(WorkoutRoutineMainViewModel::class.java) -> {
-                WorkoutRoutineMainViewModel(app, workoutRepository) as T
+                WorkoutRoutineMainViewModel(workoutRepository) as T
             }
             modelClass.isAssignableFrom(RoutineSetMainViewModel::class.java) -> {
-                RoutineSetMainViewModel(app, workoutRepository) as T
+                RoutineSetMainViewModel(workoutRepository) as T
             }
             modelClass.isAssignableFrom(LoggedWorkoutRoutineViewModel::class.java) -> {
-                LoggedWorkoutRoutineViewModel(app, workoutRepository) as T
+                LoggedWorkoutRoutineViewModel(workoutRepository) as T
             }
             modelClass.isAssignableFrom(LoggedRoutineSetViewModel::class.java) -> {
-                LoggedRoutineSetViewModel(app, workoutRepository) as T
+                LoggedRoutineSetViewModel(workoutRepository) as T
             }
             modelClass.isAssignableFrom(LoggedExerciseSetViewModel::class.java) -> {
-                LoggedExerciseSetViewModel(app, workoutRepository) as T
+                LoggedExerciseSetViewModel(workoutRepository) as T
             }
             modelClass.isAssignableFrom(UserViewModel::class.java) -> {
-                UserViewModel(app, workoutRepository) as T
+                UserViewModel(workoutRepository) as T
             }
             modelClass.isAssignableFrom(StatisticsViewModel::class.java) -> {
-                StatisticsViewModel(app, workoutRepository) as T
+                StatisticsViewModel(workoutRepository) as T
             }
             else -> throw IllegalArgumentException("Unknown ViewModel class")
         }

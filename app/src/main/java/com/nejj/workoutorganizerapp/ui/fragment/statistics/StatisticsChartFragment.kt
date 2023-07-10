@@ -8,8 +8,10 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
 import com.github.aachartmodel.aainfographics.aachartcreator.*
 import com.github.aachartmodel.aainfographics.aaoptionsmodel.AAScrollablePlotArea
+import com.github.aachartmodel.aainfographics.aaoptionsmodel.AAStyle
 import com.nejj.workoutorganizerapp.R
 import com.nejj.workoutorganizerapp.databinding.FragmentStatisticChartBinding
+import com.nejj.workoutorganizerapp.enums.OverallStatisticsType
 
 class StatisticsChartFragment : Fragment(R.layout.fragment_statistic_chart) {
 
@@ -34,22 +36,21 @@ class StatisticsChartFragment : Fragment(R.layout.fragment_statistic_chart) {
         val categoriesArray = statisticsDataSet.categories.toTypedArray()
         val dataSetArray = statisticsDataSet.dataSet.toTypedArray()
 
-        val aaChartView = viewBinding.aaChartView as AAChartView
-        val scrollablePlotArea = AAScrollablePlotArea()
-        scrollablePlotArea.minHeight = aaChartView.height
-        scrollablePlotArea.minWidth = aaChartView.width
-        scrollablePlotArea.opacity = 80f
+        val aaChartView = viewBinding.aaChartView
+
+        val chartType = when (statisticsDataSet.overallStatisticsType.toString()) {
+            OverallStatisticsType.TOTAL_SETS.toString() -> AAChartType.Column
+            OverallStatisticsType.REPS_PER_SET.toString() -> AAChartType.Column
+            else -> AAChartType.Spline
+        }
 
         val aaChartModel : AAChartModel = AAChartModel()
-            .chartType(AAChartType.Spline)
-            .title("title")
-            .subtitle("subtitle")
+            .chartType(chartType)
+            .title(statisticsDataSet.overallStatisticsType.toString())
+            .titleStyle(AAStyle().color("#FFFFFFFF"))
             .dataLabelsEnabled(true)
             .backgroundColor("#FF000000")
             .axesTextColor("#FFFFFFFF")
-            .scrollablePlotArea(
-                scrollablePlotArea
-            )
             .dataLabelsEnabled(false)
             .touchEventEnabled(true)
             .zoomType(AAChartZoomType.X)
@@ -61,30 +62,11 @@ class StatisticsChartFragment : Fragment(R.layout.fragment_statistic_chart) {
             )
             )
 
+        if(OverallStatisticsType.VOLUME.toString() == statisticsDataSet.overallStatisticsType.toString()) {
+            aaChartModel.subtitle = "Calculated as weight * reps * sets"
+            aaChartModel.subtitleStyle = (AAStyle().color("#FFFFFFFF"))
+        }
+
         aaChartView.aa_drawChartWithChartModel(aaChartModel)
-
-
-//        val chartView = viewBinding.temperatureChart as VizContainerView
-//
-//        with(chartView) {
-//
-//            val temperatures = listOf(
-//                5.2, 5.1, 6.1, 6.0, 5.9, 6.2,
-//                6.4, 6.7, 7.8, 9.8, 12.3, 12.6,
-//                12.6, 13.2, 14.6, 14.5, 14.7, 14.3,
-//                13.8, 11.2, 9.4, 8.0, 6.9, 6.3
-//            )
-//
-//            chart(temperatures) {
-//                val tempDimension = quantitative( { domain } ) {
-//                    name = "Temperature in °C"
-//                }
-//                val hourDimension = discrete( { indexInData } ) {
-//                    name = "Time of the day"
-//                }
-//                line(hourDimension, tempDimension)
-//            }
-//        }
-
     }
 }

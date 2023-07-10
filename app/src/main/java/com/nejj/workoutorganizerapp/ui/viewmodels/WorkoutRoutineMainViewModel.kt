@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.firestore.DocumentSnapshot
 import com.nejj.workoutorganizerapp.models.Exercise
@@ -13,20 +14,21 @@ import com.nejj.workoutorganizerapp.repositories.WorkoutRepository
 import kotlinx.coroutines.launch
 
 class WorkoutRoutineMainViewModel(
-    app: Application,
     val workoutRepository: WorkoutRepository
-) : AndroidViewModel(app) {
-
-    private val _workoutRoutineID = MutableLiveData<Long>()
-    val workoutRoutineID: LiveData<Long>
-        get() = _workoutRoutineID
+) : ViewModel() {
 
     fun insertEntity(entity: WorkoutRoutine) = viewModelScope.launch {
         workoutRepository.upsertWorkoutRoutine(entity)
     }
 
-    fun insertEntityAndGetID(entity: WorkoutRoutine) = viewModelScope.launch {
-        _workoutRoutineID.value = workoutRepository.upsertWorkoutRoutine(entity)
+    fun insertEntityAndGetID(entity: WorkoutRoutine) : LiveData<Long> {
+        val workoutRoutineID: MutableLiveData<Long> =  MutableLiveData()
+
+        viewModelScope.launch {
+            workoutRoutineID.value = workoutRepository.upsertWorkoutRoutine(entity)
+        }
+
+        return workoutRoutineID
     }
 
     fun deleteEntity(entity: WorkoutRoutine) = viewModelScope.launch {
@@ -36,7 +38,6 @@ class WorkoutRoutineMainViewModel(
         }
 
         workoutRepository.deleteWorkoutRoutine(entity)
-        //TODO: Delete Routine Sets related to this workout routine
     }
 
     fun updateWorkoutRoutinesUserUID(userUID: String) = viewModelScope.launch {

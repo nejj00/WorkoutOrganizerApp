@@ -2,6 +2,7 @@ package com.nejj.workoutorganizerapp.ui.viewmodels
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.DocumentSnapshot
@@ -14,9 +15,8 @@ import com.nejj.workoutorganizerapp.repositories.WorkoutRepository
 import kotlinx.coroutines.launch
 
 class LoggedRoutineSetViewModel(
-    app: Application,
     val workoutRepository: WorkoutRepository
-) : AndroidViewModel(app) {
+) : ViewModel() {
 
     fun insertEntity(entity: LoggedRoutineSet) = viewModelScope.launch {
         workoutRepository.upsertLoggedRoutineSet(entity)

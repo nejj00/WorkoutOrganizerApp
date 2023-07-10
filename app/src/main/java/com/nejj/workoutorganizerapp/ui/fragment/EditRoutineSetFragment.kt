@@ -42,6 +42,7 @@ class EditRoutineSetFragment : Fragment(R.layout.fragment_routine_set_edit){
 
         val routineSet = args.routineSet
 
+
         viewBinding.tiSets.editText?.setText(routineSet.setsCount.toString())
         viewBinding.tiWarmupSets.editText?.setText(routineSet.warmupSetsCount.toString())
 

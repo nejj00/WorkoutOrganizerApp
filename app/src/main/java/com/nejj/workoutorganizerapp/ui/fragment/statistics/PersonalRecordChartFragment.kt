@@ -55,12 +55,11 @@ class PersonalRecordChartFragment : Fragment(R.layout.fragment_personal_record_c
                 recordsHistory.add(RecordHistoryItem(it.key, it.value.toString().toDouble()))
             }
 
-            personalRecordsHistoryAdapter.differ.submitList(recordsHistory)
+            personalRecordsHistoryAdapter.differ.submitList(recordsHistory.sortedByDescending { it.date })
 
             val aaChartModel : AAChartModel = AAChartModel()
                 .chartType(AAChartType.Areaspline)
-                .title("title")
-                .subtitle("subtitle")
+                .title(args.personalRecord.personalRecordStatisticsType.toString())
                 .dataLabelsEnabled(true)
                 .backgroundColor("#FF000000")
                 .axesTextColor("#FFFFFFFF")

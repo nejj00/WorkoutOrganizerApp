@@ -6,6 +6,8 @@ import android.view.View
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.snackbar.Snackbar
 import com.nejj.workoutorganizerapp.R
 import com.nejj.workoutorganizerapp.adapters.CategoriesAdapter
 import com.nejj.workoutorganizerapp.adapters.SimpleItemPreviewAdapter
@@ -47,6 +49,18 @@ class StatisticsFragment : SimpleItemsDoubleListViewFragment<StatisticsType, Exe
         lifecycleScope.launch {
             val dateVolumeMap = statisticsViewModel.getStatisticsDataSetMap(statisticType)
 
+            if(dateVolumeMap.isEmpty()) {
+                MaterialAlertDialogBuilder(requireContext())
+                    .setTitle("No data")
+                    .setMessage("There is not enough data to show statistics.")
+                    .setPositiveButton("OK") { dialog, which ->
+                    }
+                    .show()
+
+                Log.d(TAG, "dateVolumeMap is empty")
+                return@launch
+            }
+
             val(categories, dataSet) = dateVolumeMap.toList().unzip()
 
             val statisticsDataSet = StatisticsDataSet(statisticType, categories, dataSet)
@@ -55,7 +69,7 @@ class StatisticsFragment : SimpleItemsDoubleListViewFragment<StatisticsType, Exe
                 putSerializable("statisticsDataSet", statisticsDataSet)
             }
 
-            val action = if(statisticType == OverallStatisticsType.MUSCLE_RANKING_CHART) {
+            val action = if(/*statisticType == OverallStatisticsType.MUSCLE_RANKING_CHART*/ 1 == 2) {
                 R.id.action_statisticsFragment_to_muscleRankingChartFragment
             } else {
                 R.id.action_statisticsFragment_to_statisticsChartFragment

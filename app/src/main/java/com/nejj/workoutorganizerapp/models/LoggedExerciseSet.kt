@@ -9,7 +9,7 @@ import java.io.Serializable
 )
 data class LoggedExerciseSet(
     @PrimaryKey(autoGenerate = true)
-    val loggedExerciseSetId: Long? = null,
+    var loggedExerciseSetId: Long? = null,
     var loggedRoutineId: Long? = null,
     var loggedRoutineSetId: Long? = null,
     var weight: Double = 0.0,

@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.DocumentSnapshot
@@ -14,6 +15,7 @@ import com.nejj.workoutorganizerapp.enums.StatisticsType
 import com.nejj.workoutorganizerapp.models.LoggedExerciseSet
 import com.nejj.workoutorganizerapp.models.LoggedRoutineSet
 import com.nejj.workoutorganizerapp.models.LoggedWorkoutRoutine
+import com.nejj.workoutorganizerapp.models.WorkoutRoutine
 import com.nejj.workoutorganizerapp.models.relations.LoggedWorkoutRoutineWithLoggedRoutineSets
 import com.nejj.workoutorganizerapp.models.relations.RoutineSetsWithExercise
 import com.nejj.workoutorganizerapp.repositories.WorkoutRepository
@@ -24,16 +26,21 @@ import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 
 class LoggedWorkoutRoutineViewModel(
-    app: Application,
     val workoutRepository: WorkoutRepository
-) : AndroidViewModel(app) {
+) : ViewModel() {
 
     fun insertEntity(loggedWorkoutRoutine: LoggedWorkoutRoutine)  = viewModelScope.launch {
         workoutRepository.upsertLoggedWorkoutRoutine(loggedWorkoutRoutine)
     }
 
-    suspend fun insertEntityAndGetID(loggedWorkoutRoutine: LoggedWorkoutRoutine) : Long {
-        return workoutRepository.upsertLoggedWorkoutRoutine(loggedWorkoutRoutine)
+    fun insertEntityAndGetID(loggedWorkoutRoutine: LoggedWorkoutRoutine) : LiveData<Long> {
+        val loggedWorkoutRoutineId: MutableLiveData<Long> = MutableLiveData()
+
+        viewModelScope.launch {
+            loggedWorkoutRoutineId.value = workoutRepository.upsertLoggedWorkoutRoutine(loggedWorkoutRoutine)
+        }
+
+        return loggedWorkoutRoutineId
     }
 
     fun deleteEntity(loggedWorkoutRoutine: LoggedWorkoutRoutine) = viewModelScope.launch {
@@ -48,7 +55,6 @@ class LoggedWorkoutRoutineViewModel(
         }
 
         workoutRepository.deleteLoggedWorkoutRoutine(loggedWorkoutRoutine)
-        // TODO Delete Logged Routine Sets related to this Logged Workout Routine
     }
 
     fun updateLoggedWorkoutRoutinesUserUID(userUID: String) = viewModelScope.launch {
@@ -60,31 +66,38 @@ class LoggedWorkoutRoutineViewModel(
     fun getLoggedWorkoutRoutineWithLoggedRoutineSetsLive() = workoutRepository.getLoggedWorkoutRoutineWithLoggedRoutineSetsLive()
     suspend fun getLoggedWorkoutRoutineWithLoggedRoutineSets() = workoutRepository.getLoggedWorkoutRoutineWithLoggedRoutineSets()
 
-    suspend fun initializeLoggedWorkoutRoutine(loggedWorkoutRoutine: LoggedWorkoutRoutine, routineSetsWithExercise: List<RoutineSetsWithExercise>) : LoggedWorkoutRoutineWithLoggedRoutineSets {
-        loggedWorkoutRoutine.userUID = Firebase.auth.currentUser?.uid
-        val loggedWorkoutRoutineId = workoutRepository.upsertLoggedWorkoutRoutine(loggedWorkoutRoutine)
+    fun initializeLoggedWorkoutRoutine(workoutRoutine: WorkoutRoutine, routineSetsWithExercises: List<RoutineSetsWithExercise>) : LiveData<LoggedWorkoutRoutineWithLoggedRoutineSets> {
+        val loggedWorkoutRoutineWithLoggedRoutineSets: MutableLiveData<LoggedWorkoutRoutineWithLoggedRoutineSets> = MutableLiveData()
 
-        for(routineSet in routineSetsWithExercise) {
-            // initialize logged routine sets from the routine sets loaded from the routine id
-            // insert logged routine sets
-            val loggedRoutineSet = LoggedRoutineSet(routineSet, loggedWorkoutRoutineId)
-            loggedRoutineSet.userUID = loggedWorkoutRoutine.userUID
-            val loggedRoutineSetId = workoutRepository.upsertLoggedRoutineSet(loggedRoutineSet)
-            loggedRoutineSet.loggedRoutineSetId = loggedRoutineSetId
-            // initialize exercise sets from the routine sets
-            // insert exercise sets
-            for (i in 1..loggedRoutineSet.warmupSetsCount) {
-                val loggedExerciseSet = LoggedExerciseSet(loggedRoutineSet, 0, true)
-                loggedExerciseSet.userUID = loggedWorkoutRoutine.userUID
-                workoutRepository.upsertLoggedExerciseSet(loggedExerciseSet)
+        viewModelScope.launch {
+            val loggedWorkoutRoutine = LoggedWorkoutRoutine(workoutRoutine)
+            loggedWorkoutRoutine.userUID = Firebase.auth.currentUser?.uid
+            val loggedWorkoutRoutineId = workoutRepository.upsertLoggedWorkoutRoutine(loggedWorkoutRoutine)
+
+            for(routineSetWithExercise in routineSetsWithExercises) {
+                // initialize logged routine sets from the routine sets loaded from the routine id
+                // insert logged routine sets
+                val loggedRoutineSet = LoggedRoutineSet(routineSetWithExercise, loggedWorkoutRoutineId)
+                loggedRoutineSet.userUID = loggedWorkoutRoutine.userUID
+                val loggedRoutineSetId = workoutRepository.upsertLoggedRoutineSet(loggedRoutineSet)
+                loggedRoutineSet.loggedRoutineSetId = loggedRoutineSetId
+                // initialize exercise sets from the routine sets
+                // insert exercise sets
+                for (i in 1..loggedRoutineSet.warmupSetsCount) {
+                    val loggedExerciseSet = LoggedExerciseSet(loggedRoutineSet, 0, true)
+                    loggedExerciseSet.userUID = loggedWorkoutRoutine.userUID
+                    workoutRepository.upsertLoggedExerciseSet(loggedExerciseSet)
+                }
+                for (i in 1..loggedRoutineSet.setsCount) {
+                    val loggedExerciseSet = LoggedExerciseSet(loggedRoutineSet, i, false)
+                    loggedExerciseSet.userUID = loggedWorkoutRoutine.userUID
+                    workoutRepository.upsertLoggedExerciseSet(loggedExerciseSet)
+                }
             }
-            for (i in 1..loggedRoutineSet.setsCount) {
-                val loggedExerciseSet = LoggedExerciseSet(loggedRoutineSet, i, false)
-                loggedExerciseSet.userUID = loggedWorkoutRoutine.userUID
-                workoutRepository.upsertLoggedExerciseSet(loggedExerciseSet)
-            }
+
+            loggedWorkoutRoutineWithLoggedRoutineSets.value = workoutRepository.getLogWorkoutWithSets(loggedWorkoutRoutineId)
         }
 
-        return workoutRepository.getLogWorkoutWithSets(loggedWorkoutRoutineId)
+        return loggedWorkoutRoutineWithLoggedRoutineSets
     }
 }

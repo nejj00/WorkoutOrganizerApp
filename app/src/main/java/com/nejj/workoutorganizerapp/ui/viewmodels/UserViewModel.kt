@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -16,9 +17,8 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 class UserViewModel(
-    app: Application,
     val workoutRepository: WorkoutRepository
-) : AndroidViewModel(app) {
+) : ViewModel() {
 
     private val _isLoggingInFirstTime = MutableLiveData<Boolean>()
     val isLoggingInFirstTime: LiveData<Boolean>
@@ -36,24 +36,6 @@ class UserViewModel(
         }
 
         workoutRepository.upsertUser(user)
-    }
-
-    suspend fun getLastLoggedInUserFirebase(): User? {
-        val userSnapshot = firestoreRepository.getLastLoggedInUser()
-
-        if(userSnapshot.isNotEmpty()) {
-            val document = userSnapshot[0]
-
-            val userUID = document.data?.get("userUID") as String
-            val email = document.data?.get("email") as String
-            val bodyweight = document.data?.get("bodyweight") as Double
-            val userCreated = LocalDateTime.parse(document.data?.get("userCreated") as String, DateTimeFormatter.ISO_LOCAL_DATE)
-            val userLastLogin = LocalDateTime.parse(document.data?.get("userLastLogin") as String, DateTimeFormatter.ISO_LOCAL_DATE)
-
-            //return User(userUID, email, bodyweight, userCreated, userLastLogin)
-        }
-
-        return null
     }
 
     fun upsertEntityFirebaseLogin(userUID: String, email: String) = viewModelScope.launch {

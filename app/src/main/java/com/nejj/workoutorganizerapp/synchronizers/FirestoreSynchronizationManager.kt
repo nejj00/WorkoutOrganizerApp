@@ -23,14 +23,14 @@ class FirestoreSynchronizationManager(workoutRepository: WorkoutRepository) {
         loggedExerciseSynchronizer.saveEntitiesToFirebase()
     }
 
-    fun deleteFirestoreData() {
-        exerciseCategorySynchronizer.deleteEntitiesFirebase()
-        exerciseSynchronizer.deleteEntitiesFirebase()
-        workoutRoutineSynchronizer.deleteEntitiesFirebase()
-        routineSetSynchronizer.deleteEntitiesFirebase()
-        loggedWorkoutRoutineSynchronizer.deleteEntitiesFirebase()
-        loggedRoutineSetSynchronizer.deleteEntitiesFirebase()
-        loggedExerciseSynchronizer.deleteEntitiesFirebase()
+    fun deleteFirestoreData(userUID: String) {
+        exerciseCategorySynchronizer.deleteEntitiesFirebase(userUID)
+        exerciseSynchronizer.deleteEntitiesFirebase(userUID)
+        workoutRoutineSynchronizer.deleteEntitiesFirebase(userUID)
+        routineSetSynchronizer.deleteEntitiesFirebase(userUID)
+        loggedWorkoutRoutineSynchronizer.deleteEntitiesFirebase(userUID)
+        loggedRoutineSetSynchronizer.deleteEntitiesFirebase(userUID)
+        loggedExerciseSynchronizer.deleteEntitiesFirebase(userUID)
     }
 
     suspend fun saveFirebaseDataToLocalDB(userUID: String) {

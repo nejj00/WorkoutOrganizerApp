@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
 import com.github.aachartmodel.aainfographics.aachartcreator.*
 import com.github.aachartmodel.aainfographics.aaoptionsmodel.AAScrollablePlotArea
+import com.github.aachartmodel.aainfographics.aaoptionsmodel.AAStyle
 import com.nejj.workoutorganizerapp.R
 import com.nejj.workoutorganizerapp.databinding.FragmentStatisticChartBinding
 
@@ -42,6 +43,7 @@ class MuscleRankingChartFragment : Fragment(R.layout.fragment_statistic_chart) {
 
         val aaChartModel: AAChartModel = AAChartModel()
             .chartType(AAChartType.Area)
+            .titleStyle(AAStyle().color("#FFFFFFFF"))
             .title("title")
             .subtitle("subtitle")
             .dataLabelsEnabled(true)

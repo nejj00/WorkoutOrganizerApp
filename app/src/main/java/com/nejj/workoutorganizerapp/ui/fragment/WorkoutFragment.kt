@@ -1,9 +1,14 @@
 package com.nejj.workoutorganizerapp.ui.fragment
 
+import android.content.res.ColorStateList
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.*
 import android.widget.EditText
 import android.widget.PopupMenu
+import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
@@ -14,6 +19,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.datepicker.MaterialDatePicker
+import com.google.android.material.textfield.TextInputLayout
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
 import com.google.firebase.auth.ktx.auth
@@ -30,7 +36,6 @@ import com.nejj.workoutorganizerapp.ui.dialogs.CountdownTimerBottomSheet
 import com.nejj.workoutorganizerapp.ui.viewmodels.LoggedExerciseSetViewModel
 import com.nejj.workoutorganizerapp.ui.viewmodels.LoggedRoutineSetViewModel
 import com.nejj.workoutorganizerapp.ui.viewmodels.LoggedWorkoutRoutineViewModel
-import kotlinx.coroutines.launch
 import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalTime
@@ -79,20 +84,7 @@ class WorkoutFragment : Fragment(R.layout.activity_workout) {
         if(loggedWorkoutRoutineWithLoggedSets.loggedWorkoutRoutine.endTime != null)
             viewBinding.tfWorkoutEndTime.editText?.setText(loggedWorkoutRoutineWithLoggedSets.loggedWorkoutRoutine.endTime!!.format(localizedTImeFormatter))
 
-        viewBinding.tfWotkoutDate.editText?.setOnClickListener  {
-                val datePicker = MaterialDatePicker.Builder.datePicker()
-                    .setTitleText("Select date")
-                    .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
-                    .build()
-
-                datePicker.addOnPositiveButtonClickListener { selectedDate ->
-                    val localDate = Instant.ofEpochMilli(selectedDate).atZone(ZoneId.systemDefault()).toLocalDate()
-
-                    viewBinding.tfWotkoutDate.editText?.setText(localDate.toString())
-                }
-
-                datePicker.show(childFragmentManager, "datePicker")
-        }
+        setupWorkoutDateField()
 
         viewBinding.tfWorkoutStartTime.editText?.setOnClickListener(timeClickedListener)
         viewBinding.tfWorkoutEndTime.editText?.setOnClickListener(timeClickedListener)
@@ -111,18 +103,37 @@ class WorkoutFragment : Fragment(R.layout.activity_workout) {
         loggedRoutineSetInWorkoutAdapter.setOnOptionsClickListener(loggedRoutineSetOptionsClickListener)
         loggedRoutineSetInWorkoutAdapter.setOnAddSetClickListener(addExerciseSetClickedListener)
         loggedRoutineSetInWorkoutAdapter.setOnExerciseSetOptionsClickListener(exerciseSetOptionsClickListener)
+        loggedRoutineSetInWorkoutAdapter.setOnWeightTextChangedListener(exerciseSetWeightTextChangedListener)
 
         viewBinding.fabAddWorkoutExercise.setOnClickListener{
 
             if(loggedWorkoutRoutineWithLoggedSets.loggedWorkoutRoutine.loggedRoutineId == null) {
-                lifecycleScope.launch {
-                    val loggedWorkoutRoutineID = loggedWorkoutRoutineViewModel.insertEntityAndGetID(loggedWorkoutRoutineWithLoggedSets.loggedWorkoutRoutine)
-                    loggedWorkoutRoutineWithLoggedSets.loggedWorkoutRoutine.loggedRoutineId = loggedWorkoutRoutineID
-                    openAddExerciseFragment(loggedWorkoutRoutineWithLoggedSets)
-                }
+                loggedWorkoutRoutineViewModel.insertEntityAndGetID(loggedWorkoutRoutineWithLoggedSets.loggedWorkoutRoutine)
+                    .observe(viewLifecycleOwner) { loggedWorkoutRoutineID ->
+                        loggedWorkoutRoutineWithLoggedSets.loggedWorkoutRoutine.loggedRoutineId = loggedWorkoutRoutineID
+                        openAddExerciseFragment(loggedWorkoutRoutineWithLoggedSets)
+                    }
             } else {
                 openAddExerciseFragment(loggedWorkoutRoutineWithLoggedSets)
             }
+        }
+    }
+
+    private fun setupWorkoutDateField() {
+        viewBinding.tfWotkoutDate.editText?.setOnClickListener {
+            val datePicker = MaterialDatePicker.Builder.datePicker()
+                .setTitleText("Select date")
+                .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
+                .build()
+
+            datePicker.addOnPositiveButtonClickListener { selectedDate ->
+                val localDate =
+                    Instant.ofEpochMilli(selectedDate).atZone(ZoneId.systemDefault()).toLocalDate()
+
+                viewBinding.tfWotkoutDate.editText?.setText(localDate.toString())
+            }
+
+            datePicker.show(childFragmentManager, "datePicker")
         }
     }
 
@@ -300,12 +311,31 @@ class WorkoutFragment : Fragment(R.layout.activity_workout) {
         popupMenu.show()
     }
 
-    fun <T> LiveData<T>.observeOnce(owner: LifecycleOwner, observer: Observer<T>) {
-        observe(owner, object : Observer<T> {
-            override fun onChanged(t: T) {
-                observer.onChanged(t)
-                removeObserver(this)
+    private val exerciseSetWeightTextChangedListener =
+        fun(textInputLayout: TextInputLayout, textView: TextView, loggedExerciseSet: LoggedExerciseSet, charSeq: CharSequence?, start: Int, before: Int, count: Int) {
+
+            val weight = charSeq.toString().toDoubleOrNull()
+            weight.let {
+                loggedExerciseSetViewModel.getMaxWeightForExercise(loggedExerciseSet.loggedRoutineSetId!!)
+                    .observe(viewLifecycleOwner) { maxWeight ->
+                        if (weight != null && maxWeight > 0.0) {
+                            if (weight > maxWeight + (maxWeight * 0.3)) {
+                                textInputLayout.error = " "
+                                textInputLayout.errorIconDrawable = null
+                                textView.text = "The data in this field is more than 30% of your max and might affect the statistics."
+                                textView.setTextColor(textInputLayout.errorCurrentTextColors)
+//                                Toast.makeText(
+//                                    requireContext(),
+//                                    "You are lifting more than 30% of your 1RM",
+//                                    Toast.LENGTH_SHORT
+//                                ).show()
+                            }
+                        }
+                        else {
+                            textInputLayout.error = null
+                            textView.text = ""
+                        }
+                    }
             }
-        })
-    }
+        }
 }

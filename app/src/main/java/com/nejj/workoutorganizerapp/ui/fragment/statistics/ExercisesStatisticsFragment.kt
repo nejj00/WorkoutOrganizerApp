@@ -1,11 +1,13 @@
 package com.nejj.workoutorganizerapp.ui.fragment.statistics
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.nejj.workoutorganizerapp.R
 import com.nejj.workoutorganizerapp.adapters.SimpleItemPreviewAdapter
 import com.nejj.workoutorganizerapp.adapters.StatisticsOptionsAdapter
@@ -23,8 +25,13 @@ class ExercisesStatisticsFragment : ItemsListViewFragment<StatisticsType>() {
 
     private val args: ExercisesStatisticsFragmentArgs by navArgs()
 
+    companion object {
+        val TAG = "ExercisesStatisticsFragment"
+    }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewBinding.fabAddItem.visibility = View.GONE
+
         val exercise = args.exercise
         requireActivity().title = exercise.name
 
@@ -52,6 +59,19 @@ class ExercisesStatisticsFragment : ItemsListViewFragment<StatisticsType>() {
             else -> {
                 lifecycleScope.launch {
                     val dateDataSetMap = statisticsViewModel.getLoggedExerciseSetsWithDateMapByExercise(statisticType, args.exercise.exerciseId!!)
+
+                    if(dateDataSetMap.isEmpty()) {
+                        MaterialAlertDialogBuilder(requireContext())
+                            .setTitle("No data")
+                            .setMessage("There is not enough data to show statistics.")
+                            .setPositiveButton("OK") { dialog, which ->
+                            }
+                            .show()
+
+                        Log.d(TAG, "dateVolumeMap is empty")
+                        return@launch
+                    }
+
                     navigateToStatisticsChart(dateDataSetMap, statisticType)
                 }
             }

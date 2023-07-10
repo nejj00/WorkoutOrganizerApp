@@ -1,12 +1,16 @@
 package com.nejj.workoutorganizerapp.adapters
 
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.textfield.TextInputLayout
 import com.nejj.workoutorganizerapp.databinding.ItemWorkoutRoutineSetBinding
 import com.nejj.workoutorganizerapp.models.LoggedExerciseSet
 import com.nejj.workoutorganizerapp.models.relations.LoggedRoutineSetWithLoggedExerciseSet
@@ -66,6 +70,10 @@ class LoggedRoutineSetInWorkoutAdapter : RecyclerView.Adapter<LoggedRoutineSetIn
             onExerciseSetOptionsClickListener?.let {
                 loggedExerciseSetAdapter.setOnOptionsClickListener(it)
             }
+
+            onWeightTextChangedListener?.let {
+                loggedExerciseSetAdapter.setOnWeightTextChangedListener(it)
+            }
         }
     }
 
@@ -98,5 +106,11 @@ class LoggedRoutineSetInWorkoutAdapter : RecyclerView.Adapter<LoggedRoutineSetIn
 
     fun setOnExerciseSetOptionsClickListener(listener: (LoggedExerciseSet, View) -> Unit) {
         onExerciseSetOptionsClickListener = listener
+    }
+
+    private var onWeightTextChangedListener: ((TextInputLayout, TextView, LoggedExerciseSet, CharSequence?, Int, Int, Int) -> Unit)? = null
+
+    fun setOnWeightTextChangedListener(listener: (TextInputLayout, TextView, LoggedExerciseSet, CharSequence?, Int, Int, Int) -> Unit) {
+        onWeightTextChangedListener = listener
     }
 }

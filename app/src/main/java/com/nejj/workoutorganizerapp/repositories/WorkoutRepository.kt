@@ -66,6 +66,7 @@ class WorkoutRepository(
     fun getLoggedWorkoutRoutineWithLoggedRoutineSetsLive() = database.getLoggedWorkoutRoutineDao().getLoggedWorkoutRoutineWithLoggedRoutineSetsLive()
     suspend fun getLoggedWorkoutRoutineWithLoggedRoutineSets() = database.getLoggedWorkoutRoutineDao().getLoggedWorkoutRoutineWithLoggedRoutineSets()
     suspend fun getLogWorkoutWithSets(loggedWorkoutId: Long) = database.getLoggedWorkoutRoutineDao().getLogWorkoutWithSets(loggedWorkoutId)
+    suspend fun getBodyweightOvertime() = database.getLoggedWorkoutRoutineDao().getBodyweightOvertime()
     suspend fun updateLoggedWorkoutRoutinesUserUID(userUID: String) = database.getLoggedWorkoutRoutineDao().updateLoggedWorkoutRoutinesUserUID(userUID)
 
     // Logged Routine Sets

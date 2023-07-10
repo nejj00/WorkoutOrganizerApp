@@ -70,8 +70,8 @@ class LoggedWorkoutRoutinesAdapter : RecyclerView.Adapter<LoggedWorkoutRoutinesA
                 layoutManager = LinearLayoutManager(context)
             }
 
-            loggedWorkoutRoutine.loggedRoutineSets.let {
-                loggedRoutineSetAdapter.differ.submitList(it)
+            loggedWorkoutRoutine.loggedRoutineSets.let {loggedRoutineSetList ->
+                loggedRoutineSetAdapter.differ.submitList(loggedRoutineSetList.sortedBy { it.setsOrder })
             }
         }
     }
@@ -92,5 +92,4 @@ class LoggedWorkoutRoutinesAdapter : RecyclerView.Adapter<LoggedWorkoutRoutinesA
         onItemLongClickListener = listener
     }
 
-    //TODO Add OnHoldCLickListener for the card view to delete a logged workout routine
 }

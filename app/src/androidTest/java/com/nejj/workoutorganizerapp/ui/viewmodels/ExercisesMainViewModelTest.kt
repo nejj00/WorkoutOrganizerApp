@@ -8,8 +8,10 @@ import com.google.common.truth.Truth.assertThat
 import com.nejj.workoutorganizerapp.database.WorkoutDatabase
 import com.nejj.workoutorganizerapp.getOrAwaitValue
 import com.nejj.workoutorganizerapp.models.Exercise
+import com.nejj.workoutorganizerapp.models.RoutineSet
 import com.nejj.workoutorganizerapp.repositories.WorkoutRepository
 import kotlinx.coroutines.test.runTest
+import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -36,6 +38,11 @@ class ExercisesMainViewModelTest {
         exercisesMainViewModel = ExercisesMainViewModel(workoutRepository)
     }
 
+    @After
+    fun teardown() {
+        database.close()
+    }
+
     @Test
     fun insertExercise() = runTest {
         val exercise = Exercise(null, 0, "exerciseDescription", "exerciseType", false, true, "")
@@ -44,5 +51,29 @@ class ExercisesMainViewModelTest {
         val allExercise = exercisesMainViewModel.getEntities().getOrAwaitValue()
 
         assertThat(allExercise).contains(exercise)
+    }
+
+    @Test
+    fun checkIfExerciseIsUsedTrue() = runTest {
+        val exercise = Exercise(1, 2, "exerciseDescription", "exerciseType", false, true, "")
+        exercisesMainViewModel.insertEntity(exercise)
+
+        workoutRepository.upsertRoutineSet(
+            RoutineSet(1, 1, 1, 0, 1, 1, true, "")
+        )
+
+        val isUsed = exercisesMainViewModel.checkIfExerciseIsUsed(exercise).getOrAwaitValue()
+
+        assertThat(isUsed).isTrue()
+    }
+
+    @Test
+    fun checkIfExerciseIsUsedFalse() = runTest {
+        val exercise = Exercise(1, 2, "exerciseDescription", "exerciseType", false, true, "")
+        exercisesMainViewModel.insertEntity(exercise)
+
+        val isUsed = exercisesMainViewModel.checkIfExerciseIsUsed(exercise).getOrAwaitValue()
+
+        assertThat(isUsed).isFalse()
     }
 }

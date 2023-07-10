@@ -4,15 +4,15 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.nejj.workoutorganizerapp.models.ExerciseCategory
 import com.nejj.workoutorganizerapp.repositories.WorkoutRepository
 import kotlinx.coroutines.launch
 
 class CategoriesMainViewModel(
-    app: Application,
     val workoutRepository: WorkoutRepository
-) : AndroidViewModel(app) {
+) : ViewModel() {
 
 //    init {
 //        val databaseSynchronizer = DatabaseSynchronizer()

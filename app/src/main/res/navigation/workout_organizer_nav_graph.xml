@@ -61,6 +61,17 @@
             android:id="@+id/action_routineFragment_to_addRoutineExerciseCategoriesFragment"
             app:destination="@id/addRoutineExerciseCategoriesFragment" />
     </fragment>
+
+    <action android:id="@+id/action_global_categoriesFragment"
+        app:destination="@id/categoriesFragment"
+        app:popUpTo="@id/routinesFragment"
+        app:restoreState="true"
+        app:popUpToSaveState="true" />
+    <action android:id="@+id/action_global_exercisesFragment"
+        app:destination="@id/exercisesFragment"
+        app:popUpTo="@id/routinesFragment"
+        app:restoreState="true"
+        app:popUpToSaveState="true" />
     <fragment
         android:id="@+id/categoriesFragment"
         android:name="com.nejj.workoutorganizerapp.ui.fragment.ModifyCategoriesFragment"

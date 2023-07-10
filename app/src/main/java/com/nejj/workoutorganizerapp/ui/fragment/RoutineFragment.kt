@@ -83,8 +83,7 @@ class RoutineFragment : Fragment(R.layout.activity_routine) {
                     return@setOnClickListener
                 }
 
-                workoutRoutineViewModel.insertEntityAndGetID(workoutRoutine)
-                workoutRoutineViewModel.workoutRoutineID.observe(viewLifecycleOwner) { routineId ->
+                workoutRoutineViewModel.insertEntityAndGetID(workoutRoutine).observe(viewLifecycleOwner) { routineId ->
                     workoutRoutine.routineId = routineId
                     openAddExerciseFragment(workoutRoutine)
                 }
@@ -176,17 +175,15 @@ class RoutineFragment : Fragment(R.layout.activity_routine) {
             lifecycleScope.launch {
                 val routineSetsWithExercise = routineSetViewModel.getRoutineSetsWithExercise(workoutRoutine.routineId!!)
 
-                val loggedWorkoutRoutine = LoggedWorkoutRoutine(workoutRoutine)
-
-                val loggedWorkoutRoutineWorkoutRoutineSets = loggedWorkoutRoutineViewModel.initializeLoggedWorkoutRoutine(loggedWorkoutRoutine, routineSetsWithExercise)
-
-                val bundle = Bundle().apply {
-                    putSerializable("loggedWorkoutRoutineWithLoggedSets", loggedWorkoutRoutineWorkoutRoutineSets)
+                loggedWorkoutRoutineViewModel.initializeLoggedWorkoutRoutine(workoutRoutine, routineSetsWithExercise).observe(viewLifecycleOwner) {
+                    val bundle = Bundle().apply {
+                        putSerializable("loggedWorkoutRoutineWithLoggedSets", it)
+                    }
+                    findNavController().navigate(
+                        R.id.action_routineFragment_to_workoutFragment,
+                        bundle
+                    )
                 }
-                findNavController().navigate(
-                    R.id.action_routineFragment_to_workoutFragment,
-                    bundle
-                )
             }
         }
     }

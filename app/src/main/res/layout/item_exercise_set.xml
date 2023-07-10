@@ -2,7 +2,8 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:paddingTop="10dp">
 
     <TextView
         android:id="@+id/tvWeight"
@@ -36,7 +37,7 @@
         android:paddingLeft="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintHorizontal_weight="3"
+        app:layout_constraintHorizontal_weight="2.5"
         app:layout_constraintStart_toEndOf="@+id/tvReps"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -45,7 +46,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:padding="@dimen/text_input_layout_padding"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:endIconMode="none"
         app:layout_constraintEnd_toStartOf="@+id/tiReps"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintHorizontal_weight="1"
@@ -65,11 +66,11 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:padding="@dimen/text_input_layout_padding"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/tiNotes"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintHorizontal_weight="1"
-        app:layout_constraintStart_toEndOf="@+id/tiWeight">
+        app:layout_constraintStart_toEndOf="@+id/tiWeight"
+        app:layout_constraintTop_toBottomOf="@+id/tvReps">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/etReps"
@@ -84,11 +85,11 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:padding="@dimen/text_input_layout_padding"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/tvExerciseSetOptions"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintHorizontal_weight="2.5"
-        app:layout_constraintStart_toEndOf="@+id/tiReps">
+        app:layout_constraintHorizontal_weight="2"
+        app:layout_constraintStart_toEndOf="@+id/tiReps"
+        app:layout_constraintTop_toBottomOf="@+id/tvNotes">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/etNotes"
@@ -106,11 +107,22 @@
         android:text="⋮"
         android:textAppearance="?android:textAppearanceLarge"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/tvError"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintHorizontal_weight="0.5"
         app:layout_constraintStart_toEndOf="@+id/tiNotes"
         app:layout_constraintTop_toBottomOf="@+id/tvNotes" />
+
+    <TextView
+        android:id="@+id/tvError"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tiReps" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

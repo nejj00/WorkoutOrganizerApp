@@ -7,9 +7,13 @@ import android.view.View
 import android.view.View.OnFocusChangeListener
 import android.view.ViewGroup
 import android.widget.EditText
+import android.widget.TextView
+import androidx.core.widget.addTextChangedListener
+import androidx.core.widget.doOnTextChanged
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.textfield.TextInputLayout
 import com.nejj.workoutorganizerapp.R
 import com.nejj.workoutorganizerapp.databinding.ItemExerciseSetBinding
 import com.nejj.workoutorganizerapp.models.LoggedExerciseSet
@@ -64,6 +68,11 @@ class LoggedExerciseSetAdapter : RecyclerView.Adapter<LoggedExerciseSetAdapter.L
                 }
             }
 
+            tiWeight.editText?.doOnTextChanged {
+                text, start, count, after ->
+                onWeightTextChangedListener?.let { it(tiWeight, tvError,loggedExerciseSet, text, start, count, after) }
+            }
+
             tiWeight.editText?.addTextChangedListener(textWatcher)
             tiReps.editText?.addTextChangedListener(textWatcher)
             tiNotes.editText?.addTextChangedListener(textWatcher)
@@ -92,6 +101,12 @@ class LoggedExerciseSetAdapter : RecyclerView.Adapter<LoggedExerciseSetAdapter.L
 
     fun getExerciseSets(): List<LoggedExerciseSet> {
         return updatedExerciseSets
+    }
+
+    private var onWeightTextChangedListener: ((TextInputLayout, TextView, LoggedExerciseSet, CharSequence?, Int, Int, Int) -> Unit)? = null
+
+    fun setOnWeightTextChangedListener(listener: (TextInputLayout, TextView, LoggedExerciseSet, CharSequence?, Int, Int, Int) -> Unit) {
+        onWeightTextChangedListener = listener
     }
 
     private var onOptionsClickListener: ((LoggedExerciseSet, View) -> Unit)? = null

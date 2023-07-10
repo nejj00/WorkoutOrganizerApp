@@ -76,4 +76,34 @@ class LoggedExerciseSetDaoTest {
         val allLoggedExerciseSetsHaveNewUID = allLoggedExerciseSets.all { it.userUID == newUID }
         assertTrue(allLoggedExerciseSetsHaveNewUID)
     }
+
+    @Test
+    fun getMaxOrder() = runTest {
+        val newUID = "newUID"
+        val loggedExerciseSet1 = LoggedExerciseSet(null, 1, 1, 50.0, 10, 1, false, "Set 1", "firstUID")
+        val loggedExerciseSet2 = LoggedExerciseSet(null, 1, 1, 60.0, 12, 2, false, "Set 2", "secondUID")
+        loggedExerciseSetDao.upsert(loggedExerciseSet1)
+        loggedExerciseSetDao.upsert(loggedExerciseSet2)
+
+        val maxOrder = loggedExerciseSetDao.getMaxOrder(1)
+        assertThat(maxOrder).isEqualTo(2)
+    }
+
+    @Test
+    fun getMaxOrderEmpty() = runTest {
+        val maxOrder = loggedExerciseSetDao.getMaxOrder(1)
+        assertThat(maxOrder).isNull()
+    }
+
+    @Test
+    fun getExerciseSetForRoutineSet() = runTest {
+        val loggedExerciseSet1 = LoggedExerciseSet(1, 1, 1, 50.0, 10, 1, false, "Set 1", "firstUID")
+        val loggedExerciseSet2 = LoggedExerciseSet(2, 1, 1, 60.0, 12, 2, false, "Set 2", "secondUID")
+        loggedExerciseSetDao.upsert(loggedExerciseSet1)
+        loggedExerciseSetDao.upsert(loggedExerciseSet2)
+
+        val exerciseSets = loggedExerciseSetDao.getExerciseSetsForLoggedRoutineSet(1)
+        assertThat(exerciseSets).contains(loggedExerciseSet1)
+        assertThat(exerciseSets).contains(loggedExerciseSet2)
+    }
 }

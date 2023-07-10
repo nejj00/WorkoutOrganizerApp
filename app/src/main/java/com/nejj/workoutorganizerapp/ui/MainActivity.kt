@@ -92,24 +92,24 @@ class MainActivity : AppCompatActivity() {
 
         val workoutRepository = WorkoutRepository(WorkoutDatabase(this))
 
-        initViewModels(workoutRepository)
-
         setupDrawerNavigationMenu(workoutRepository)
+
+        initViewModels(workoutRepository)
 
         //initializeData()
 
-        val firebaseSyncRequest = PeriodicWorkRequestBuilder<FirebaseSyncWorker>(
-            Duration.ofHours(24,)
-        )
-            .setConstraints(
-                Constraints.Builder()
-                    .setRequiredNetworkType(androidx.work.NetworkType.CONNECTED)
-                    .build()
-            )
-            .build()
-
-        val workManager = androidx.work.WorkManager.getInstance(applicationContext)
-        workManager.enqueue(firebaseSyncRequest)
+//        val firebaseSyncRequest = PeriodicWorkRequestBuilder<FirebaseSyncWorker>(
+//            Duration.ofHours(24,)
+//        )
+//            .setConstraints(
+//                Constraints.Builder()
+//                    .setRequiredNetworkType(androidx.work.NetworkType.CONNECTED)
+//                    .build()
+//            )
+//            .build()
+//
+//        val workManager = androidx.work.WorkManager.getInstance(applicationContext)
+//        workManager.enqueue(firebaseSyncRequest)
 
     }
 
@@ -119,11 +119,11 @@ class MainActivity : AppCompatActivity() {
         binding.drawerNavigationView.setNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.categoriesFragment -> {
-                    navController.navigate(R.id.categoriesFragment)
+                    navController.navigate(R.id.action_global_categoriesFragment)
                     binding.drawerLayout.closeDrawer(GravityCompat.START)
                 }
                 R.id.exercisesFragment -> {
-                    navController.navigate(R.id.exercisesFragment)
+                    navController.navigate(R.id.action_global_exercisesFragment)
                     binding.drawerLayout.closeDrawer(GravityCompat.START)
                 }
                 R.id.userLogin -> {
@@ -162,7 +162,7 @@ class MainActivity : AppCompatActivity() {
     private fun deleteBackedUpData(workoutRepository: WorkoutRepository) {
         if (googleAuthUiClient.getSignedInUser() != null) {
             val firestoreSynchronizationManager = FirestoreSynchronizationManager(workoutRepository)
-            firestoreSynchronizationManager.deleteFirestoreData()
+            firestoreSynchronizationManager.deleteFirestoreData(Firebase.auth.currentUser!!.uid)
         } else {
             Toast.makeText(this, "Not logged in", Toast.LENGTH_SHORT).show()
         }

@@ -6,7 +6,7 @@ enum class ExerciseStatisticsType(private val statisticsName: String) : Statisti
     TOTAL_SETS("Total Sets"),
     REPS_PER_SET("Reps per Set"),
     NUMBER_OF_WORKOUTS("Number of Workouts"),
-    AVG_WEIGHT("Average Weight"),
+    AVG_WEIGHT("Average Weight Lifted"),
     EST_ONE_REP_MAX("Estimated One Rep Max"),
     PERSONAL_RECORDS("Personal Records");
 
